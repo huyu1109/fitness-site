@@ -1,0 +1,200 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人体肌肉选择器</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;display:flex;justify-content:center;min-height:100vh;padding:40px 20px}
+  .wrap{display:flex;gap:40px;max-width:900px;width:100%;align-items:flex-start}
+  .svg-wrap{flex-shrink:0;width:300px;overflow:hidden}
+  .svg-wrap svg{width:100%;height:auto;display:block}
+  .muscle-part{cursor:pointer;transition:fill 0.2s ease;fill:#8c8c9e;stroke:#e6e6ef;stroke-width:1.5;stroke-linejoin:round}
+  .muscle-part:hover{fill:#9e9eb0}
+  .muscle-part.selected{fill:#48c972}
+  .muscle-part.selected:hover{fill:#3ab862}
+  /* 右侧面板 */
+  .panel{flex:1;min-width:200px;padding-top:10px}
+  .panel h2{font-size:20px;font-weight:700;margin-bottom:4px;color:#222}
+  .panel .sub{font-size:13px;color:#888;margin-bottom:16px}
+  #selList{min-height:50px;margin-bottom:12px}
+  .sel-item{display:flex;justify-content:space-between;align-items:center;padding:7px 12px;margin-bottom:4px;background:#f0f8f0;border:1px solid #c8e6c8;border-radius:8px;font-size:13px;color:#333;animation:fadeIn 0.2s}
+  .sel-item .del{cursor:pointer;color:#999;font-size:16px;line-height:1;padding:0 4px}
+  .sel-item .del:hover{color:#e74c3c}
+  #countText{font-size:13px;color:#999;text-align:center;margin-bottom:12px}
+  .quick-btns{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .qbtn{padding:6px 16px;border-radius:20px;border:1px solid #ddd;background:#fff;color:#666;font-size:12px;cursor:pointer;transition:all 0.2s;font-family:inherit}
+  .qbtn:hover{border-color:#48c972;color:#48c972;background:#f5fff5}
+  .empty-state{text-align:center;padding:24px;color:#bbb;font-size:13px}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+  @media(max-width:700px){
+    .wrap{flex-direction:column;align-items:center;gap:20px}
+    .svg-wrap{width:260px}
+    .panel{width:100%}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="svg-wrap">
+<svg viewBox="0 0 300 680" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- 背景人体轮廓（装饰） -->
+  <g fill="none" stroke="#eee" stroke-width="1">
+    <ellipse cx="150" cy="45" rx="28" ry="32"/>
+    <path d="M135 72 Q140 86 135 92 L125 98 Q110 85 60 85 Q50 85 48 92 L45 115 Q43 128 50 135 L58 140 Q65 138 72 130 L78 120 Q82 112 85 105"/>
+    <path d="M165 72 Q160 86 165 92 L175 98 Q190 85 240 85 Q250 85 252 92 L255 115 Q257 128 250 135 L242 140 Q235 138 228 130 L222 120 Q218 112 215 105"/>
+    <path d="M80 95 Q75 140 72 180 Q70 220 72 252 L74 262 Q78 270 85 272 L90 270 Q95 260 96 245 Q97 230 96 210 Q95 190 96 175 L98 160 L99 150 L100 140 L102 130 L105 120 L110 110 L120 100 L130 95 L140 93 L150 92 L160 93 L170 95 L180 100 L190 110 L195 120 L198 130 L200 140 L201 150 L202 160 L204 175 L205 190 L204 210 L203 230 L204 245 L205 260 L210 270 L215 272 L222 270 L226 262 L228 252 L230 220 L228 180 L225 140 L220 95" fill="#fafafa"/>
+    <path d="M74 260 Q70 275 70 295 Q70 315 74 330 L80 340 L88 345 L94 340 L98 328 Q100 315 100 300 Q100 280 96 265 Z" fill="#fafafa"/>
+    <path d="M226 260 Q230 275 230 295 Q230 315 226 330 L220 340 L212 345 L206 340 L202 328 Q200 315 200 300 Q200 280 204 265 Z" fill="#fafafa"/>
+    <path d="M94 340 Q92 360 92 390 Q92 420 95 445 L100 460 L108 465 L116 460 L120 445 Q122 420 122 395 Q122 365 118 345 Z" fill="#fafafa"/>
+    <path d="M206 340 Q208 360 208 390 Q208 420 205 445 L200 460 L192 465 L184 460 L180 445 Q178 420 178 395 Q178 365 182 345 Z" fill="#fafafa"/>
+    <path d="M108 462 Q106 485 106 510 Q106 535 108 552 L114 565 L124 568 L132 560 L136 545 Q138 528 138 510 Q138 490 134 468 Z" fill="#fafafa"/>
+    <path d="M192 462 Q194 485 194 510 Q194 535 192 552 L186 565 L176 568 L168 560 L164 545 Q162 528 162 510 Q162 490 166 468 Z" fill="#fafafa"/>
+  </g>
+
+  <!-- ====== 斜方肌 (Trapezius) ====== -->
+  <path class="muscle-part" id="traps" data-name="斜方肌" data-group="back" d="M138 68 Q145 65 150 64 Q155 65 162 68 L170 72 Q175 76 178 82 L180 88 Q182 92 180 96 L175 100 Q170 104 165 106 L160 108 L155 109 L150 110 L145 109 L140 108 L135 106 L130 104 L125 100 L120 96 Q118 92 120 88 L122 82 Q125 76 130 72 Z"/>
+
+  <!-- ====== 三角肌 (Deltoids) - 左 ====== -->
+  <path class="muscle-part" id="delt-l" data-name="左三角肌" data-group="push" d="M125 88 Q120 90 115 95 L110 100 Q105 108 100 118 L98 128 Q96 135 100 140 L105 142 Q108 140 112 136 L116 128 Q120 118 124 108 L128 100 Q130 95 130 92 Z"/>
+  <!-- ====== 三角肌 (Deltoids) - 右 ====== -->
+  <path class="muscle-part" id="delt-r" data-name="右三角肌" data-group="push" d="M175 88 Q180 90 185 95 L190 100 Q195 108 200 118 L202 128 Q204 135 200 140 L195 142 Q192 140 188 136 L184 128 Q180 118 176 108 L172 100 Q170 95 170 92 Z"/>
+
+  <!-- ====== 胸肌 (Pectorals) - 左 ====== -->
+  <path class="muscle-part" id="pec-l" data-name="左胸肌" data-group="push" d="M130 102 Q128 108 126 118 L124 130 Q123 140 124 148 L126 155 Q130 160 135 162 L140 163 Q145 162 148 158 L150 152 Q152 142 152 130 Q152 118 150 108 Q148 100 145 98 Q140 96 135 98 Z"/>
+  <!-- ====== 胸肌 (Pectorals) - 右 ====== -->
+  <path class="muscle-part" id="pec-r" data-name="右胸肌" data-group="push" d="M170 102 Q172 108 174 118 L176 130 Q177 140 176 148 L174 155 Q170 160 165 162 L160 163 Q155 162 152 158 L150 152 Q148 142 148 130 Q148 118 150 108 Q152 100 155 98 Q160 96 165 98 Z"/>
+
+  <!-- ====== 背阔肌 (Latissimus Dorsi) - 左 ====== -->
+  <path class="muscle-part" id="lat-l" data-name="左背阔肌" data-group="pull" d="M98 138 Q94 148 92 160 L90 175 Q88 190 90 205 L92 218 Q95 228 100 234 L105 236 Q108 232 110 225 L112 215 Q114 200 114 185 Q114 168 112 155 Q110 142 106 135 Z"/>
+  <!-- ====== 背阔肌 (Latissimus Dorsi) - 右 ====== -->
+  <path class="muscle-part" id="lat-r" data-name="右背阔肌" data-group="pull" d="M202 138 Q206 148 208 160 L210 175 Q212 190 210 205 L208 218 Q205 228 200 234 L195 236 Q192 232 190 225 L188 215 Q186 200 186 185 Q186 168 188 155 Q190 142 194 135 Z"/>
+
+  <!-- ====== 腹直肌-上 (Upper Abs) ====== -->
+  <path class="muscle-part" id="abs-up" data-name="上腹肌" data-group="core" d="M135 170 Q132 178 130 188 L128 198 Q127 206 130 212 L135 216 L140 217 L145 218 L150 218 L155 217 L160 216 L165 212 Q168 206 170 198 L172 188 Q174 178 171 170 L168 168 L160 166 L150 165 L140 166 L132 168 Z"/>
+  <!-- ====== 腹直肌-下 (Lower Abs) ====== -->
+  <path class="muscle-part" id="abs-low" data-name="下腹肌" data-group="core" d="M132 218 Q130 226 130 236 Q130 248 132 258 L135 264 L140 266 L145 267 L150 267 L155 266 L160 264 L165 258 Q167 248 168 236 Q168 226 166 218 L165 214 L160 216 L155 217 L150 218 L145 218 L140 217 L135 216 Z"/>
+
+  <!-- ====== 腹外斜肌 (Obliques) - 左 ====== -->
+  <path class="muscle-part" id="obl-l" data-name="左侧腹" data-group="core" d="M126 185 Q122 200 120 218 Q118 232 120 248 L122 260 L126 266 L130 264 L132 256 Q134 244 134 230 Q134 215 132 202 Q130 190 128 184 Z"/>
+  <!-- ====== 腹外斜肌 (Obliques) - 右 ====== -->
+  <path class="muscle-part" id="obl-r" data-name="右侧腹" data-group="core" d="M174 185 Q178 200 180 218 Q182 232 180 248 L178 260 L174 266 L170 264 L168 256 Q166 244 166 230 Q166 215 168 202 Q170 190 172 184 Z"/>
+
+  <!-- ====== 二头肌 (Biceps) - 左 ====== -->
+  <path class="muscle-part" id="bic-l" data-name="左二头肌" data-group="pull" d="M105 140 Q100 148 98 160 L96 175 Q95 188 98 198 L102 204 L106 202 Q110 195 112 185 Q114 172 114 158 Q114 148 112 140 Z"/>
+  <!-- ====== 二头肌 (Biceps) - 右 ====== -->
+  <path class="muscle-part" id="bic-r" data-name="右二头肌" data-group="pull" d="M195 140 Q200 148 202 160 L204 175 Q205 188 202 198 L198 204 L194 202 Q190 195 188 185 Q186 172 186 158 Q186 148 188 140 Z"/>
+
+  <!-- ====== 三头肌 (Triceps) - 左 ====== -->
+  <path class="muscle-part" id="tri-l" data-name="左三头肌" data-group="push" d="M90 142 Q86 155 84 170 L82 185 Q82 198 86 208 L90 212 L94 208 Q98 200 100 190 Q102 178 102 165 Q102 152 98 142 Z"/>
+  <!-- ====== 三头肌 (Triceps) - 右 ====== -->
+  <path class="muscle-part" id="tri-r" data-name="右三头肌" data-group="push" d="M210 142 Q214 155 216 170 L218 185 Q218 198 214 208 L210 212 L206 208 Q202 200 200 190 Q198 178 198 165 Q198 152 202 142 Z"/>
+
+  <!-- ====== 小臂肌群 (Forearms) - 左 ====== -->
+  <path class="muscle-part" id="forearm-l" data-name="左小臂" data-group="pull" d="M96 204 Q92 212 90 224 L88 238 Q86 250 88 260 L92 266 L98 262 Q102 254 104 242 Q106 228 104 214 Q102 206 100 202 Z"/>
+  <!-- ====== 小臂肌群 (Forearms) - 右 ====== -->
+  <path class="muscle-part" id="forearm-r" data-name="右小臂" data-group="pull" d="M204 204 Q208 212 210 224 L212 238 Q214 250 212 260 L208 266 L202 262 Q198 254 196 242 Q194 228 196 214 Q198 206 200 202 Z"/>
+
+  <!-- ====== 臀部 (Glutes) - 左 ====== -->
+  <path class="muscle-part" id="glute-l" data-name="左臀" data-group="legs" d="M120 260 Q115 270 112 282 L110 295 Q110 308 114 318 L118 324 L125 322 L130 316 Q134 308 136 296 Q138 282 136 270 Q134 260 130 256 Z"/>
+  <!-- ====== 臀部 (Glutes) - 右 ====== -->
+  <path class="muscle-part" id="glute-r" data-name="右臀" data-group="legs" d="M180 260 Q185 270 188 282 L190 295 Q190 308 186 318 L182 324 L175 322 L170 316 Q166 308 164 296 Q162 282 164 270 Q166 260 170 256 Z"/>
+
+  <!-- ====== 股四头肌 (Quads) - 左 ====== -->
+  <path class="muscle-part" id="quad-l" data-name="左股四头肌" data-group="legs" d="M122 320 Q118 335 116 355 L114 375 Q114 395 118 412 L122 420 L128 420 L134 414 Q138 402 140 386 Q142 365 140 345 Q138 325 134 312 Z"/>
+  <!-- ====== 股四头肌 (Quads) - 右 ====== -->
+  <path class="muscle-part" id="quad-r" data-name="右股四头肌" data-group="legs" d="M178 320 Q182 335 184 355 L186 375 Q186 395 182 412 L178 420 L172 420 L166 414 Q162 402 160 386 Q158 365 160 345 Q162 325 166 312 Z"/>
+
+  <!-- ====== 腘绳肌 (Hamstrings) - 左 ====== -->
+  <path class="muscle-part" id="ham-l" data-name="左腘绳肌" data-group="legs" d="M130 316 Q126 330 124 350 L122 370 Q122 390 126 406 L130 414 L136 412 L140 404 Q142 390 142 372 Q142 348 140 328 Q138 314 135 310 Z"/>
+  <!-- ====== 腘绳肌 (Hamstrings) - 右 ====== -->
+  <path class="muscle-part" id="ham-r" data-name="右腘绳肌" data-group="legs" d="M170 316 Q174 330 176 350 L178 370 Q178 390 174 406 L170 414 L164 412 L160 404 Q158 390 158 372 Q158 348 160 328 Q162 314 165 310 Z"/>
+
+  <!-- ====== 小腿肌群 (Calves) - 左 ====== -->
+  <path class="muscle-part" id="calf-l" data-name="左小腿" data-group="legs" d="M126 418 Q123 435 122 458 L120 478 Q120 498 124 512 L128 520 L134 518 L138 510 Q140 498 140 480 Q140 458 136 435 Q132 418 130 414 Z"/>
+  <!-- ====== 小腿肌群 (Calves) - 右 ====== -->
+  <path class="muscle-part" id="calf-r" data-name="右小腿" data-group="legs" d="M174 418 Q177 435 178 458 L180 478 Q180 498 176 512 L172 520 L166 518 L162 510 Q160 498 160 480 Q160 458 164 435 Q168 418 170 414 Z"/>
+
+</svg>
+</div>
+
+<!-- 右侧面板 -->
+<div class="panel">
+  <h2>肌肉选择器</h2>
+  <div class="sub">点击肌肉区域查看详情</div>
+  <div id="selList"><div class="empty-state">点击上方肌肉区域</div></div>
+  <div id="countText">已选 0 块肌肉</div>
+  <div class="quick-btns">
+    <button class="qbtn" onclick="qs('push')">推类训练</button>
+    <button class="qbtn" onclick="qs('pull')">拉类训练</button>
+    <button class="qbtn" onclick="qs('legs')">下肢训练</button>
+    <button class="qbtn" onclick="qs('core')">核心训练</button>
+    <button class="qbtn" onclick="qs('all')">全身训练</button>
+    <button class="qbtn" onclick="qs('clear')">清除选择</button>
+  </div>
+</div>
+</div>
+
+<script>
+// ====== 肌肉选择交互 ======
+var sel = new Set();
+
+// 预设分组
+var groups = {
+  push: ['左胸肌','右胸肌','左三角肌','右三角肌','左三头肌','右三头肌'],
+  pull: ['左背阔肌','右背阔肌','左二头肌','右二头肌','斜方肌','左小臂','右小臂'],
+  legs: ['左臀','右臀','左股四头肌','右股四头肌','左腘绳肌','右腘绳肌','左小腿','右小腿'],
+  core: ['上腹肌','下腹肌','左侧腹','右侧腹'],
+  all: ['斜方肌','左三角肌','右三角肌','左胸肌','右胸肌','左背阔肌','右背阔肌',
+        '上腹肌','下腹肌','左侧腹','右侧腹','左二头肌','右二头肌','左三头肌','右三头肌',
+        '左小臂','右小臂','左臀','右臀','左股四头肌','右股四头肌','左腘绳肌','右腘绳肌','左小腿','右小腿']
+};
+
+document.querySelectorAll('.muscle-part').forEach(function(el) {
+  el.addEventListener('click', function() {
+    var name = this.getAttribute('data-name');
+    if (sel.has(name)) { sel.delete(name); this.classList.remove('selected'); }
+    else { sel.add(name); this.classList.add('selected'); }
+    render();
+  });
+});
+
+function render() {
+  var list = document.getElementById('selList');
+  document.getElementById('countText').textContent = '已选 ' + sel.size + ' 块肌肉';
+  if (sel.size === 0) {
+    list.innerHTML = '<div class="empty-state">点击上方肌肉区域</div>';
+    return;
+  }
+  var h = '';
+  sel.forEach(function(n) {
+    h += '<div class="sel-item"><span>' + n + '</span><span class="del" onclick="rm(\'' + n + '\')">&times;</span></div>';
+  });
+  list.innerHTML = h;
+}
+
+function rm(name) {
+  sel.delete(name);
+  document.querySelectorAll('.muscle-part').forEach(function(el) {
+    if (el.getAttribute('data-name') === name) el.classList.remove('selected');
+  });
+  render();
+}
+
+function qs(type) {
+  if (type === 'clear') { sel.clear(); document.querySelectorAll('.muscle-part').forEach(function(el) { el.classList.remove('selected'); }); render(); return; }
+  sel.clear();
+  document.querySelectorAll('.muscle-part').forEach(function(el) { el.classList.remove('selected'); });
+  (groups[type] || []).forEach(function(n) {
+    sel.add(n);
+    document.querySelectorAll('.muscle-part').forEach(function(el) {
+      if (el.getAttribute('data-name') === n) el.classList.add('selected');
+    });
+  });
+  render();
+}
+</script>
+</body>
+</html>

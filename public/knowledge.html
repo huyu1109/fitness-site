@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>知识库 - 铁馆</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<nav class="nav">
+<div class="nav-inner">
+<a href="index.html" class="nav-logo">铁馆</a>
+<ul class="nav-links">
+<li><a href="index.html">首页</a></li>
+<li><a href="muscles.html">肌肉图</a></li>
+<li><a href="exercises.html">动作库</a></li>
+<li><a href="plans.html">训练计划</a></li>
+<li><a href="calculator.html">热量计算</a></li>
+<li><a href="knowledge.html">知识库</a></li>
+<li><a href="calendar.html">进度日历</a></li>
+<li><a href="tools.html">工具</a></li>
+</ul>
+</div>
+</nav>
+<script>
+(function(){var p=location.pathname.split("/").pop()||"index.html";document.querySelectorAll(".nav-links a").forEach(function(a){if(a.getAttribute("href")===p)a.classList.add("active")})})();
+</script>
+<script src="js/particles.js"></script>
+<div class="container content-enter">
+  <h1 class="page-title content-enter">健身知识库</h1>
+  <p class="page-subtitle content-enter content-enter-delay-1">用生活化的语言，搞懂健身那些事</p>
+  <div class="knowledge-layout content-enter content-enter-delay-2">
+    <div class="card knowledge-sidebar"><div class="card-header">专题列表</div><ul class="topic-list" id="topicList"></ul></div>
+    <div class="card knowledge-content" id="knowledgeContent"><div style="color:var(--text-tertiary);text-align:center;padding:40px;">选择一个专题开始阅读</div></div>
+  </div>
+</div>
+<script src="js/unlock.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/ui.js"></script>
+<script>
+const TOPICS=[{title:'蛋白质——你的肌肉砖块',content:'<h2>蛋白质——你的肌肉砖块</h2><p>想象你在盖一栋肌肉大楼。蛋白质就是那些砖块——没有砖块，你练得再狠也盖不起楼。每次力量训练后，你的肌纤维都会产生微小撕裂，而蛋白质就是用来修补和加固这些撕裂的材料，让肌肉变得更强壮。</p><h3>每天该吃多少？</h3><p>对于普通健身者，推荐每公斤体重摄入1.6-2.2克蛋白质。一个70kg的人大约需要112-154克。打个比方：这相当于每天吃400-500克鸡胸肉，或者8-10个鸡蛋。</p><h3>什么时候吃最好？</h3><p>训练后30分钟内是"黄金窗口"，此时摄入蛋白质的吸收效率最高。但别紧张——只要你三餐都有蛋白质，总量够了就行，不用精确到分钟。</p><h3>食物来源排行</h3><ul><li>鸡胸肉：31g/100g，几乎零脂肪</li><li>蛋白粉：80g/100g，吸收最快</li><li>鸡蛋：13g/个，营养全面</li><li>瘦牛肉：26g/100g，含肌酸</li><li>三文鱼：20g/100g，含健康脂肪</li><li>豆腐：8g/100g，植物蛋白首选</li></ul><h3>自测清单</h3><p>每天每公斤体重吃到1.6g以上蛋白质<br>每餐都有一手掌大小的蛋白质来源<br>训练后1小时内补充了蛋白质</p><h3>实践建议</h3><p>早餐吃3个鸡蛋+200ml牛奶，午餐200g鸡胸肉，晚餐150g三文鱼或牛肉。如果胃口不够，加一杯蛋白粉——这才是蛋白粉的正确用法，不是替代正餐，而是补充缺口。</p>'},
+{title:'碳水化合物——你的燃料箱',content:'<h2>碳水化合物——你的燃料箱</h2><p>碳水就是你身体的汽油。油箱空了，油门踩到底也跑不快。很多新手怕碳水，觉得吃碳水就长胖——这是个巨大的误解。碳水本身不会让你胖，过量的总热量才会让你胖。</p><h3>好碳水和坏碳水</h3><p>把碳水想象成两种火：粗粮是木炭，慢慢燃烧，持久供热；精制糖是稻草，瞬间烧完，然后你就没劲了。训练前吃香蕉（快碳）能立刻给力，但平时应该多吃燕麦、红薯这类慢碳。</p><h3>每天吃多少？</h3><p>减脂期：每公斤体重2-3g碳水<br>增肌期：每公斤体重4-6g碳水<br>训练日多吃，休息日少吃。——这就是"碳水循环"的核心思想，不复杂吧？</p><h3>最佳碳水来源</h3><ul><li>燕麦片：低升糖，管饱5小时</li><li>红薯：维生素A丰富，口感好</li><li>糙米/藜麦：完整谷物，营养保留</li><li>水果：训练前的理想快碳</li><li>全麦面包：方便的快手碳水</li></ul><h3>自测清单</h3><p>减脂期碳水不低于2g/kg体重<br>训练前2小时吃了慢碳<br>训练后30分钟补充了快碳<br>主食一半换成粗粮</p>'},
+{title:'脂肪——不是敌人',content:'<h2>脂肪——不是敌人</h2><p>脂肪长期以来被污名化了。实际上，你的荷尔蒙系统靠脂肪才能正常运转——睾酮、生长激素都需要脂肪来合成。零脂饮食会让你的睾酮水平暴跌，训练热情和恢复能力都会受影响。</p><h3>好脂肪 vs 坏脂肪</h3><p>不饱和脂肪（橄榄油、坚果、鱼油）是身体的好朋友，帮助消炎和维持心血管健康。反式脂肪（炸鸡、奶茶、饼干里的起酥油）才是真正的坏脂肪。</p><h3>每天吃多少？</h3><p>总热量的20-30%来自脂肪。一个吃2200kcal的人，每天大约49-73g脂肪。听起来很多？一勺花生酱就有16g脂肪了。</p><h3>优质脂肪来源</h3><ul><li>三文鱼、沙丁鱼等深海鱼</li><li>橄榄油、牛油果</li><li>坚果（核桃、杏仁、腰果）</li><li>奇亚籽、亚麻籽</li><li>全蛋（不用只吃蛋白）</li></ul><h3>自测清单</h3><p>每天至少吃一份优质脂肪（牛油果/橄榄油/坚果）<br>每周吃2次以上深海鱼<br>不吃油炸食品和奶茶<br>蛋黄也吃，不扔</p>'},
+{title:'训练基础知识',content:'<h2>训练基础知识</h2><p>健身训练就像学开车——一开始都会笨手笨脚，但肌肉有"记忆"，重复够了动作自然就顺了。关键是正确起步，避免养成坏习惯。</p><h3>渐进超负荷——进步的秘诀</h3><p>肌肉不会无缘无故长大。你必须给它一个理由去长大。这个理由就是：每一次训练都比上一次多一点点。多一个次数、多2.5kg重量、少休息10秒——这就是渐进超负荷。</p><h3>分化训练怎么选？</h3><p><strong>新手全身训练：</strong>每周3次，每次练全身。频率高，每个部位一周练3次，进步最快。<br><strong>上下肢分化：</strong>每周4次，一天上肢一天下肢。适合中级训练者。<br><strong>推拉腿分化：</strong>每周6次，推类动作、拉类动作、腿部各一天。适合高级训练者。</p><h3>组间休息时间</h3><ul><li>力量训练（1-5RM）：休息3-5分钟</li><li>增肌训练（8-12RM）：休息60-90秒</li><li>耐力训练（15-20RM）：休息30-45秒</li></ul><h3>自测清单</h3><p>每次训练都记录重量和次数<br>每2周至少增加一点重量或次数<br>训练前做5-10分钟动态热身<br>训练后做5-10分钟静态拉伸</p><h3>实践建议</h3><p>新手前3个月，不要纠结"哪个计划最好"。随便选一个计划，坚持做，比找"完美计划"重要100倍。</p>'},
+{title:'有氧运动指南',content:'<h2>有氧运动指南</h2><p>很多人以为减脂就是疯狂跑步。其实，有氧运动就像汽车的怠速油耗——它确实烧油，但真正省油的方式是换一台更高效的发动机（也就是增肌提高基础代谢）。</p><h3>有氧vs无氧</h3><p>有氧运动（慢跑、游泳、骑车）主要训练心肺耐力，燃烧脂肪的效率高，但不会显著增肌。无氧运动（力量训练）虽然运动中烧的脂肪少，但训练后身体会持续消耗热量（EPOC效应），而且肌肉多了基础代谢就高，睡觉都在瘦。</p><h3>最佳减脂组合</h3><p>力量训练+少量有氧+饮食控制=最高效减脂。推荐：每次力量训练后做20-30分钟中等强度有氧，或者早晨空腹做20分钟低强度有氧。</p><h3>有氧类型</h3><ul><li>LISS（低强度稳态）：快走、慢跑、椭圆机。适合减脂期、膝盖不好的朋友</li><li>HIIT（高强度间歇）：冲刺30秒休息30秒。效率极高，10分钟抵30分钟</li><li>日常活动：爬楼梯、走路、做家务——叫NEAT，减脂的隐藏功臣</li></ul><h3>自测清单</h3><p>每周至少150分钟中等强度有氧<br>有氧放在力量训练后面做<br>日常生活中尽量多走路</p>'},
+{title:'睡眠与恢复',content:'<h2>睡眠与恢复</h2><p>肌肉不是在训练时长出来的，是在你睡觉时长出来的。训练只是给肌肉"打招呼"说：喂，我需要你变强。然后你去睡觉了，身体才开始动手施工。</p><h3>为什么7-9小时不可妥协？</h3><p>生长激素主要在深度睡眠时分泌。你练了1小时，身体需要几十个小时来修复和适应。如果你每天只睡5-6小时，相当于让一个建筑队24小时干活从不休息——迟早要塌。</p><h3>恢复小技巧</h3><ul><li>同一肌群训练间隔至少48小时</li><li>每周安排1-2天完全休息</li><li>训练后补充蛋白质+碳水</li><li>睡前1小时不看屏幕</li><li>保持房间凉爽（18-22°C最佳）</li><li>做深呼吸或冥想帮助入睡</li></ul><h3>自测清单</h3><p>每天睡足7小时以上<br>同一部位两次训练间隔大于48小时<br>每周至少1个完全休息日<br>睡前不看手机超过30分钟</p>'},
+{title:'饮食误区与真相',content:'<h2>饮食误区与真相</h2><p>健身圈可能是谣言最多的地方了。这里帮你拨开迷雾。</p><h3>迷思一：晚上8点后不能吃东西</h3><p>假。身体没有"宵禁"机制。如果你白天没吃够，晚上吃完全没问题。重要的是总热量，不是进食时间。不过睡前吃太饱可能影响睡眠质量。</p><h3>迷思二：吃脂肪长脂肪</h3><p>假。吃脂肪不等于长脂肪。多余的热量（不论来自碳水、脂肪还是蛋白质）才会被储存为脂肪。脂肪激素对荷尔蒙还很重要。</p><h3>迷思三：必须吃6餐才能提高代谢</h3><p>假。餐次频率对代谢的影响微乎其微。找到你生活习惯最舒服的进餐频率就行——3餐或5餐都可以。</p><h3>迷思四：流汗越多燃脂越多</h3><p>假。流汗是身体降温的机制，跟燃脂没有直接关系。夏天坐着都流汗，不表示在瘦。</p><h3>迷思五：女生举铁会变成金刚芭比</h3><p>假。女性的睾酮水平只有男性的1/10-1/20，想练出大块肌肉非常困难。适度的力量训练只会让你线条更紧致，看起来更健康。</p><h3>自测清单</h3><p>不信"减肥神药""快速瘦身"的宣传<br>饮食有弹性，不用"干净""脏"来评判<br>只和自己比，不跟别人比进度</p>'},
+{title:'心理建设与习惯养成',content:'<h2>心理建设与习惯养成</h2><p>健身最大的挑战不是力气不够，而是坚持不下去。从"坚持锻炼"到"喜欢锻炼"的转变，才是真正的胜利。</p><h3>2分钟法则</h3><p>不想训练的时候怎么办？告诉自己：只做2分钟。穿上运动服，热身2分钟。2分钟后想停就停。但神奇的是，一旦开始了，你通常会继续练下去。最难的是开头那2分钟。</p><h3>不要追求完美</h3><p>偶尔吃一顿大餐不会毁掉你的身材，漏掉一次训练不会前功尽弃。真正毁掉进度的是"反正已经破戒了，干脆摆烂一周"的心态。接受80%的完成率，远比追求100%但频繁放弃要好。</p><h3>记录就是动力</h3><p>每次训练后记录一下。一个月后回头看，你会惊讶地发现自己已经走了这么远。记录本身就是一种正向反馈——你看着数据在涨，自然就想继续练。</p><h3>找一个伙伴</h3><p>有训练伙伴的人，坚持率是独自训练的2倍以上。找不到真人？加入线上社群，晒打卡，互相监督，效果也不错。</p><h3>自测清单</h3><p>定了固定的训练时间（比如每周一三五晚7点）<br>训练服提前准备好，减少借口的空间<br>每次训练后简单记录<br>偶尔没练，不责备自己，明天继续<br>告诉自己：健身是一辈子的事，不差这一两天</p><h3>一句话总结</h3><p><em>健身不是一种惩罚，而是对自己身体的投资。你每流的一滴汗，都是在给未来的自己存钱。</em></p>'}];
+let currentTopic=0;
+function renderTopics(){const l=document.getElementById('topicList');l.innerHTML=TOPICS.map((t,i)=>'<li class="'+(i===currentTopic?'active':'')+'" onclick="selectTopic('+i+')">'+t.title+'</li>').join('');selectTopic(0)}
+function selectTopic(i){currentTopic=i;document.querySelectorAll('.topic-list li').forEach((li,idx)=>li.classList.toggle('active',idx===i));var u=window.unlockAPI&&unlockAPI.isUnlocked();var full=TOPICS[i].content;if(!u){var preview=full.replace(/<[^>]+>/g,'').substring(0,150)+'...';document.getElementById('knowledgeContent').innerHTML='<div style="position:relative">'+TOPICS[i].content.substring(0,TOPICS[i].content.indexOf('</p>')+4)+'<div style="position:relative;overflow:hidden"><div class="unlock-blur" style="max-height:200px;overflow:hidden;pointer-events:auto">'+TOPICS[i].content.substring(TOPICS[i].content.indexOf('</p>')+4)+'</div></div><div style="text-align:center;padding:30px 0;position:relative;z-index:5"><p style="color:rgba(255,255,255,0.4);font-size:13px;margin-bottom:10px">🔒 继续阅读需要解锁全站</p><button class="btn btn-primary" onclick="unlockAPI.showModal()">0.5元解锁全站，阅读全部内容</button></div></div>'}else{document.getElementById('knowledgeContent').innerHTML=full}}
+renderTopics();
+</script>
+</body>
+</html>

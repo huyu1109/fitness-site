@@ -1,0 +1,14 @@
+﻿{
+  "name": "fitness-website",
+  "version": "1.0.0",
+  "description": "全功能健身网站",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "sql.js": "^1.10.0",
+    "cors": "^2.8.5"
+  }
+}

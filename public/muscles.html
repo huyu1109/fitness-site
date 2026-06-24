@@ -1,0 +1,473 @@
+﻿<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>肌肉图选择器 - 铁馆</title>
+<style>
+body{margin:0;background:#0a0a12;color:#fff;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
+.container{max-width:1200px;margin:0 auto;padding:20px 24px}
+h2{font-size:22px;margin-bottom:4px}
+.sub{font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:20px}
+.layout{display:flex;gap:40px;align-items:flex-start}
+.diagrams{display:flex;gap:60px;flex:1;justify-content:center}
+.wrap{text-align:center;position:relative}
+.wrap svg{width:370px;height:auto}
+.wrap-label{font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:6px;letter-spacing:1px}
+.panel{width:280px;flex-shrink:0}
+.panel-title{font-size:16px;font-weight:600;margin-bottom:12px}
+#selList{min-height:40px}
+.empty-state{padding:24px 0;text-align:center;color:rgba(255,255,255,0.3);font-size:13px}
+.sel-item{display:flex;justify-content:space-between;padding:6px 10px;margin-bottom:4px;background:rgba(72,201,114,0.08);border:1px solid rgba(72,201,114,0.12);border-radius:6px;font-size:12px}
+.sel-item .del{cursor:pointer;color:rgba(255,255,255,0.3);font-size:14px;padding:0 4px}
+.sel-item .del:hover{color:#ff5252}
+.count-text{font-size:12px;color:rgba(255,255,255,0.4);text-align:center;margin:8px 0 12px}
+.qb{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px}
+.qb button{flex:1;min-width:70px;padding:7px 0;border-radius:14px;border:1px solid rgba(255,255,255,0.12);background:transparent;color:rgba(255,255,255,0.6);font-size:11px;cursor:pointer;font-family:inherit}
+.qb button:hover{border-color:#48c972;color:#48c972}
+.ab{display:flex;flex-direction:column;gap:8px}
+.ab button{width:100%;border-radius:10px;font-family:inherit;cursor:pointer}
+.btn-p{height:42px;border:none;background:#48c972;color:#fff;font-size:14px;font-weight:600;transition:all 0.15s}
+.btn-p:hover{background:#3ab862}
+.btn-s{height:38px;border:1px solid rgba(255,255,255,0.12);background:transparent;color:rgba(255,255,255,0.5);font-size:12px;transition:all 0.15s}
+.btn-s:hover{border-color:rgba(255,255,255,0.25);color:rgba(255,255,255,0.8)}
+</style>
+<link rel="stylesheet" href="css/style.css"></head>
+<body>
+<nav class="nav">
+<div class="nav-inner">
+<a href="index.html" class="nav-logo">铁馆</a>
+<ul class="nav-links">
+<li><a href="index.html">首页</a></li>
+<li><a href="muscles.html">肌肉图</a></li>
+<li><a href="exercises.html">动作库</a></li>
+<li><a href="plans.html">训练计划</a></li>
+<li><a href="calculator.html">热量计算</a></li>
+<li><a href="knowledge.html">知识库</a></li>
+<li><a href="calendar.html">进度日历</a></li>
+<li><a href="tools.html">工具</a></li>
+</ul>
+</div>
+</nav>
+<script>
+(function(){var p=location.pathname.split("/").pop()||"index.html";document.querySelectorAll(".nav-links a").forEach(function(a){if(a.getAttribute("href")===p)a.classList.add("active")})})();
+</script>
+<script src="js/particles.js">
+// 生成训练计划
+var exDB={chest:["杠铃卧推","哑铃飞鸟","上斜卧推","绳索夹胸"],back:["引体向上","杠铃划船","高位下拉","坐姿划船"],shoulder:["哑铃推举","侧平举","前平举","面拉"],biceps:["杠铃弯举","哑铃弯举","锤式弯举"],triceps:["绳索下压","仰卧臂屈伸","窄距卧推"],abs:["卷腹","平板支撑","仰卧举腿","俄罗斯转体"],glute:["深蹲","箭步蹲","臀推","腿举"],calf:["站姿提踵","坐姿提踵"]};
+var matchKeys={chest:["chest","pec"],back:["lats","trapez","spine","erector","quadrat","rear","nape"],shoulder:["shoulder","deltoid"],biceps:["biceps"],triceps:[],abs:["abs","oblique"],glute:["quad","hamstring","glute","adductor","groin","hip"],calf:["gastrocnemius","soleus","tibialis","calf"]};
+
+function generatePlan(){
+  console.log("生成计划按钮被点击了");
+  if(sel.size===0){alert("请先选择肌肉部位");return}
+  var matched={};
+  sel.forEach(function(id){
+    for(var g in matchKeys){
+      for(var i=0;i<matchKeys[g].length;i++){
+        if(id.toLowerCase().indexOf(matchKeys[g][i])>=0){matched[g]=exDB[g];break}
+      }
+    }
+  });
+  var h="<div style='margin-top:16px;padding:12px;background:rgba(72,201,114,0.06);border:1px solid rgba(72,201,114,0.12);border-radius:8px'>";
+  h+="<div style='font-size:14px;font-weight:600;margin-bottom:8px'>\U0001F4CB \u8bad\u7ec3\u8ba1\u5212</div>";
+  var total=0;
+  for(var g in matched){
+    matched[g].forEach(function(ex){
+      total++;
+      h+="<div style='padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:12px'>";
+      h+="<span style='font-weight:500'>"+ex+"</span>";
+      h+=" <span style='color:rgba(255,255,255,0.4)'>4\u7ec4\u00d710\u6b21 \u4f11\u606f60s</span></div>"
+    })
+  }
+  h+="<div style='text-align:center;padding:8px 0;font-size:12px;color:rgba(72,201,114,0.8)'>\u5171 "+total+" \u4e2a\u52a8\u4f5c</div></div>";
+  var old=document.getElementById("planResult");
+  if(old)old.remove();
+  var d=document.createElement("div");
+  d.id="planResult";
+  d.innerHTML=h;
+  document.querySelector(".ab").parentNode.insertBefore(d,document.querySelector(".ab").nextSibling)
+}
+
+function syncToCalendar(){
+  console.log("同步按钮被点击了");
+  var plan=document.getElementById("planResult");
+  if(!plan){alert("\u26A0\uFE0F \u8bf7\u5148\u751f\u6210\u8bad\u7ec3\u8ba1\u5212");return}
+  var today=new Date().toISOString().slice(0,10);
+  var exercises=[];
+  plan.querySelectorAll("div[style*='border-bottom']").forEach(function(el){
+    var txt=el.textContent.trim().split("4组")[0].trim();
+    exercises.push({name:txt,sets:4,reps:10,rest:60})
+  });
+  try{
+    var all=JSON.parse(localStorage.getItem("workout_plans")||"{}");
+    all[today]={date:today,exercises:exercises};
+    localStorage.setItem("workout_plans",JSON.stringify(all));
+    alert("\u2705 \u5df2\u540c\u6b65\u5230\u6253\u5361\u8868")
+  }catch(e){alert("\u4fdd\u5b58\u5931\u8d25: "+e.message)}
+}</script>
+<script src="https://unpkg.com/body-muscles/dist/umd/body-muscles.umd.min.js">
+// 生成训练计划
+var exDB={chest:["杠铃卧推","哑铃飞鸟","上斜卧推","绳索夹胸"],back:["引体向上","杠铃划船","高位下拉","坐姿划船"],shoulder:["哑铃推举","侧平举","前平举","面拉"],biceps:["杠铃弯举","哑铃弯举","锤式弯举"],triceps:["绳索下压","仰卧臂屈伸","窄距卧推"],abs:["卷腹","平板支撑","仰卧举腿","俄罗斯转体"],glute:["深蹲","箭步蹲","臀推","腿举"],calf:["站姿提踵","坐姿提踵"]};
+var matchKeys={chest:["chest","pec"],back:["lats","trapez","spine","erector","quadrat","rear","nape"],shoulder:["shoulder","deltoid"],biceps:["biceps"],triceps:[],abs:["abs","oblique"],glute:["quad","hamstring","glute","adductor","groin","hip"],calf:["gastrocnemius","soleus","tibialis","calf"]};
+
+function generatePlan(){
+  console.log("生成计划按钮被点击了");
+  if(sel.size===0){alert("请先选择肌肉部位");return}
+  var matched={};
+  sel.forEach(function(id){
+    for(var g in matchKeys){
+      for(var i=0;i<matchKeys[g].length;i++){
+        if(id.toLowerCase().indexOf(matchKeys[g][i])>=0){matched[g]=exDB[g];break}
+      }
+    }
+  });
+  var h="<div style='margin-top:16px;padding:12px;background:rgba(72,201,114,0.06);border:1px solid rgba(72,201,114,0.12);border-radius:8px'>";
+  h+="<div style='font-size:14px;font-weight:600;margin-bottom:8px'>\U0001F4CB \u8bad\u7ec3\u8ba1\u5212</div>";
+  var total=0;
+  for(var g in matched){
+    matched[g].forEach(function(ex){
+      total++;
+      h+="<div style='padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:12px'>";
+      h+="<span style='font-weight:500'>"+ex+"</span>";
+      h+=" <span style='color:rgba(255,255,255,0.4)'>4\u7ec4\u00d710\u6b21 \u4f11\u606f60s</span></div>"
+    })
+  }
+  h+="<div style='text-align:center;padding:8px 0;font-size:12px;color:rgba(72,201,114,0.8)'>\u5171 "+total+" \u4e2a\u52a8\u4f5c</div></div>";
+  var old=document.getElementById("planResult");
+  if(old)old.remove();
+  var d=document.createElement("div");
+  d.id="planResult";
+  d.innerHTML=h;
+  document.querySelector(".ab").parentNode.insertBefore(d,document.querySelector(".ab").nextSibling)
+}
+
+function syncToCalendar(){
+  console.log("同步按钮被点击了");
+  var plan=document.getElementById("planResult");
+  if(!plan){alert("\u26A0\uFE0F \u8bf7\u5148\u751f\u6210\u8bad\u7ec3\u8ba1\u5212");return}
+  var today=new Date().toISOString().slice(0,10);
+  var exercises=[];
+  plan.querySelectorAll("div[style*='border-bottom']").forEach(function(el){
+    var txt=el.textContent.trim().split("4组")[0].trim();
+    exercises.push({name:txt,sets:4,reps:10,rest:60})
+  });
+  try{
+    var all=JSON.parse(localStorage.getItem("workout_plans")||"{}");
+    all[today]={date:today,exercises:exercises};
+    localStorage.setItem("workout_plans",JSON.stringify(all));
+    alert("\u2705 \u5df2\u540c\u6b65\u5230\u6253\u5361\u8868")
+  }catch(e){alert("\u4fdd\u5b58\u5931\u8d25: "+e.message)}
+}</script>
+<script src="js/unlock.js"></script>
+<script src="js/nav.js">
+// 生成训练计划
+var exDB={chest:["杠铃卧推","哑铃飞鸟","上斜卧推","绳索夹胸"],back:["引体向上","杠铃划船","高位下拉","坐姿划船"],shoulder:["哑铃推举","侧平举","前平举","面拉"],biceps:["杠铃弯举","哑铃弯举","锤式弯举"],triceps:["绳索下压","仰卧臂屈伸","窄距卧推"],abs:["卷腹","平板支撑","仰卧举腿","俄罗斯转体"],glute:["深蹲","箭步蹲","臀推","腿举"],calf:["站姿提踵","坐姿提踵"]};
+var matchKeys={chest:["chest","pec"],back:["lats","trapez","spine","erector","quadrat","rear","nape"],shoulder:["shoulder","deltoid"],biceps:["biceps"],triceps:[],abs:["abs","oblique"],glute:["quad","hamstring","glute","adductor","groin","hip"],calf:["gastrocnemius","soleus","tibialis","calf"]};
+
+function generatePlan(){
+  console.log("生成计划按钮被点击了");
+  if(sel.size===0){alert("请先选择肌肉部位");return}
+  var matched={};
+  sel.forEach(function(id){
+    for(var g in matchKeys){
+      for(var i=0;i<matchKeys[g].length;i++){
+        if(id.toLowerCase().indexOf(matchKeys[g][i])>=0){matched[g]=exDB[g];break}
+      }
+    }
+  });
+  var h="<div style='margin-top:16px;padding:12px;background:rgba(72,201,114,0.06);border:1px solid rgba(72,201,114,0.12);border-radius:8px'>";
+  h+="<div style='font-size:14px;font-weight:600;margin-bottom:8px'>\U0001F4CB \u8bad\u7ec3\u8ba1\u5212</div>";
+  var total=0;
+  for(var g in matched){
+    matched[g].forEach(function(ex){
+      total++;
+      h+="<div style='padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:12px'>";
+      h+="<span style='font-weight:500'>"+ex+"</span>";
+      h+=" <span style='color:rgba(255,255,255,0.4)'>4\u7ec4\u00d710\u6b21 \u4f11\u606f60s</span></div>"
+    })
+  }
+  h+="<div style='text-align:center;padding:8px 0;font-size:12px;color:rgba(72,201,114,0.8)'>\u5171 "+total+" \u4e2a\u52a8\u4f5c</div></div>";
+  var old=document.getElementById("planResult");
+  if(old)old.remove();
+  var d=document.createElement("div");
+  d.id="planResult";
+  d.innerHTML=h;
+  document.querySelector(".ab").parentNode.insertBefore(d,document.querySelector(".ab").nextSibling)
+}
+
+function syncToCalendar(){
+  console.log("同步按钮被点击了");
+  var plan=document.getElementById("planResult");
+  if(!plan){alert("\u26A0\uFE0F \u8bf7\u5148\u751f\u6210\u8bad\u7ec3\u8ba1\u5212");return}
+  var today=new Date().toISOString().slice(0,10);
+  var exercises=[];
+  plan.querySelectorAll("div[style*='border-bottom']").forEach(function(el){
+    var txt=el.textContent.trim().split("4组")[0].trim();
+    exercises.push({name:txt,sets:4,reps:10,rest:60})
+  });
+  try{
+    var all=JSON.parse(localStorage.getItem("workout_plans")||"{}");
+    all[today]={date:today,exercises:exercises};
+    localStorage.setItem("workout_plans",JSON.stringify(all));
+    alert("\u2705 \u5df2\u540c\u6b65\u5230\u6253\u5361\u8868")
+  }catch(e){alert("\u4fdd\u5b58\u5931\u8d25: "+e.message)}
+}</script>
+<div class="container">
+<h2> 肌肉训练选择器</h2>
+<p class="sub">点击人体图上的肌肉部位，选择你今天想训练的区域</p>
+<div class="layout">
+<div class="diagrams">
+<div class="wrap"><div class="wrap-label">正面</div><div id="chartFront"></div></div>
+<div class="wrap"><div class="wrap-label">背面</div><div id="chartBack"></div></div>
+</div>
+<div class="panel">
+<div class="panel-title">已选肌肉</div>
+<div id="selList"><div class="empty-state">👆 点击上方人体图选择训练部位</div></div>
+<div class="count-text" id="countText">共 0 块</div>
+<div class="qb">
+<button onclick="qs('push')">推类</button>
+<button onclick="qs('pull')">拉类</button>
+<button onclick="qs('legs')">下肢</button>
+<button onclick="qs('core')">核心</button>
+<button onclick="qs('all')">全身</button>
+<button onclick="qs('clear')">清除</button>
+</div>
+<div class="ab">
+<button class="btn-p" onclick="generatePlan()">生成训练计划</button>
+<button class="btn-s" onclick="syncToCalendar()">同步到打卡表</button>
+</div></div></div></div>
+<script src="js/ui.js">
+// 生成训练计划
+var exDB={chest:["杠铃卧推","哑铃飞鸟","上斜卧推","绳索夹胸"],back:["引体向上","杠铃划船","高位下拉","坐姿划船"],shoulder:["哑铃推举","侧平举","前平举","面拉"],biceps:["杠铃弯举","哑铃弯举","锤式弯举"],triceps:["绳索下压","仰卧臂屈伸","窄距卧推"],abs:["卷腹","平板支撑","仰卧举腿","俄罗斯转体"],glute:["深蹲","箭步蹲","臀推","腿举"],calf:["站姿提踵","坐姿提踵"]};
+var matchKeys={chest:["chest","pec"],back:["lats","trapez","spine","erector","quadrat","rear","nape"],shoulder:["shoulder","deltoid"],biceps:["biceps"],triceps:[],abs:["abs","oblique"],glute:["quad","hamstring","glute","adductor","groin","hip"],calf:["gastrocnemius","soleus","tibialis","calf"]};
+
+function generatePlan(){
+  console.log("生成计划按钮被点击了");
+  if(sel.size===0){alert("请先选择肌肉部位");return}
+  var matched={};
+  sel.forEach(function(id){
+    for(var g in matchKeys){
+      for(var i=0;i<matchKeys[g].length;i++){
+        if(id.toLowerCase().indexOf(matchKeys[g][i])>=0){matched[g]=exDB[g];break}
+      }
+    }
+  });
+  var h="<div style='margin-top:16px;padding:12px;background:rgba(72,201,114,0.06);border:1px solid rgba(72,201,114,0.12);border-radius:8px'>";
+  h+="<div style='font-size:14px;font-weight:600;margin-bottom:8px'>\U0001F4CB \u8bad\u7ec3\u8ba1\u5212</div>";
+  var total=0;
+  for(var g in matched){
+    matched[g].forEach(function(ex){
+      total++;
+      h+="<div style='padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:12px'>";
+      h+="<span style='font-weight:500'>"+ex+"</span>";
+      h+=" <span style='color:rgba(255,255,255,0.4)'>4\u7ec4\u00d710\u6b21 \u4f11\u606f60s</span></div>"
+    })
+  }
+  h+="<div style='text-align:center;padding:8px 0;font-size:12px;color:rgba(72,201,114,0.8)'>\u5171 "+total+" \u4e2a\u52a8\u4f5c</div></div>";
+  var old=document.getElementById("planResult");
+  if(old)old.remove();
+  var d=document.createElement("div");
+  d.id="planResult";
+  d.innerHTML=h;
+  document.querySelector(".ab").parentNode.insertBefore(d,document.querySelector(".ab").nextSibling)
+}
+
+function syncToCalendar(){
+  console.log("同步按钮被点击了");
+  var plan=document.getElementById("planResult");
+  if(!plan){alert("\u26A0\uFE0F \u8bf7\u5148\u751f\u6210\u8bad\u7ec3\u8ba1\u5212");return}
+  var today=new Date().toISOString().slice(0,10);
+  var exercises=[];
+  plan.querySelectorAll("div[style*='border-bottom']").forEach(function(el){
+    var txt=el.textContent.trim().split("4组")[0].trim();
+    exercises.push({name:txt,sets:4,reps:10,rest:60})
+  });
+  try{
+    var all=JSON.parse(localStorage.getItem("workout_plans")||"{}");
+    all[today]={date:today,exercises:exercises};
+    localStorage.setItem("workout_plans",JSON.stringify(all));
+    alert("\u2705 \u5df2\u540c\u6b65\u5230\u6253\u5361\u8868")
+  }catch(e){alert("\u4fdd\u5b58\u5931\u8d25: "+e.message)}
+}</script>
+<script>
+var sel=new Set();
+var BM=BodyMuscles;
+var chartF=new BM.BodyChart(document.getElementById("chartFront"),{view:BM.ViewSide.FRONT,bodyState:{},onMuscleClick:function(id){toggleSel(id)}});
+var chartB=new BM.BodyChart(document.getElementById("chartBack"),{view:BM.ViewSide.BACK,bodyState:{},onMuscleClick:function(id){toggleSel(id)}});
+
+// Display name map (ID prefix → Chinese name)
+var nameMap={
+  "neck":"颈部","face":"面部","head":"头部","nape":"颈后",
+  "shoulder-front":"三角肌前束","shoulder-side":"三角肌中束","rear-deltoid":"三角肌后束",
+  "biceps":"肱二头肌","triceps":"肱三头肌","forearm":"前臂","forearm-flexors":"前臂","forearm-extensors":"前臂",
+  "chest-upper":"胸肌上部","chest-lower":"胸肌下部",
+  "abs-upper":"腹直肌上部","abs-lower":"腹直肌下部",
+  "serratus":"前锯肌","oblique":"腹外斜肌","groin":"髋屈肌","hip":"髋屈肌",
+  "quadriceps":"股四头肌","quads":"股四头肌","adductors":"内收肌","tibialis-anterior":"胫骨前肌",
+  "trapezius-upper":"斜方肌上部","trapezius-mid":"斜方肌中部","trapezius-lower":"斜方肌下部",
+  "lats-upper":"背阔肌上部","lats-mid":"背阔肌中部","lats-lower":"背阔肌下部",
+  "spine":"脊柱","erector-spinae":"竖脊肌","quadratus-lumborum":"腰方肌",
+  "gluteus-medius":"臀中肌","gluteus-maximus":"臀大肌",
+  "gastrocnemius-medial":"腓肠肌内侧","gastrocnemius-lateral":"腓肠肌外侧","soleus":"比目鱼肌",
+  "hamstrings-medial":"腘绳肌","hamstrings-lateral":"腘绳肌",
+  "deltoid":"三角肌","hand":"手","hand-back":"手背","foot":"脚","foot-back":"脚背",
+  "knee":"膝盖","knee-back":"膝后","elbow":"肘部"
+};
+
+function getMirrorId(id){
+  if(id.endsWith("-left"))return id.slice(0,-5)+"-right";
+  if(id.endsWith("-right"))return id.slice(0,-6)+"-left";
+  return null;
+}
+function getIdPrefix(id){return id.replace(/-left$/,"").replace(/-right$/,"")}
+function getDisplayName(id){
+  var p=getIdPrefix(id);
+  for(var key in nameMap){if(p===key||p.startsWith(key))return nameMap[key]}
+  return p;
+}
+
+function toggleSel(id){
+  var mir=getMirrorId(id);
+  if(sel.has(id)){sel.delete(id);if(mir)sel.delete(mir)}
+  else{sel.add(id);if(mir)sel.add(mir)}
+  syncCharts();updateList()
+}
+function syncCharts(){
+  var s={};sel.forEach(function(i){s[i]={intensity:0,selected:true}});
+  chartF.update({bodyState:s});chartB.update({bodyState:s})
+}
+function updateList(){
+  var l=document.getElementById("selList"),c=document.getElementById("countText");
+  var groups={};sel.forEach(function(i){groups[getDisplayName(i)]=true});
+  var cnt=Object.keys(groups).length;
+  c.textContent="共 "+cnt+" 块肌肉";
+  if(cnt===0){l.innerHTML="<div class='empty-state'>\uD83D\uDC46 点击人体图选择</div>";return}
+  var h="";
+  Object.keys(groups).forEach(function(n){h+="<div class='sel-item'><span>"+n+"</span><span class='del' onclick=\"rmGroup('"+n+"')\">\u00D7</span></div>"});
+  l.innerHTML=h
+}
+function rmGroup(name){
+  var rm=[];
+  sel.forEach(function(i){if(getDisplayName(i)===name)rm.push(i)});
+  rm.forEach(function(i){sel.delete(i)});
+  syncCharts();updateList()
+}
+function qs(t){
+  sel.clear();
+  if(t==="clear"){syncCharts();updateList();return}
+  var g={push:["Shoulder","Chest"],pull:["Biceps","Trapezius","Forearm","Lats","Rear"],legs:["Quad","Hamstring","Glute","Gastrocnemius","Soleus","Adductor"],core:["Abs","Oblique","Spine","Erector","Quadratus"]};
+  var allM=chartF._muscles.concat(chartB._muscles);
+  if(t==="all"){allM.forEach(function(m){sel.add(m.id)});syncCharts();updateList();return}
+  var k=g[t]||[];
+  allM.forEach(function(m){for(var i=0;i<k.length;i++){if(m.name.indexOf(k[i])>=0){sel.add(m.id);break}}});
+  syncCharts();updateList()
+}
+
+// Exercise database
+var eDB={
+  "胸肌上部":[
+    {n:"上斜杠铃卧推",e:"杠铃",s:"4组×8-10次",r:"60秒"},{n:"上斜哑铃卧推",e:"哑铃",s:"4组×10-12次",r:"60秒"},
+    {n:"上斜哑铃飞鸟",e:"哑铃",s:"3组×12-15次",r:"45秒"},{n:"低位绳索夹胸",e:"绳索",s:"3组×12-15次",r:"45秒"},
+    {n:"上斜史密斯机卧推",e:"固定器械",s:"4组×8-10次",r:"60秒"},{n:"下斜俯卧撑(脚垫高)",e:"徒手",s:"3组×15-20次",r:"45秒"}],
+  "胸肌下部":[
+    {n:"下斜杠铃卧推",e:"杠铃",s:"4组×8-10次",r:"60秒"},{n:"下斜哑铃卧推",e:"哑铃",s:"4组×10-12次",r:"60秒"},
+    {n:"双杠臂屈伸",e:"徒手",s:"3组×12-15次",r:"45秒"},{n:"高位绳索夹胸",e:"绳索",s:"3组×12-15次",r:"45秒"},
+    {n:"下斜史密斯机卧推",e:"固定器械",s:"4组×8-10次",r:"60秒"},{n:"窄距俯卧撑",e:"徒手",s:"3组×15-20次",r:"45秒"}],
+  "三角肌前束":[
+    {n:"杠铃站姿推举",e:"杠铃",s:"4组×8-10次",r:"60秒"},{n:"哑铃前平举",e:"哑铃",s:"3组×12-15次",r:"45秒"},
+    {n:"杠铃片前平举",e:"杠铃片",s:"3组×12-15次",r:"45秒"},{n:"绳索前平举",e:"绳索",s:"3组×12-15次",r:"45秒"},
+    {n:"史密斯机推举",e:"固定器械",s:"4组×8-10次",r:"60秒"},{n:"弹力带前平举",e:"弹力带",s:"3组×15-20次",r:"30秒"}],
+  "三角肌中束":[
+    {n:"哑铃侧平举",e:"哑铃",s:"4组×12-15次",r:"45秒"},{n:"绳索侧平举",e:"绳索",s:"3组×12-15次",r:"45秒"},
+    {n:"杠铃片侧平举",e:"杠铃片",s:"3组×12-15次",r:"45秒"},{n:"史密斯机颈后推举",e:"固定器械",s:"3组×10-12次",r:"60秒"},
+    {n:"弹力带侧平举",e:"弹力带",s:"3组×15-20次",r:"30秒"},{n:"哑铃古巴推举",e:"哑铃",s:"3组×10-12次",r:"45秒"}],
+  "肱二头肌":[
+    {n:"杠铃弯举",e:"杠铃",s:"4组×8-10次",r:"60秒"},{n:"哑铃交替弯举",e:"哑铃",s:"4组×10-12次",r:"45秒"},
+    {n:"锤式弯举",e:"哑铃",s:"3组×12-15次",r:"45秒"},{n:"绳索弯举",e:"绳索",s:"3组×12-15次",r:"45秒"},
+    {n:"集中弯举",e:"哑铃",s:"3组×10-12次",r:"45秒"},{n:"弹力带弯举",e:"弹力带",s:"3组×15-20次",r:"30秒"}],
+  "背部":[
+    {n:"杠铃划船",e:"杠铃",s:"4组×8-10次",r:"60秒"},{n:"引体向上",e:"徒手",s:"4组×8-12次",r:"60秒"},
+    {n:"高位下拉",e:"固定器械",s:"4组×10-12次",r:"60秒"},{n:"坐姿绳索划船",e:"绳索",s:"4组×10-12次",r:"45秒"},
+    {n:"单臂哑铃划船",e:"哑铃",s:"3组×10-12次",r:"45秒"},{n:"弹力带划船",e:"弹力带",s:"3组×15-20次",r:"30秒"}],
+  "腹直肌":[
+    {n:"卷腹",e:"徒手",s:"3组×20-25次",r:"30秒"},{n:"平板支撑",e:"徒手",s:"3组×45-60秒",r:"30秒"},
+    {n:"绳索卷腹",e:"绳索",s:"3组×15-20次",r:"30秒"},{n:"仰卧举腿",e:"徒手",s:"3组×15-20次",r:"30秒"},
+    {n:"健腹轮卷腹",e:"徒手",s:"3组×10-15次",r:"45秒"},{n:"药球卷腹",e:"药球",s:"3组×15-20次",r:"30秒"}],
+  "腹外斜肌":[
+    {n:"俄罗斯转体",e:"徒手",s:"3组×20-25次",r:"30秒"},{n:"侧平板支撑",e:"徒手",s:"3组×30-45秒",r:"30秒"},
+    {n:"绳索侧向卷腹",e:"绳索",s:"3组×15-20次",r:"30秒"},{n:"哑铃侧屈",e:"哑铃",s:"3组×15-20次",r:"30秒"},
+    {n:"悬垂侧举腿",e:"徒手",s:"3组×10-15次",r:"45秒"},{n:"药球侧抛",e:"药球",s:"3组×15-20次",r:"30秒"}],
+  "股四头肌":[
+    {n:"杠铃深蹲",e:"杠铃",s:"4组×8-10次",r:"90秒"},{n:"前蹲",e:"杠铃",s:"4组×8-10次",r:"90秒"},
+    {n:"腿举",e:"固定器械",s:"4组×10-12次",r:"60秒"},{n:"腿屈伸",e:"固定器械",s:"3组×12-15次",r:"45秒"},
+    {n:"保加利亚分腿蹲",e:"哑铃",s:"3组×10-12次",r:"60秒"},{n:"弹力带深蹲",e:"弹力带",s:"3组×15-20次",r:"45秒"}],
+  "腘绳肌":[
+    {n:"罗马尼亚硬拉",e:"杠铃",s:"4组×8-10次",r:"60秒"},{n:"腿弯举",e:"固定器械",s:"4组×10-12次",r:"45秒"},
+    {n:"北欧腿弯举",e:"徒手",s:"3组×6-10次",r:"60秒"},{n:"单腿硬拉",e:"哑铃",s:"3组×10-12次",r:"45秒"},
+    {n:"臀桥",e:"徒手",s:"3组×15-20次",r:"30秒"},{n:"弹力带腿弯举",e:"弹力带",s:"3组×15-20次",r:"30秒"}],
+  "臀部":[
+    {n:"杠铃臀推",e:"杠铃",s:"4组×8-10次",r:"60秒"},{n:"哑铃臀推",e:"哑铃",s:"4组×10-12次",r:"60秒"},
+    {n:"绳索臀推",e:"绳索",s:"3组×12-15次",r:"45秒"},{n:"保加利亚分腿蹲",e:"哑铃",s:"3组×10-12次",r:"60秒"},
+    {n:"弹力带臀桥",e:"弹力带",s:"3组×15-20次",r:"30秒"},{n:"鸟狗式",e:"徒手",s:"3组×12-15次",r:"30秒"}],
+  "小腿":[
+    {n:"站姿提踵",e:"杠铃",s:"4组×15-20次",r:"45秒"},{n:"坐姿提踵",e:"哑铃",s:"4组×15-20次",r:"45秒"},
+    {n:"腿举机提踵",e:"固定器械",s:"4组×15-20次",r:"45秒"},{n:"单腿提踵",e:"徒手",s:"3组×20-25次",r:"30秒"},
+    {n:"弹力带提踵",e:"弹力带",s:"3组×15-20次",r:"30秒"},{n:"农夫行走",e:"哑铃",s:"3组×30秒",r:"60秒"}]
+};
+
+// Muscle ID → exercise group mapping (ID prefix → Chinese group name)
+var idToEx={
+  "chest-upper":"胸肌上部","chest-lower":"胸肌下部",
+  "shoulder-front":"三角肌前束","shoulder-side":"三角肌中束","rear-deltoid":"三角肌后束",
+  "biceps":"肱二头肌","forearm":"前臂","forearm-flexors":"前臂","forearm-extensors":"前臂",
+  "lats":"背部","trapezius":"背部","spine":"背部","erector":"背部","quadrat":"背部","nape":"背部",
+  "abs":"腹直肌","serratus":"腹外斜肌","oblique":"腹外斜肌",
+  "groin":"股四头肌","quadriceps":"股四头肌","adductors":"股四头肌",
+  "hamstrings":"腘绳肌","gluteus":"臀部","glute":"臀部","gastrocnemius":"小腿","soleus":"小腿","tibialis":"小腿"
+};
+
+function generatePlan(){
+  console.log("生成计划按钮被点击了");
+  if(sel.size===0){alert("请先选择肌肉部位");return}
+  var groups={};
+  sel.forEach(function(id){
+    var p=getIdPrefix(id);
+    for(var key in idToEx){
+      if(p.indexOf(key)>=0||key.indexOf(p)>=0){groups[idToEx[key]]=eDB[idToEx[key]];break}
+    }
+  });
+  var h="<div style='margin-top:16px;padding:12px;background:rgba(72,201,114,0.06);border:1px solid rgba(72,201,114,0.12);border-radius:8px'>";
+  h+="<div style='font-size:14px;font-weight:600;margin-bottom:8px'>\uD83D\uDCCB \u8bad\u7ec3\u8ba1\u5212</div>";
+  var total=0;
+  for(var g in groups){
+    h+="<div style='font-size:12px;font-weight:600;color:#48c972;margin:6px 0 3px'>"+g+"</div>";
+    var exArr=groups[g];
+    var showCount=Math.min(exArr.length,Object.keys(groups).length>2?4:6);
+    for(var i=0;i<showCount;i++){
+      var ex=exArr[i];total++;
+      h+="<div style='padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:11px'>";
+      h+="<span style='font-weight:500'>"+ex.n+"</span> ";
+      h+="<span style='color:rgba(255,255,255,0.3);font-size:10px'>["+ex.e+"]</span> ";
+      h+="<span style='color:rgba(255,255,255,0.4)'>"+ex.s+"</span> ";
+      h+="<span style='color:rgba(255,255,255,0.3)'>\u4f11\u606f"+ex.r+"</span></div>"
+    }
+  }
+  h+="<div style='text-align:center;padding:8px 0;font-size:12px;color:rgba(72,201,114,0.8)'>\u5171 "+total+" \u4e2a\u52a8\u4f5c</div></div>";
+  var old=document.getElementById("planResult");
+  if(old)old.remove();
+  var d=document.createElement("div");d.id="planResult";d.innerHTML=h;
+  document.querySelector(".ab").parentNode.insertBefore(d,document.querySelector(".ab").nextSibling)
+}
+
+function syncToCalendar(){
+  console.log("同步按钮被点击了");
+  var plan=document.getElementById("planResult");
+  if(!plan){alert("\u26A0\uFE0F \u8bf7\u5148\u751f\u6210\u8bad\u7ec3\u8ba1\u5212");return}
+  var today=new Date().toISOString().slice(0,10);
+  var exercises=[];
+  plan.querySelectorAll("div[style*='border-bottom']").forEach(function(el){
+    var spans=el.querySelectorAll("span");
+    if(spans.length>0)exercises.push({name:spans[0].textContent,sets:4,reps:10,rest:60})
+  });
+  try{
+    var all=JSON.parse(localStorage.getItem("workout_plans")||"{}");
+    all[today]={date:today,exercises:exercises};
+    localStorage.setItem("workout_plans",JSON.stringify(all));
+    alert("\u2705 \u5df2\u540c\u6b65\u5230\u6253\u5361\u8868")
+  }catch(e){alert("保存失败: "+e.message)}
+}</script></body></html>

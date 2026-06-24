@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个人资料 - 铁馆</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<script src="js/particles.js"></script>
+<div class="container content-enter">
+  <h1 class="page-title content-enter">个人资料</h1>
+  <p class="page-subtitle content-enter content-enter-delay-1">管理你的身体数据和健身目标</p>
+
+  <div class="profile-layout content-enter content-enter-delay-2">
+    <div class="card avatar-section">
+      <div class="avatar-img">
+        <svg viewBox="0 0 50 50" fill="none"><circle cx="25" cy="18" r="10" stroke="#64b5f6" stroke-width="2"/><path d="M8 42c0-8 7.6-14 17-14s17 6 17 14" stroke="#64b5f6" stroke-width="2"/></svg>
+      </div>
+      <h3 id="displayName" style="font-size:18px;font-weight:600;margin-bottom:4px;">健身用户</h3>
+      <p style="color:var(--text-tertiary);font-size:13px;" id="displayGoal">目标：增肌</p>
+      <p style="color:var(--text-tertiary);font-size:13px;" id="displayCalories">推荐每日热量：2200 kcal</p>
+      <button class="btn btn-primary btn-block" onclick="saveProfile()" style="margin-top:16px;">保存资料</button>
+      <button class="btn btn-secondary btn-block" onclick="exportData()" style="margin-top:8px;">导出数据 (JSON)</button>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-bottom:16px;">身体数据</h3>
+      <div class="form-group"><label>昵称</label><input class="form-control" id="nickname" placeholder="你的昵称"></div>
+      <div class="grid-2">
+        <div class="form-group"><label>身高 (cm)</label><input class="form-control" id="height" type="number" step="0.1"></div>
+        <div class="form-group"><label>体重 (kg)</label><input class="form-control" id="weight" type="number" step="0.1"></div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group"><label>年龄</label><input class="form-control" id="age" type="number"></div>
+        <div class="form-group"><label>性别</label><select class="form-control" id="gender"><option value="男">男</option><option value="女">女</option></select></div>
+      </div>
+      <div class="form-group"><label>健身目标</label>
+        <select class="form-control" id="goal"><option value="增肌">增肌</option><option value="减脂">减脂</option><option value="塑形">塑形</option><option value="新手入门">新手入门</option></select></div>
+      <div class="form-group"><label>活动水平</label>
+        <select class="form-control" id="activityLevel"><option value="久坐">久坐（几乎不运动）</option><option value="轻度">轻度（每周1-3天）</option><option value="中等" selected>中等（每周3-5天）</option><option value="活跃">活跃（每周6-7天）</option><option value="高强度">高强度（每天/体力劳动）</option></select></div>
+    </div>
+  </div>
+</div>
+<script src="js/nav.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/api.js"></script>
+<script>
+async function loadProfile() {
+  try {
+    const user = await api.get('/user');
+    document.getElementById('nickname').value = user.nickname || '';
+    document.getElementById('height').value = user.height || 170;
+    document.getElementById('weight').value = user.weight || 70;
+    document.getElementById('age').value = user.age || 25;
+    document.getElementById('gender').value = user.gender || '男';
+    document.getElementById('goal').value = user.goal || '增肌';
+    document.getElementById('activityLevel').value = user.activity_level || '中等';
+    document.getElementById('displayName').textContent = user.nickname || '健身用户';
+    document.getElementById('displayGoal').textContent = '目标：' + (user.goal || '增肌');
+    document.getElementById('displayCalories').textContent = '推荐每日热量：' + (user.daily_calories || 2200) + ' kcal';
+  } catch(e) { console.error('加载用户资料失败', e); }
+}
+async function saveProfile() {
+  const data = {
+    nickname: document.getElementById('nickname').value,
+    height: parseFloat(document.getElementById('height').value) || 170,
+    weight: parseFloat(document.getElementById('weight').value) || 70,
+    age: parseInt(document.getElementById('age').value) || 25,
+    gender: document.getElementById('gender').value,
+    goal: document.getElementById('goal').value,
+    activity_level: document.getElementById('activityLevel').value
+  };
+  try {
+    const user = await api.post('/user', data);
+    document.getElementById('displayName').textContent = user.nickname || '健身用户';
+    document.getElementById('displayGoal').textContent = '目标：' + user.goal;
+    document.getElementById('displayCalories').textContent = '推荐每日热量：' + user.daily_calories + ' kcal';
+    showToast('资料已保存！推荐每日热量：' + user.daily_calories + ' kcal', 'success');
+  } catch(e) { showToast('保存失败', 'error'); }
+}
+async function exportData() {
+  try {
+    const data = await api.get('/export');
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'fitness-data-' + new Date().toISOString().slice(0,10) + '.json';
+    a.click();
+    showToast('数据已导出', 'success');
+  } catch(e) { showToast('导出失败', 'error'); }
+}
+function showToast(msg, type) {
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2500);
+}
+loadProfile();
+</script>
+</body>
+</html>

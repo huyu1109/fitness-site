@@ -1,0 +1,802 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>登录 - 铁馆</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* ====== 登录页专用样式 ====== */
+.login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:80px 24px}
+.login-wrapper{display:grid;grid-template-columns:1fr 1fr;max-width:920px;width:100%;gap:0;background:rgba(255,255,255,0.03);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border-radius:24px;border:1px solid rgba(255,255,255,0.08);overflow:hidden;box-shadow:0 16px 64px rgba(0,0,0,0.3)}
+.login-brand{padding:48px 40px;display:flex;flex-direction:column;justify-content:center;background:linear-gradient(135deg,rgba(51,112,255,0.08),rgba(51,112,255,0.02));border-right:1px solid rgba(255,255,255,0.06);position:relative}
+.login-brand .logo{font-size:32px;font-weight:700;margin-bottom:12px;letter-spacing:-0.5px}
+.login-brand .logo span{color:#3370FF}
+.login-brand .tagline{font-size:15px;color:var(--text-secondary);line-height:1.7;margin-bottom:32px}
+.login-brand .illustration{flex:1;display:flex;align-items:center;justify-content:center;min-height:160px;opacity:0.7}
+.login-brand .illustration svg{width:100%;max-width:240px;height:auto}
+.login-brand .stats{font-size:13px;color:var(--text-tertiary);margin-top:24px;text-align:center}
+.login-card{padding:40px}
+.login-tabs{display:flex;gap:0;margin-bottom:28px;border-bottom:1px solid rgba(255,255,255,0.08)}
+.login-tab{padding:12px 24px;font-size:15px;font-weight:600;cursor:pointer;color:var(--text-tertiary);border-bottom:2px solid transparent;transition:all 0.3s var(--ease-out);background:none;border-top:none;border-left:none;border-right:none;font-family:var(--font)}
+.login-tab:hover{color:var(--text-secondary)}
+.login-tab.active{color:#3370FF;border-bottom-color:#3370FF}
+.login-panel{display:none;animation:fadeIn 0.3s var(--ease-out)}
+.login-panel.active{display:block}
+.feishu-btn{width:100%;padding:14px 20px;border:none;border-radius:12px;background:#3370FF;color:#fff;font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all 0.3s var(--ease-out);font-family:var(--font)}
+.feishu-btn:hover{background:#2860e0;transform:translateY(-2px);box-shadow:0 4px 20px rgba(51,112,255,0.3)}
+.feishu-btn:active{transform:scale(0.97)}
+.feishu-btn svg{width:22px;height:22px;flex-shrink:0}
+.feishu-hint{text-align:center;font-size:12px;color:var(--text-tertiary);margin-top:8px}
+.qr-area{text-align:center;padding:20px 0 10px}
+.qr-wrapper{display:inline-block;background:#fff;border-radius:12px;padding:12px;box-shadow:0 4px 16px rgba(0,0,0,0.15)}
+.qr-wrapper img{display:block;width:200px;height:200px}
+#qrStatus{text-align:center;font-size:13px;color:var(--text-secondary);margin:10px 0 4px}
+#qrTimer{text-align:center;font-size:11px;color:var(--text-tertiary);font-variant-numeric:tabular-nums}
+.qr-refresh-btn{width:100%;padding:12px 20px;border:none;border-radius:12px;background:#3370FF;color:#fff;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.3s;font-family:var(--font);margin-top:10px}
+.qr-refresh-btn:hover{background:#2860e0}
+.qr-refresh-btn:active{transform:scale(0.97)}
+.qr-simulate-btn{width:auto;padding:5px 10px;border:1px solid rgba(255,255,255,0.15);border-radius:6px;background:transparent;color:var(--text-tertiary);font-size:10px;cursor:pointer;margin-top:4px;transition:all 0.2s}
+.qr-simulate-btn:hover{color:var(--text-primary);border-color:rgba(255,255,255,0.3)}
+.divider-row{display:flex;align-items:center;gap:16px;margin:20px 0;color:var(--text-tertiary);font-size:13px}
+.divider-row::before,.divider-row::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08)}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:13px;font-weight:500;color:var(--text-secondary);margin-bottom:6px}
+.login-input{width:100%;padding:14px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.06);color:var(--text-primary);font-size:14px;font-family:var(--font);outline:none;transition:all 0.25s var(--ease-out);box-sizing:border-box}
+.login-input::placeholder{color:rgba(255,255,255,0.3)}
+.login-input:focus{border-color:#3370FF;box-shadow:0 0 0 3px rgba(51,112,255,0.15)}
+.pwd-wrapper{position:relative}
+.pwd-toggle{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-tertiary);cursor:pointer;font-size:13px;padding:4px}
+.pwd-toggle:hover{color:var(--text-primary)}
+.row-flex{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
+.checkbox-label{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-secondary);cursor:pointer}
+.checkbox-label input[type=checkbox]{width:16px;height:16px;accent-color:#3370FF;cursor:pointer}
+.forgot-link{font-size:13px;color:var(--text-tertiary);cursor:pointer;text-decoration:none}
+.forgot-link:hover{color:#3370FF}
+.login-submit{width:100%;padding:14px 24px;border-radius:12px;border:1px solid rgba(255,255,255,0.2);background:transparent;color:var(--text-primary);font-size:15px;font-weight:600;cursor:pointer;transition:all 0.3s var(--ease-out);font-family:var(--font)}
+.login-submit:hover{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.3);transform:translateY(-2px)}
+.login-submit:active{transform:scale(0.97)}
+.login-submit.primary{background:#3370FF;border-color:#3370FF;color:#fff}
+.login-submit.primary:hover{background:#2860e0;box-shadow:0 4px 20px rgba(51,112,255,0.3)}
+.login-error{font-size:12px;color:#ff4757;margin-top:4px;display:none}
+.login-error.show{display:block;animation:fadeIn 0.2s}
+.login-success{text-align:center;padding:40px 20px}
+.login-success .check{width:64px;height:64px;border-radius:50%;background:rgba(51,112,255,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:32px;color:#3370FF}
+.login-success h3{font-size:18px;margin-bottom:8px}
+.login-success p{font-size:13px;color:var(--text-secondary)}
+@keyframes spinner{to{transform:rotate(360deg)}}
+.loading-spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;border-radius:50%;animation:spinner 0.6s linear infinite;vertical-align:middle;margin-right:8px}
+
+@media(max-width:768px){
+  .login-wrapper{grid-template-columns:1fr}
+  .login-brand{padding:32px 24px;border-right:none;border-bottom:1px solid rgba(255,255,255,0.06)}
+  .login-brand .illustration{display:none}
+  .login-brand .stats{margin-top:12px}
+  .login-card{padding:24px}
+  .login-page{padding:60px 16px}
+}
+</style>
+</head>
+<body>
+<script src="js/particles.js">
+
+// QR code functions - ASCII safe
+var qtp=null,qet=null,qea=0,qd=null;
+function qrLd(){
+  var i=document.getElementById('qrCodeImg'),p=document.getElementById('qrPh'),s=document.getElementById('qrStatus'),r=document.getElementById('qrRefreshBtn'),b=document.getElementById('qrSimBtn');
+  if(!i)return;
+  i.style.display='none';p.style.display='flex';
+  s.textContent='\u6B63\u5728\u751F\u6210...';
+  r.style.display='none';b.style.display='none';
+  if(qtp){clearInterval(qtp);qtp=null;}
+  if(qet){clearInterval(qet);qet=null;}
+  api.post('/auth/feishu/qrcode').then(function(x){
+    qd=x;qea=x.expire_at;i.src=x.qrcode_url;
+    i.onload=function(){i.style.display='block';p.style.display='none';};
+    i.onerror=function(){p.textContent='\u52A0\u8F7D\u5931\u8D25';};
+    s.textContent='\u8BF7\u4F7F\u7528\u98DE\u4E66\u626B\u7801\u767B\u5F55';
+    b.style.display='inline-block';
+    stP(x.qrcode_id);stT();
+  }).catch(function(){s.textContent='\u751F\u6210\u5931\u8D25';r.style.display='block';});
+}
+function stP(id){
+  var s=document.getElementById('qrStatus'),r=document.getElementById('qrRefreshBtn');
+  if(qtp)clearInterval(qtp);
+  qtp=setInterval(function(){
+    api.get('/feishu/status/'+id).then(function(x){
+      if(x.status==='scanned'){
+        s.textContent='\u5DF2\u626B\u7801\uFF0C\u8BF7\u5728\u624B\u673A\u4E0A\u786E\u8BA4';
+        api.post('/auth/feishu/confirm-scan/'+id).then(function(c){
+          if(c.status==='confirmed'&&c.token){
+            clearInterval(qtp);qtp=null;clearInterval(qet);qet=null;
+            localStorage.setItem('fit_token',c.token);localStorage.setItem('fit_user',JSON.stringify(c.user));
+            shS('\u767B\u5F55\u6210\u529F','\u6B63\u5728\u8DF3\u8F6C...');
+            setTimeout(function(){var rd=localStorage.getItem('fit_redirect')||'index.html';localStorage.removeItem('fit_redirect');window.location.href=rd;},1000);
+          }
+        }).catch(function(){});
+      }else if(x.status==='expired'){
+        clearInterval(qtp);qtp=null;clearInterval(qet);qet=null;
+        s.textContent='\u4E8C\u7EF4\u7801\u5DF2\u8FC7\u671F';r.style.display='block';
+      }
+    }).catch(function(){});
+  },2000);
+}
+function stT(){
+  var e=document.getElementById('qrTimer'),s=document.getElementById('qrStatus'),r=document.getElementById('qrRefreshBtn');
+  if(!e)return;
+  if(qet)clearInterval(qet);
+  qet=setInterval(function(){
+    var rm=Math.max(0,Math.floor((qea-Date.now())/1000));
+    if(rm<=0){clearInterval(qet);qet=null;e.textContent='';
+      if(!r.style.display||r.style.display==='none'){s.textContent='\u4E8C\u7EF4\u7801\u5DF2\u8FC7\u671F';r.style.display='block';}
+    }else{var m=Math.floor(rm/60),ss=rm%60;e.textContent='\u5269\u4F59 '+(m<10?'0':'')+m+':'+(ss<10?'0':'')+ss;}
+  },1000);
+}
+function smS(){
+  if(!qd)return;
+  api.post('/auth/feishu/simulate-scan/'+qd.qrcode_id);
+  api.post('/auth/feishu/confirm-scan/'+qd.qrcode_id).then(function(c){
+    if(c.status==='confirmed'&&c.token){
+      if(qtp){clearInterval(qtp);qtp=null;}
+      if(qet){clearInterval(qet);qet=null;}
+      localStorage.setItem('fit_token',c.token);localStorage.setItem('fit_user',JSON.stringify(c.user));
+      shS('\u767B\u5F55\u6210\u529F','\u6B63\u5728\u8DF3\u8F6C...');
+      setTimeout(function(){var rd=localStorage.getItem('fit_redirect')||'index.html';localStorage.removeItem('fit_redirect');window.location.href=rd;},1000);
+    }
+  }).catch(function(){});
+}
+document.addEventListener('DOMContentLoaded',function(){
+  var lp=document.getElementById('panel-login');
+  if(lp&&lp.classList.contains('active'))qrLd();
+});
+
+</script>
+<div class="login-page">
+  <div class="login-wrapper">
+    <!-- 左栏：品牌展示 -->
+    <div class="login-brand">
+      <div class="logo">&#x94C1;&#x9986;</div>
+      <div class="tagline">&#x8BB0;&#x5F55;&#x6BCF;&#x4E00;&#x6B21;&#x8BAD;&#x7EC3;&#xFF0C;<br>&#x89C1;&#x8BC1;&#x6BCF;&#x4E00;&#x6B21;&#x8FDB;&#x6B65;</div>
+      <div class="illustration">
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="100" cy="60" r="30" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
+          <path d="M60 170 Q60 90 100 90 Q140 90 140 170" stroke="rgba(255,255,255,0.15)" stroke-width="2" fill="none"/>
+          <path d="M40 100 L60 140 L75 120" stroke="#3370FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M160 100 L140 140 L125 120" stroke="#3370FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+          <circle cx="85" cy="50" r="4" fill="#3370FF" opacity="0.6"/>
+          <circle cx="100" cy="40" r="5" fill="#3370FF" opacity="0.8"/>
+          <circle cx="115" cy="50" r="4" fill="#3370FF" opacity="0.6"/>
+        </svg>
+      </div>
+      <div class="stats">&#x5DF2;&#x6709; 10,000+ &#x5065;&#x8EAB;&#x7231;&#x597D;&#x8005;&#x52A0;&#x5165;</div>
+    </div>
+
+    <!-- 右栏：登录/注册表单 -->
+    <div class="login-card">
+      <!-- 选项卡 -->
+      <div class="login-tabs">
+        <button class="login-tab active" data-tab="login" onclick="switchTab('login')">&#x767B;&#x5F55;</button>
+        <button class="login-tab" data-tab="register" onclick="switchTab('register')">&#x6CE8;&#x518C;</button>
+      </div>
+
+      <!-- 登录面板 -->
+      <div class="login-panel active" id="panel-login">
+        <button class="feishu-btn" onclick="window.location.href='/api/auth/feishu/login'">
+          <svg viewBox="0 0 22 22" fill="none"><rect x="3" y="3" width="16" height="16" rx="4" fill="white"/><path d="M7 11h8M11 7v8" stroke="#3370FF" stroke-width="2" stroke-linecap="round"/></svg>
+          &#x4F7F;&#x7528;&#x98DE;&#x4E66;&#x626B;&#x7801;&#x767B;&#x5F55;
+        </button>
+        <div class="feishu-hint">&#x65E0;&#x9700;&#x6CE8;&#x518C;&#xFF0C;&#x626B;&#x7801;&#x5373;&#x767B;&#x5F55;</div>
+
+        <div class="divider-row">&#x6216;</div>
+
+        <div class="form-group">
+          <label>&#x90AE;&#x7BB1;/&#x624B;&#x673A;&#x53F7;</label>
+          <input class="login-input" id="loginEmail" type="text" placeholder="&#x8BF7;&#x8F93;&#x5165;&#x90AE;&#x7BB1;&#x6216;&#x624B;&#x673A;&#x53F7;">
+          <div class="login-error" id="loginEmailError"></div>
+        </div>
+        <div class="form-group">
+          <label>&#x5BC6;&#x7801;</label>
+          <div class="pwd-wrapper">
+            <input class="login-input" id="loginPassword" type="password" placeholder="&#x8BF7;&#x8F93;&#x5165;&#x5BC6;&#x7801;">
+            <button class="pwd-toggle" onclick="togglePwd('loginPassword',this)">&#x663E;&#x793A;</button>
+          </div>
+          <div class="login-error" id="loginPwdError"></div>
+        </div>
+        <div class="row-flex">
+          <label class="checkbox-label"><input type="checkbox" id="rememberMe"> &#x8BB0;&#x4F4F;&#x6211;</label>
+          <a class="forgot-link" onclick="alert('&#x8BF7;&#x8054;&#x7CFB;&#x7BA1;&#x7406;&#x5458;&#x91CD;&#x7F6E;&#x5BC6;&#x7801;')">&#x5FD8;&#x8BB0;&#x5BC6;&#x7801;&#xFF1F;</a>
+        </div>
+        <button class="login-submit primary" onclick="login()" id="loginBtn">&#x767B;&#x5F55;</button>
+      </div>
+
+      <!-- 注册面板 -->
+      <div class="login-panel" id="panel-register">
+        <button class="feishu-btn" onclick="window.location.href='/api/auth/feishu/login'">
+          <svg viewBox="0 0 22 22" fill="none"><rect x="3" y="3" width="16" height="16" rx="4" fill="white"/><path d="M7 11h8M11 7v8" stroke="#3370FF" stroke-width="2" stroke-linecap="round"/></svg>
+          &#x4F7F;&#x7528;&#x98DE;&#x4E66;&#x4E00;&#x952E;&#x6CE8;&#x518C;
+        </button>
+        <div class="feishu-hint">&#x626B;&#x7801;&#x5373;&#x53EF;&#x81EA;&#x52A8;&#x6CE8;&#x518C;</div>
+
+        <div class="divider-row">&#x6216;</div>
+
+        <div class="form-group">
+          <label>&#x6635;&#x79F0;</label>
+          <input class="login-input" id="regNick" placeholder="&#x8BF7;&#x8F93;&#x5165;&#x6635;&#x79F0;">
+        </div>
+        <div class="form-group">
+          <label>&#x90AE;&#x7BB1;</label>
+          <input class="login-input" id="regEmail" type="email" placeholder="&#x8BF7;&#x8F93;&#x5165;&#x90AE;&#x7BB1;">
+          <div class="login-error" id="regEmailError"></div>
+        </div>
+        <div class="form-group">
+          <label>&#x5BC6;&#x7801; (&#x81F3;&#x5C11;8&#x4F4D;&#xFF0C;&#x5305;&#x542B;&#x5B57;&#x6BCD;&#x548C;&#x6570;&#x5B57;)</label>
+          <div class="pwd-wrapper">
+            <input class="login-input" id="regPwd" type="password" placeholder="&#x8BF7;&#x8F93;&#x5165;&#x5BC6;&#x7801;">
+            <button class="pwd-toggle" onclick="togglePwd('regPwd',this)">&#x663E;&#x793A;</button>
+          </div>
+          <div class="login-error" id="regPwdError"></div>
+        </div>
+        <div class="form-group">
+          <label>&#x786E;&#x8BA4;&#x5BC6;&#x7801;</label>
+          <div class="pwd-wrapper">
+            <input class="login-input" id="regPwd2" type="password" placeholder="&#x518D;&#x6B21;&#x8F93;&#x5165;&#x5BC6;&#x7801;">
+          </div>
+          <div class="login-error" id="regPwd2Error"></div>
+        </div>
+
+        <details style="margin-bottom:12px">
+          <summary style="cursor:pointer;font-size:13px;color:var(--text-tertiary);padding:4px 0">&#x8EAB;&#x4F53;&#x6570;&#x636E; (&#x53EF;&#x9009;&#xFF0C;&#x540E;&#x7EED;&#x53EF;&#x4FEE;&#x6539;)</summary>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+            <div><label style="font-size:12px;color:var(--text-tertiary)">&#x8EAB;&#x9AD8;(cm)</label><input class="login-input" id="regHeight" type="number" placeholder="170"></div>
+            <div><label style="font-size:12px;color:var(--text-tertiary)">&#x4F53;&#x91CD;(kg)</label><input class="login-input" id="regWeight" type="number" placeholder="70"></div>
+            <div><label style="font-size:12px;color:var(--text-tertiary)">&#x5E74;&#x9F84;</label><input class="login-input" id="regAge" type="number" placeholder="25"></div>
+            <div><label style="font-size:12px;color:var(--text-tertiary)">&#x6027;&#x522B;</label>
+              <select class="login-input" id="regGender"><option value="&#x7537;">&#x7537;</option><option value="&#x5973;">&#x5973;</option></select>
+            </div>
+          </div>
+          <div style="margin-top:10px">
+            <label style="font-size:12px;color:var(--text-tertiary)">&#x5065;&#x8EAB;&#x76EE;&#x6807;</label>
+            <select class="login-input" id="regGoal"><option value="&#x589E;&#x808C;">&#x589E;&#x808C;</option><option value="&#x51CF;&#x8102;">&#x51CF;&#x8102;</option><option value="&#x5851;&#x5F62;">&#x5851;&#x5F62;</option><option value="&#x65B0;&#x624B;&#x5165;&#x95E8;">&#x65B0;&#x624B;&#x5165;&#x95E8;</option></select>
+          </div>
+        </details>
+
+        <label class="checkbox-label" style="margin-bottom:16px">
+          <input type="checkbox" id="agreeTerms">
+          <span style="font-size:13px">&#x6211;&#x5DF2;&#x9605;&#x8BFB;&#x5E76;&#x540C;&#x610F; <a href="#" style="color:#3370FF">&#x7528;&#x6237;&#x534F;&#x8BAE;</a> &#x548C; <a href="#" style="color:#3370FF">&#x9690;&#x79C1;&#x653F;&#x7B56;</a></span>
+        </label>
+        <button class="login-submit primary" onclick="register()" id="regBtn">&#x6CE8;&#x518C;</button>
+      </div>
+
+      <!-- 成功面板 -->
+      <div class="login-panel" id="panel-success">
+        <div class="login-success">
+          <div class="check">&#x2713;</div>
+          <h3 id="successTitle">&#x767B;&#x5F55;&#x6210;&#x529F;</h3>
+          <p id="successMsg">&#x6B63;&#x5728;&#x8DF3;&#x8F6C;&#x2026;</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="js/ui.js">
+
+// ====== QR Code Login ======
+var qrPollTimer=null,qrExpTimer=null,qrExpAt=0,qrData=null;
+function loadQRCode(){
+  var img=document.getElementById('qrCodeImg'),ph=document.getElementById('qrPh'),st=document.getElementById('qrStatus'),rb=document.getElementById('qrRefreshBtn'),sb=document.getElementById('qrSimBtn');
+  if(!img)return;
+  img.style.display='none';ph.style.display='flex';st.textContent='正在生成...';
+  rb.style.display='none';sb.style.display='none';
+  if(qrPollTimer){clearInterval(qrPollTimer);qrPollTimer=null;}
+  if(qrExpTimer){clearInterval(qrExpTimer);qrExpTimer=null;}
+  api.post('/auth/feishu/qrcode').then(function(r){
+    qrData=r;qrExpAt=r.expire_at;img.src=r.qrcode_url;
+    img.onload=function(){img.style.display='block';ph.style.display='none';};
+    img.onerror=function(){ph.textContent='加载失败';};
+    st.textContent='请使用飞书扫码登录';
+    sb.style.display='inline-block';
+    startPolling(r.qrcode_id);startExpTimer();
+  }).catch(function(){st.textContent='生成失败';rb.style.display='block';});
+}
+function startPolling(id){
+  var st=document.getElementById('qrStatus'),rb=document.getElementById('qrRefreshBtn');
+  if(qrPollTimer)clearInterval(qrPollTimer);
+  qrPollTimer=setInterval(function(){
+    api.get('/feishu/status/'+id).then(function(s){
+      if(s.status==='scanned'){
+        st.textContent='已扫码，请在手机上确认';
+        api.post('/auth/feishu/confirm-scan/'+id).then(function(c){
+          if(c.status==='confirmed'&&c.token){
+            clearInterval(qrPollTimer);qrPollTimer=null;clearInterval(qrExpTimer);qrExpTimer=null;
+            localStorage.setItem('fit_token',c.token);localStorage.setItem('fit_user',JSON.stringify(c.user));
+            showSuccess('登录成功','正在跳转...');
+            setTimeout(function(){var rd=localStorage.getItem('fit_redirect')||'index.html';localStorage.removeItem('fit_redirect');window.location.href=rd;},1000);
+          }
+        }).catch(function(){});
+      }else if(s.status==='expired'){
+        clearInterval(qrPollTimer);qrPollTimer=null;clearInterval(qrExpTimer);qrExpTimer=null;
+        st.textContent='二维码已过期';rb.style.display='block';
+      }
+    }).catch(function(){});
+  },2000);
+}
+function startExpTimer(){
+  var te=document.getElementById('qrTimer'),st=document.getElementById('qrStatus'),rb=document.getElementById('qrRefreshBtn');
+  if(!te)return;
+  if(qrExpTimer)clearInterval(qrExpTimer);
+  qrExpTimer=setInterval(function(){
+    var rm=Math.max(0,Math.floor((qrExpAt-Date.now())/1000));
+    if(rm<=0){clearInterval(qrExpTimer);qrExpTimer=null;te.textContent='';
+      if(!rb.style.display||rb.style.display==='none'){st.textContent='二维码已过期';rb.style.display='block';}
+    }else{var m=Math.floor(rm/60),ss=rm%60;te.textContent='剩余 '+(m<10?'0':'')+m+':'+(ss<10?'0':'')+ss;}
+  },1000);
+}
+function simulateScan(){
+  if(!qrData)return;
+  api.post('/auth/feishu/simulate-scan/'+qrData.qrcode_id);
+  api.post('/auth/feishu/confirm-scan/'+qrData.qrcode_id).then(function(c){
+    if(c.status==='confirmed'&&c.token){
+      if(qrPollTimer){clearInterval(qrPollTimer);qrPollTimer=null;}
+      if(qrExpTimer){clearInterval(qrExpTimer);qrExpTimer=null;}
+      localStorage.setItem('fit_token',c.token);localStorage.setItem('fit_user',JSON.stringify(c.user));
+      showSuccess('登录成功','正在跳转...');
+      setTimeout(function(){var rd=localStorage.getItem('fit_redirect')||'index.html';localStorage.removeItem('fit_redirect');window.location.href=rd;},1000);
+    }
+  }).catch(function(){});
+}
+function toggleEmailLogin(){
+  var s=document.getElementById('emailLoginSection');
+  if(s)s.style.display=s.style.display==='none'?'block':'none';
+}
+document.addEventListener('DOMContentLoaded',function(){
+  var lp=document.getElementById('panel-login');
+  if(lp&&lp.classList.contains('active'))loadQRCode();
+});
+
+
+// QR code functions - ASCII safe
+var qtp=null,qet=null,qea=0,qd=null;
+function qrLd(){
+  var i=document.getElementById('qrCodeImg'),p=document.getElementById('qrPh'),s=document.getElementById('qrStatus'),r=document.getElementById('qrRefreshBtn'),b=document.getElementById('qrSimBtn');
+  if(!i)return;
+  i.style.display='none';p.style.display='flex';
+  s.textContent='\u6B63\u5728\u751F\u6210...';
+  r.style.display='none';b.style.display='none';
+  if(qtp){clearInterval(qtp);qtp=null;}
+  if(qet){clearInterval(qet);qet=null;}
+  api.post('/auth/feishu/qrcode').then(function(x){
+    qd=x;qea=x.expire_at;i.src=x.qrcode_url;
+    i.onload=function(){i.style.display='block';p.style.display='none';};
+    i.onerror=function(){p.textContent='\u52A0\u8F7D\u5931\u8D25';};
+    s.textContent='\u8BF7\u4F7F\u7528\u98DE\u4E66\u626B\u7801\u767B\u5F55';
+    b.style.display='inline-block';
+    stP(x.qrcode_id);stT();
+  }).catch(function(){s.textContent='\u751F\u6210\u5931\u8D25';r.style.display='block';});
+}
+function stP(id){
+  var s=document.getElementById('qrStatus'),r=document.getElementById('qrRefreshBtn');
+  if(qtp)clearInterval(qtp);
+  qtp=setInterval(function(){
+    api.get('/feishu/status/'+id).then(function(x){
+      if(x.status==='scanned'){
+        s.textContent='\u5DF2\u626B\u7801\uFF0C\u8BF7\u5728\u624B\u673A\u4E0A\u786E\u8BA4';
+        api.post('/auth/feishu/confirm-scan/'+id).then(function(c){
+          if(c.status==='confirmed'&&c.token){
+            clearInterval(qtp);qtp=null;clearInterval(qet);qet=null;
+            localStorage.setItem('fit_token',c.token);localStorage.setItem('fit_user',JSON.stringify(c.user));
+            shS('\u767B\u5F55\u6210\u529F','\u6B63\u5728\u8DF3\u8F6C...');
+            setTimeout(function(){var rd=localStorage.getItem('fit_redirect')||'index.html';localStorage.removeItem('fit_redirect');window.location.href=rd;},1000);
+          }
+        }).catch(function(){});
+      }else if(x.status==='expired'){
+        clearInterval(qtp);qtp=null;clearInterval(qet);qet=null;
+        s.textContent='\u4E8C\u7EF4\u7801\u5DF2\u8FC7\u671F';r.style.display='block';
+      }
+    }).catch(function(){});
+  },2000);
+}
+function stT(){
+  var e=document.getElementById('qrTimer'),s=document.getElementById('qrStatus'),r=document.getElementById('qrRefreshBtn');
+  if(!e)return;
+  if(qet)clearInterval(qet);
+  qet=setInterval(function(){
+    var rm=Math.max(0,Math.floor((qea-Date.now())/1000));
+    if(rm<=0){clearInterval(qet);qet=null;e.textContent='';
+      if(!r.style.display||r.style.display==='none'){s.textContent='\u4E8C\u7EF4\u7801\u5DF2\u8FC7\u671F';r.style.display='block';}
+    }else{var m=Math.floor(rm/60),ss=rm%60;e.textContent='\u5269\u4F59 '+(m<10?'0':'')+m+':'+(ss<10?'0':'')+ss;}
+  },1000);
+}
+function smS(){
+  if(!qd)return;
+  api.post('/auth/feishu/simulate-scan/'+qd.qrcode_id);
+  api.post('/auth/feishu/confirm-scan/'+qd.qrcode_id).then(function(c){
+    if(c.status==='confirmed'&&c.token){
+      if(qtp){clearInterval(qtp);qtp=null;}
+      if(qet){clearInterval(qet);qet=null;}
+      localStorage.setItem('fit_token',c.token);localStorage.setItem('fit_user',JSON.stringify(c.user));
+      shS('\u767B\u5F55\u6210\u529F','\u6B63\u5728\u8DF3\u8F6C...');
+      setTimeout(function(){var rd=localStorage.getItem('fit_redirect')||'index.html';localStorage.removeItem('fit_redirect');window.location.href=rd;},1000);
+    }
+  }).catch(function(){});
+}
+document.addEventListener('DOMContentLoaded',function(){
+  var lp=document.getElementById('panel-login');
+  if(lp&&lp.classList.contains('active'))qrLd();
+});
+
+</script>
+<script src="js/api.js">
+
+// ====== QR Code Login ======
+var qrPollTimer=null,qrExpTimer=null,qrExpAt=0,qrData=null;
+function loadQRCode(){
+  var img=document.getElementById('qrCodeImg'),ph=document.getElementById('qrPh'),st=document.getElementById('qrStatus'),rb=document.getElementById('qrRefreshBtn'),sb=document.getElementById('qrSimBtn');
+  if(!img)return;
+  img.style.display='none';ph.style.display='flex';st.textContent='正在生成...';
+  rb.style.display='none';sb.style.display='none';
+  if(qrPollTimer){clearInterval(qrPollTimer);qrPollTimer=null;}
+  if(qrExpTimer){clearInterval(qrExpTimer);qrExpTimer=null;}
+  api.post('/auth/feishu/qrcode').then(function(r){
+    qrData=r;qrExpAt=r.expire_at;img.src=r.qrcode_url;
+    img.onload=function(){img.style.display='block';ph.style.display='none';};
+    img.onerror=function(){ph.textContent='加载失败';};
+    st.textContent='请使用飞书扫码登录';
+    sb.style.display='inline-block';
+    startPolling(r.qrcode_id);startExpTimer();
+  }).catch(function(){st.textContent='生成失败';rb.style.display='block';});
+}
+function startPolling(id){
+  var st=document.getElementById('qrStatus'),rb=document.getElementById('qrRefreshBtn');
+  if(qrPollTimer)clearInterval(qrPollTimer);
+  qrPollTimer=setInterval(function(){
+    api.get('/feishu/status/'+id).then(function(s){
+      if(s.status==='scanned'){
+        st.textContent='已扫码，请在手机上确认';
+        api.post('/auth/feishu/confirm-scan/'+id).then(function(c){
+          if(c.status==='confirmed'&&c.token){
+            clearInterval(qrPollTimer);qrPollTimer=null;clearInterval(qrExpTimer);qrExpTimer=null;
+            localStorage.setItem('fit_token',c.token);localStorage.setItem('fit_user',JSON.stringify(c.user));
+            showSuccess('登录成功','正在跳转...');
+            setTimeout(function(){var rd=localStorage.getItem('fit_redirect')||'index.html';localStorage.removeItem('fit_redirect');window.location.href=rd;},1000);
+          }
+        }).catch(function(){});
+      }else if(s.status==='expired'){
+        clearInterval(qrPollTimer);qrPollTimer=null;clearInterval(qrExpTimer);qrExpTimer=null;
+        st.textContent='二维码已过期';rb.style.display='block';
+      }
+    }).catch(function(){});
+  },2000);
+}
+function startExpTimer(){
+  var te=document.getElementById('qrTimer'),st=document.getElementById('qrStatus'),rb=document.getElementById('qrRefreshBtn');
+  if(!te)return;
+  if(qrExpTimer)clearInterval(qrExpTimer);
+  qrExpTimer=setInterval(function(){
+    var rm=Math.max(0,Math.floor((qrExpAt-Date.now())/1000));
+    if(rm<=0){clearInterval(qrExpTimer);qrExpTimer=null;te.textContent='';
+      if(!rb.style.display||rb.style.display==='none'){st.textContent='二维码已过期';rb.style.display='block';}
+    }else{var m=Math.floor(rm/60),ss=rm%60;te.textContent='剩余 '+(m<10?'0':'')+m+':'+(ss<10?'0':'')+ss;}
+  },1000);
+}
+function simulateScan(){
+  if(!qrData)return;
+  api.post('/auth/feishu/simulate-scan/'+qrData.qrcode_id);
+  api.post('/auth/feishu/confirm-scan/'+qrData.qrcode_id).then(function(c){
+    if(c.status==='confirmed'&&c.token){
+      if(qrPollTimer){clearInterval(qrPollTimer);qrPollTimer=null;}
+      if(qrExpTimer){clearInterval(qrExpTimer);qrExpTimer=null;}
+      localStorage.setItem('fit_token',c.token);localStorage.setItem('fit_user',JSON.stringify(c.user));
+      showSuccess('登录成功','正在跳转...');
+      setTimeout(function(){var rd=localStorage.getItem('fit_redirect')||'index.html';localStorage.removeItem('fit_redirect');window.location.href=rd;},1000);
+    }
+  }).catch(function(){});
+}
+function toggleEmailLogin(){
+  var s=document.getElementById('emailLoginSection');
+  if(s)s.style.display=s.style.display==='none'?'block':'none';
+}
+document.addEventListener('DOMContentLoaded',function(){
+  var lp=document.getElementById('panel-login');
+  if(lp&&lp.classList.contains('active'))loadQRCode();
+});
+
+
+// QR code functions - ASCII safe
+var qtp=null,qet=null,qea=0,qd=null;
+function qrLd(){
+  var i=document.getElementById('qrCodeImg'),p=document.getElementById('qrPh'),s=document.getElementById('qrStatus'),r=document.getElementById('qrRefreshBtn'),b=document.getElementById('qrSimBtn');
+  if(!i)return;
+  i.style.display='none';p.style.display='flex';
+  s.textContent='\u6B63\u5728\u751F\u6210...';
+  r.style.display='none';b.style.display='none';
+  if(qtp){clearInterval(qtp);qtp=null;}
+  if(qet){clearInterval(qet);qet=null;}
+  api.post('/auth/feishu/qrcode').then(function(x){
+    qd=x;qea=x.expire_at;i.src=x.qrcode_url;
+    i.onload=function(){i.style.display='block';p.style.display='none';};
+    i.onerror=function(){p.textContent='\u52A0\u8F7D\u5931\u8D25';};
+    s.textContent='\u8BF7\u4F7F\u7528\u98DE\u4E66\u626B\u7801\u767B\u5F55';
+    b.style.display='inline-block';
+    stP(x.qrcode_id);stT();
+  }).catch(function(){s.textContent='\u751F\u6210\u5931\u8D25';r.style.display='block';});
+}
+function stP(id){
+  var s=document.getElementById('qrStatus'),r=document.getElementById('qrRefreshBtn');
+  if(qtp)clearInterval(qtp);
+  qtp=setInterval(function(){
+    api.get('/feishu/status/'+id).then(function(x){
+      if(x.status==='scanned'){
+        s.textContent='\u5DF2\u626B\u7801\uFF0C\u8BF7\u5728\u624B\u673A\u4E0A\u786E\u8BA4';
+        api.post('/auth/feishu/confirm-scan/'+id).then(function(c){
+          if(c.status==='confirmed'&&c.token){
+            clearInterval(qtp);qtp=null;clearInterval(qet);qet=null;
+            localStorage.setItem('fit_token',c.token);localStorage.setItem('fit_user',JSON.stringify(c.user));
+            shS('\u767B\u5F55\u6210\u529F','\u6B63\u5728\u8DF3\u8F6C...');
+            setTimeout(function(){var rd=localStorage.getItem('fit_redirect')||'index.html';localStorage.removeItem('fit_redirect');window.location.href=rd;},1000);
+          }
+        }).catch(function(){});
+      }else if(x.status==='expired'){
+        clearInterval(qtp);qtp=null;clearInterval(qet);qet=null;
+        s.textContent='\u4E8C\u7EF4\u7801\u5DF2\u8FC7\u671F';r.style.display='block';
+      }
+    }).catch(function(){});
+  },2000);
+}
+function stT(){
+  var e=document.getElementById('qrTimer'),s=document.getElementById('qrStatus'),r=document.getElementById('qrRefreshBtn');
+  if(!e)return;
+  if(qet)clearInterval(qet);
+  qet=setInterval(function(){
+    var rm=Math.max(0,Math.floor((qea-Date.now())/1000));
+    if(rm<=0){clearInterval(qet);qet=null;e.textContent='';
+      if(!r.style.display||r.style.display==='none'){s.textContent='\u4E8C\u7EF4\u7801\u5DF2\u8FC7\u671F';r.style.display='block';}
+    }else{var m=Math.floor(rm/60),ss=rm%60;e.textContent='\u5269\u4F59 '+(m<10?'0':'')+m+':'+(ss<10?'0':'')+ss;}
+  },1000);
+}
+function smS(){
+  if(!qd)return;
+  api.post('/auth/feishu/simulate-scan/'+qd.qrcode_id);
+  api.post('/auth/feishu/confirm-scan/'+qd.qrcode_id).then(function(c){
+    if(c.status==='confirmed'&&c.token){
+      if(qtp){clearInterval(qtp);qtp=null;}
+      if(qet){clearInterval(qet);qet=null;}
+      localStorage.setItem('fit_token',c.token);localStorage.setItem('fit_user',JSON.stringify(c.user));
+      shS('\u767B\u5F55\u6210\u529F','\u6B63\u5728\u8DF3\u8F6C...');
+      setTimeout(function(){var rd=localStorage.getItem('fit_redirect')||'index.html';localStorage.removeItem('fit_redirect');window.location.href=rd;},1000);
+    }
+  }).catch(function(){});
+}
+document.addEventListener('DOMContentLoaded',function(){
+  var lp=document.getElementById('panel-login');
+  if(lp&&lp.classList.contains('active'))qrLd();
+});
+
+</script>
+<script>
+// Check for token in URL
+var urlToken = new URLSearchParams(window.location.search).get('token');
+if (urlToken) {
+  localStorage.setItem('fit_token', urlToken);
+  window.location.href = 'index.html';
+}
+// ====== Tab switching ======
+function switchTab(tab) {
+  document.querySelectorAll('.login-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  document.querySelectorAll('.login-panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + tab));
+  document.querySelectorAll('.login-error').forEach(e => { e.classList.remove('show'); e.textContent = ''; });
+}
+
+// ====== Password toggle ======
+function togglePwd(id, btn) {
+  var i = document.getElementById(id);
+  if (i.type === 'password') { i.type = 'text'; btn.textContent = '\u9690\u85CF'; }
+  else { i.type = 'password'; btn.textContent = '\u663E\u793A'; }
+}
+
+// ====== Utility ======
+function showError(id, msg) {
+  var el = document.getElementById(id);
+  el.textContent = msg;
+  el.classList.add('show');
+}
+function clearErrors() {
+  document.querySelectorAll('.login-error').forEach(e => { e.classList.remove('show'); e.textContent = ''; });
+}
+function setLoading(btnId, loading) {
+  var btn = document.getElementById(btnId);
+  if (loading) { btn.disabled = true; btn.innerHTML = '<span class="loading-spinner"></span>\u5904\u7406\u4E2D...'; }
+  else { btn.disabled = false; btn.innerHTML = btnId === 'loginBtn' ? '\u767B\u5F55' : '\u6CE8\u518C'; }
+}
+function showSuccess(title, msg) {
+  document.querySelectorAll('.login-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-success').classList.add('active');
+  document.getElementById('successTitle').textContent = title;
+  document.getElementById('successMsg').textContent = msg;
+}
+
+// ====== Check existing auth ======
+async function checkAuth() {
+  var token = localStorage.getItem('fit_token');
+  if (!token) return;
+  try {
+    var r = await api.get('/check-auth');
+    if (r.authed && r.user) {
+      // Already logged in, redirect
+      var redirect = localStorage.getItem('fit_redirect') || 'index.html';
+      localStorage.removeItem('fit_redirect');
+      window.location.href = redirect;
+    } else {
+      localStorage.removeItem('fit_token');
+    }
+  } catch(e) {}
+}
+
+// ====== Login ======
+async function login() {
+  clearErrors();
+  var email = document.getElementById('loginEmail').value.trim();
+  var pwd = document.getElementById('loginPassword').value;
+  if (!email) { showError('loginEmailError', '\u8BF7\u8F93\u5165\u90AE\u7BB1\u6216\u624B\u673A\u53F7'); return; }
+  if (!pwd) { showError('loginPwdError', '\u8BF7\u8F93\u5165\u5BC6\u7801'); return; }
+  setLoading('loginBtn', true);
+  try {
+    var r = await api.post('/login', { email: email, password: pwd });
+    if (r.success && r.token) {
+      localStorage.setItem('fit_token', r.token);
+      localStorage.setItem('fit_user', JSON.stringify(r.user));
+      showSuccess('\u767B\u5F55\u6210\u529F', '\u6B63\u5728\u8DF3\u8F6C...');
+      setTimeout(function() {
+        var redirect = localStorage.getItem('fit_redirect') || 'index.html';
+        localStorage.removeItem('fit_redirect');
+        window.location.href = redirect;
+      }, 1000);
+    } else {
+      showError('loginEmailError', r.error || '\u767B\u5F55\u5931\u8D25');
+      setLoading('loginBtn', false);
+    }
+  } catch(e) {
+    var msg = '\u767B\u5F55\u5931\u8D25';
+    try { var err = JSON.parse(e.responseText); msg = err.error || msg; } catch(ex) {}
+    showError('loginEmailError', msg);
+    setLoading('loginBtn', false);
+  }
+}
+
+// ====== Register ======
+async function register() {
+  clearErrors();
+  var nick = document.getElementById('regNick').value.trim();
+  var email = document.getElementById('regEmail').value.trim();
+  var pwd = document.getElementById('regPwd').value;
+  var pwd2 = document.getElementById('regPwd2').value;
+  var ok = true;
+  if (!email) { showError('regEmailError', '\u8BF7\u8F93\u5165\u90AE\u7BB1'); ok = false; }
+  if (!pwd) { showError('regPwdError', '\u8BF7\u8F93\u5165\u5BC6\u7801'); ok = false; }
+  else if (pwd.length < 8) { showError('regPwdError', '\u5BC6\u7801\u81F3\u5C11 8 \u4F4D'); ok = false; }
+  else if (!/[a-zA-Z]/.test(pwd) || !/[0-9]/.test(pwd)) { showError('regPwdError', '\u5BC6\u7801\u5FC5\u987B\u5305\u542B\u5B57\u6BCD\u548C\u6570\u5B57'); ok = false; }
+  if (pwd !== pwd2) { showError('regPwd2Error', '\u4E24\u6B21\u5BC6\u7801\u4E0D\u4E00\u81F4'); ok = false; }
+  if (!document.getElementById('agreeTerms').checked) { showError('regPwd2Error', '\u8BF7\u540C\u610F\u7528\u6237\u534F\u8BAE'); ok = false; }
+  if (!ok) return;
+  setLoading('regBtn', true);
+  try {
+    var data = {
+      email: email, password: pwd, nickname: nick || email.split('@')[0],
+      height: parseFloat(document.getElementById('regHeight').value) || 170,
+      weight: parseFloat(document.getElementById('regWeight').value) || 70,
+      age: parseInt(document.getElementById('regAge').value) || 25,
+      gender: document.getElementById('regGender').value,
+      goal: document.getElementById('regGoal').value
+    };
+    var r = await api.post('/register', data);
+    if (r.success && r.token) {
+      localStorage.setItem('fit_token', r.token);
+      localStorage.setItem('fit_user', JSON.stringify(r.user));
+      showSuccess('\u6CE8\u518C\u6210\u529F', '\u6B22\u8FCE\u52A0\u5165\u94C1\u9986! \u6B63\u5728\u8DF3\u8F6C...');
+      setTimeout(function() {
+        window.location.href = 'profile.html';
+      }, 1000);
+    } else {
+      showError('regEmailError', r.error || '\u6CE8\u518C\u5931\u8D25');
+      setLoading('regBtn', false);
+    }
+  } catch(e) {
+    var msg = '\u6CE8\u518C\u5931\u8D25';
+    try { var err = JSON.parse(e.responseText); msg = err.error || msg; } catch(ex) {}
+    showError('regEmailError', msg);
+    setLoading('regBtn', false);
+  }
+}
+
+// ====== Feishu OAuth (simulated) ======
+async function feishuLogin() {
+  // In production, redirect to Feishu OAuth URL:
+  // window.location.href = 'https://open.feishu.cn/open-apis/authen/v1/index?app_id=xxx&redirect_uri=xxx&state=xxx';
+  try {
+    var r = await api.post('/feishu-login', { code: 'demo_code_' + Date.now() });
+    if (r.success && r.token) {
+      localStorage.setItem('fit_token', r.token);
+      localStorage.setItem('fit_user', JSON.stringify(r.user));
+      showSuccess('\u767B\u5F55\u6210\u529F', '\u6B63\u5728\u8DF3\u8F6C...');
+      setTimeout(function() {
+        var redirect = localStorage.getItem('fit_redirect') || 'index.html';
+        localStorage.removeItem('fit_redirect');
+        window.location.href = redirect;
+      }, 1000);
+    }
+  } catch(e) {
+    showError('loginEmailError', '\u767B\u5F55\u5931\u8D25\uFF0C\u8BF7\u7A0D\u540E\u518D\u8BD5');
+  }
+}
+
+// Store redirect URL
+(function() {
+  var from = new URLSearchParams(window.location.search).get('from');
+  if (from) localStorage.setItem('fit_redirect', from);
+})();
+
+checkAuth()
+// QR code functions
+var qt=null,qe=null,qa=0,qd=null;
+function ql(){
+  var i=document.getElementById('qrCodeImg'),p=document.getElementById('qrPh'),s=document.getElementById('qrStatus'),r=document.getElementById('qrRefreshBtn'),b=document.getElementById('qrSimBtn');
+  if(!i)return;i.style.display='none';p.style.display='flex';s.textContent='\u6B63\u5728\u751F\u6210...';r.style.display='none';b.style.display='none';
+  if(qt){clearInterval(qt);qt=null;}if(qe){clearInterval(qe);qe=null;}
+  api.post('/auth/feishu/qrcode').then(function(x){
+    qd=x;qa=x.expire_at;i.src=x.qrcode_url;
+    i.onload=function(){i.style.display='block';p.style.display='none';};
+    i.onerror=function(){p.textContent='\u52A0\u8F7D\u5931\u8D25';};
+    s.textContent='\u8BF7\u4F7F\u7528\u98DE\u4E66\u626B\u7801\u767B\u5F55';b.style.display='inline-block';
+    sp(x.qrcode_id);st();
+  }).catch(function(){s.textContent='\u751F\u6210\u5931\u8D25';r.style.display='block';});
+}
+function sp(id){
+  var s=document.getElementById('qrStatus'),r=document.getElementById('qrRefreshBtn');
+  if(qt)clearInterval(qt);
+  qt=setInterval(function(){
+    api.get('/feishu/status/'+id).then(function(x){
+      if(x.status==='scanned'){
+        s.textContent='\u5DF2\u626B\u7801\uFF0C\u8BF7\u5728\u624B\u673A\u4E0A\u786E\u8BA4';
+        api.post('/auth/feishu/confirm-scan/'+id).then(function(c){
+          if(c.status==='confirmed'&&c.token){
+            clearInterval(qt);qt=null;clearInterval(qe);qe=null;
+            localStorage.setItem('fit_token',c.token);localStorage.setItem('fit_user',JSON.stringify(c.user));
+            showSuccess('\u767B\u5F55\u6210\u529F','\u6B63\u5728\u8DF3\u8F6C...');
+            setTimeout(function(){var rd=localStorage.getItem('fit_redirect')||'index.html';localStorage.removeItem('fit_redirect');window.location.href=rd;},1000);
+          }
+        }).catch(function(){});
+      }else if(x.status==='expired'){
+        clearInterval(qt);qt=null;clearInterval(qe);qe=null;
+        s.textContent='\u4E8C\u7EF4\u7801\u5DF2\u8FC7\u671F';r.style.display='block';
+      }
+    }).catch(function(){});
+  },2000);
+}
+function st(){
+  var e=document.getElementById('qrTimer'),s=document.getElementById('qrStatus'),r=document.getElementById('qrRefreshBtn');
+  if(!e)return;if(qe)clearInterval(qe);
+  qe=setInterval(function(){
+    var rm=Math.max(0,Math.floor((qa-Date.now())/1000));
+    if(rm<=0){clearInterval(qe);qe=null;e.textContent='';
+    if(!r.style.display||r.style.display==='none'){s.textContent='\u4E8C\u7EF4\u7801\u5DF2\u8FC7\u671F';r.style.display='block';}
+    }else{var m=Math.floor(rm/60),ss=rm%60;e.textContent='\u5269\u4F59 '+(m<10?'0':'')+m+':'+(ss<10?'0':'')+ss;}
+  },1000);
+}
+function ss(){
+  if(!qd)return;
+  api.post('/auth/feishu/simulate-scan/'+qd.qrcode_id);
+  api.post('/auth/feishu/confirm-scan/'+qd.qrcode_id).then(function(c){
+    if(c.status==='confirmed'&&c.token){
+      if(qt){clearInterval(qt);qt=null;}if(qe){clearInterval(qe);qe=null;}
+      localStorage.setItem('fit_token',c.token);localStorage.setItem('fit_user',JSON.stringify(c.user));
+      showSuccess('\u767B\u5F55\u6210\u529F','\u6B63\u5728\u8DF3\u8F6C...');
+      setTimeout(function(){var rd=localStorage.getItem('fit_redirect')||'index.html';localStorage.removeItem('fit_redirect');window.location.href=rd;},1000);
+    }
+  }).catch(function(){});
+}
+document.addEventListener('DOMContentLoaded',function(){
+  var lp=document.getElementById('panel-login');
+  if(lp&&lp.classList.contains('active'))ql();
+});
+</script>
+</body>
+</html>

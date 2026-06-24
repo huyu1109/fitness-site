@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>身体数据 - 铁馆</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<script src="js/particles.js"></script>
+<div class="container content-enter">
+  <h1 class="page-title content-enter">身体数据</h1>
+  <p class="page-subtitle content-enter content-enter-delay-1">追踪体重、体脂和身体围度变化</p>
+
+  <div class="grid-2 content-enter content-enter-delay-2">
+    <div class="card">
+      <div class="card-header">记录身体数据</div>
+      <div class="form-group"><label>日期</label><input class="form-control" id="bmDate" type="date"></div>
+      <div class="grid-2">
+        <div class="form-group"><label>体重 (kg)</label><input class="form-control" id="bmWeight" type="number" step="0.1"></div>
+        <div class="form-group"><label>体脂率 (%)</label><input class="form-control" id="bmFat" type="number" step="0.1"></div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group"><label>胸围 (cm)</label><input class="form-control" id="bmChest" type="number" step="0.5"></div>
+        <div class="form-group"><label>腰围 (cm)</label><input class="form-control" id="bmWaist" type="number" step="0.5"></div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group"><label>臀围 (cm)</label><input class="form-control" id="bmHip" type="number" step="0.5"></div>
+        <div class="form-group"><label>臂围 (cm)</label><input class="form-control" id="bmArm" type="number" step="0.5"></div>
+      </div>
+      <button class="btn btn-primary btn-block" onclick="saveMetrics()">保存记录</button>
+    </div>
+    <div class="card">
+      <div class="card-header">数据概览</div>
+      <div id="metricsSummary" style="font-size:13px;color:var(--text-secondary);">
+        <div class="skeleton skeleton-text" style="width:90%"></div>
+        <div class="skeleton skeleton-text" style="width:70%"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card content-enter content-enter-delay-3">
+    <div class="card-header">体重趋势</div>
+    <canvas id="weightChart" height="200" style="width:100%;height:200px;"></canvas>
+  </div>
+
+  <div class="card content-enter content-enter-delay-3">
+    <div class="card-header">历史记录</div>
+    <div style="overflow-x:auto" id="bmHistoryTable"></div>
+  </div>
+</div>
+<script src="js/nav.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/api.js"></script>
+<script>
+let metricsHistory = [];
+async function loadMetrics() {
+  try {
+    metricsHistory = await api.get('/body-metrics?months=12');
+    renderSummary();
+    renderChart();
+    renderTable();
+    // Set today's date
+    document.getElementById('bmDate').value = new Date().toISOString().slice(0,10);
+    if (metricsHistory.length > 0) {
+      const last = metricsHistory[metricsHistory.length - 1];
+      document.getElementById('bmWeight').value = last.weight || '';
+      document.getElementById('bmFat').value = last.body_fat || '';
+      document.getElementById('bmChest').value = last.chest || '';
+      document.getElementById('bmWaist').value = last.waist || '';
+      document.getElementById('bmHip').value = last.hip || '';
+      document.getElementById('bmArm').value = last.arm || '';
+    }
+  } catch(e) { console.error(e); }
+}
+function renderSummary() {
+  const el = document.getElementById('metricsSummary');
+  if (metricsHistory.length === 0) { el.innerHTML = '<div class="empty-state"><p>还没有记录，今天就记录第一个吧</p></div>'; return; }
+  const last = metricsHistory[metricsHistory.length - 1];
+  const first = metricsHistory[0];
+  const weightDiff = last.weight ? (last.weight - (first.weight || last.weight)).toFixed(1) : '0.0';
+  const sign = weightDiff > 0 ? '+' : '';
+  let html = '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;text-align:center;">' +
+    '<div><div class="stat-number">' + (last.weight || '--') + '</div><div style="font-size:11px;color:var(--text-tertiary)">当前体重</div>' +
+    '<div style="font-size:11px;color:' + (weightDiff>0?'var(--danger)':'var(--success)') + '">' + sign + weightDiff + ' kg</div></div>' +
+    '<div><div class="stat-number">' + (last.body_fat || '--') + '</div><div style="font-size:11px;color:var(--text-tertiary)">体脂率%</div></div>' +
+    '<div><div class="stat-number">' + metricsHistory.length + '</div><div style="font-size:11px;color:var(--text-tertiary)">记录次数</div></div></div>';
+  html += '<div style="margin-top:12px;font-size:12px;color:var(--text-tertiary)">最近: ' + last.date + (last.chest?(' | 胸:'+last.chest+' 腰:'+last.waist+' 臀:'+last.hip+' 臂:'+last.arm):'') + '</div>';
+  el.innerHTML = html;
+}
+function renderChart() {
+  const canvas = document.getElementById('weightChart');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = 200 * dpr;
+  ctx.scale(dpr, dpr);
+  const w = rect.width, h = 200;
+  ctx.clearRect(0, 0, w, h);
+  const data = metricsHistory.filter(d => d.weight > 0).map(d => ({date: d.date, weight: d.weight}));
+  if (data.length < 2) {
+    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    ctx.font = '14px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('需要至少2次记录才能显示趋势图', w/2, h/2);
+    return;
+  }
+  const pad = {top: 15, bottom: 25, left: 40, right: 15};
+  const chartW = w - pad.left - pad.right;
+  const chartH = h - pad.top - pad.bottom;
+  const weights = data.map(d => d.weight);
+  const minW = Math.floor(Math.min(...weights) - 2);
+  const maxW = Math.ceil(Math.max(...weights) + 2);
+  const range = maxW - minW || 1;
+  // Grid lines
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 4; i++) {
+    const y = pad.top + chartH * (1 - i/4);
+    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(w - pad.right, y); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.3)'; ctx.font = '10px sans-serif'; ctx.textAlign = 'right';
+    ctx.fillText((minW + range * i/4).toFixed(1), pad.left - 5, y + 3);
+  }
+  // Line
+  ctx.beginPath();
+  ctx.strokeStyle = 'rgba(100,180,246,0.8)';
+  ctx.lineWidth = 2;
+  data.forEach((d, i) => {
+    const x = pad.left + chartW * i / (data.length - 1);
+    const y = pad.top + chartH * (1 - (d.weight - minW) / range);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+  // Fill area under line
+  const lastX = pad.left + chartW;
+  const lastY = pad.top + chartH * (1 - (data[data.length-1].weight - minW) / range);
+  ctx.lineTo(lastX, lastY);
+  ctx.lineTo(pad.left, pad.top + chartH);
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(100,180,246,0.08)';
+  ctx.fill();
+  // Dots
+  data.forEach((d, i) => {
+    const x = pad.left + chartW * i / (data.length - 1);
+    const y = pad.top + chartH * (1 - (d.weight - minW) / range);
+    ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(100,180,246,0.9)';
+    ctx.fill();
+  });
+  // Date labels
+  const step = Math.max(1, Math.floor(data.length / 5));
+  ctx.fillStyle = 'rgba(255,255,255,0.3)';
+  ctx.font = '10px sans-serif';
+  ctx.textAlign = 'center';
+  for (let i = 0; i < data.length; i += step) {
+    const x = pad.left + chartW * i / (data.length - 1);
+    ctx.fillText(data[i].date.slice(5,10), x, h - 5);
+  }
+}
+function renderTable() {
+  const el = document.getElementById('bmHistoryTable');
+  if (metricsHistory.length === 0) { el.innerHTML = '<div class="empty-state"><p>暂无记录</p></div>'; return; }
+  let html = '<table class="bf-table"><tr><th>日期</th><th>体重</th><th>体脂%</th><th>胸围</th><th>腰围</th><th>臀围</th><th>臂围</th></tr>';
+  for (const m of metricsHistory.slice().reverse().slice(0,30)) {
+    html += '<tr><td>' + m.date + '</td><td>' + (m.weight||'-') + '</td><td>' + (m.body_fat||'-') + '</td><td>' + (m.chest||'-') + '</td><td>' + (m.waist||'-') + '</td><td>' + (m.hip||'-') + '</td><td>' + (m.arm||'-') + '</td></tr>';
+  }
+  html += '</table>';
+  el.innerHTML = html;
+}
+async function saveMetrics() {
+  const data = {
+    date: document.getElementById('bmDate').value || new Date().toISOString().slice(0,10),
+    weight: parseFloat(document.getElementById('bmWeight').value) || 0,
+    body_fat: parseFloat(document.getElementById('bmFat').value) || 0,
+    chest: parseFloat(document.getElementById('bmChest').value) || 0,
+    waist: parseFloat(document.getElementById('bmWaist').value) || 0,
+    hip: parseFloat(document.getElementById('bmHip').value) || 0,
+    arm: parseFloat(document.getElementById('bmArm').value) || 0
+  };
+  try {
+    await api.post('/body-metrics', data);
+    showToast('身体数据已保存！', 'success');
+    loadMetrics();
+  } catch(e) { showToast('保存失败', 'error'); }
+}
+function showToast(msg, t) {
+  const e = document.createElement('div');
+  e.className = 'toast ' + t;
+  e.textContent = msg;
+  document.body.appendChild(e);
+  setTimeout(() => e.remove(), 2500);
+}
+window.addEventListener('resize', renderChart);
+loadMetrics();
+</script>
+</body>
+</html>

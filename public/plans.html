@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>训练计划 - 铁馆</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<nav class="nav">
+<div class="nav-inner">
+<a href="index.html" class="nav-logo">铁馆</a>
+<ul class="nav-links">
+<li><a href="index.html">首页</a></li>
+<li><a href="muscles.html">肌肉图</a></li>
+<li><a href="exercises.html">动作库</a></li>
+<li><a href="plans.html">训练计划</a></li>
+<li><a href="calculator.html">热量计算</a></li>
+<li><a href="knowledge.html">知识库</a></li>
+<li><a href="calendar.html">进度日历</a></li>
+<li><a href="tools.html">工具</a></li>
+</ul>
+</div>
+</nav>
+<script>
+(function(){var p=location.pathname.split("/").pop()||"index.html";document.querySelectorAll(".nav-links a").forEach(function(a){if(a.getAttribute("href")===p)a.classList.add("active")})})();
+</script>
+<script src="js/particles.js"></script>
+<div class="container content-enter">
+  <h1 class="page-title content-enter">训练计划</h1>
+  <p class="page-subtitle content-enter content-enter-delay-1">选择你的目标和条件，生成4周完整训练计划</p>
+  <div class="plan-selector content-enter content-enter-delay-2">
+    <div class="form-group"><label>目标</label><select class="form-control" id="planGoal"><option value="增肌">增肌</option><option value="减脂">减脂</option><option value="塑形">塑形</option><option value="新手入门">新手入门</option></select></div>
+    <div class="form-group"><label>每周天数</label><select class="form-control" id="planDays"><option value="3">每周3天</option><option value="4" selected>每周4天</option><option value="5">每周5天</option></select></div>
+    <div class="form-group"><label>器械</label><select class="form-control" id="planEquipment"><option value="徒手">徒手</option><option value="哑铃" selected>哑铃</option><option value="健身房">健身房</option></select></div>
+    <button class="btn btn-primary" onclick="generatePlan()">生成计划</button>
+  </div>
+  <div id="planResult"></div>
+</div>
+<script src="js/unlock.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/ui.js"></script>
+<script>
+const EXERCISE_DB = {
+  '增肌':{'徒手':{'胸肌':[{name:'标准俯卧撑',sets:'4x12',detail:'中速，感受胸肌发力'},{name:'宽距俯卧撑',sets:'3x10',detail:'刺激胸肌外侧'},{name:'钻石俯卧撑',sets:'3x8',detail:'刺激胸肌中缝'},{name:'下斜俯卧撑',sets:'3x10',detail:'上胸为主'}],'背部':[{name:'引体向上(弹力带)',sets:'4x8',detail:'宽距握法'},{name:'反手划船',sets:'4x12',detail:'桌下或低杠'},{name:'超人式',sets:'3x15',detail:'俯卧抬臂抬腿'},{name:'静态悬垂',sets:'3x30s',detail:'握力训练'}],'腿部':[{name:'徒手深蹲',sets:'4x15',detail:'全蹲'},{name:'箭步蹲',sets:'3x12',detail:'每侧'},{name:'臀桥',sets:'4x15',detail:'顶峰收缩'},{name:'踮脚',sets:'3x20',detail:'小腿训练'}],'肩部':[{name:'派克俯卧撑',sets:'3x10',detail:'倒V字形'},{name:'平举',sets:'3x15',detail:'徒手侧平举'},{name:'肩胛俯卧撑',sets:'3x12',detail:'前锯肌激活'}],'手臂':[{name:'椅子臂屈伸',sets:'4x12',detail:'三头'},{name:'反手俯卧撑',sets:'3x10',detail:'三头为主'},{name:'空气弯举',sets:'3x20',detail:'二头等长收缩'}],'核心':[{name:'平板支撑',sets:'4x45s',detail:'保持身体一条线'},{name:'卷腹',sets:'3x20',detail:'上腹'},{name:'举腿',sets:'3x15',detail:'下腹'}],'全身':[{name:'波比跳',sets:'4x10',detail:'全身燃脂'},{name:'登山者',sets:'3x30s',detail:'核心+有氧'},{name:'开合跳',sets:'3x30',detail:'热身心肺'}]},
+    '哑铃':{'胸肌':[{name:'哑铃卧推',sets:'4x10',detail:'平躺'},{name:'上斜卧推',sets:'3x10',detail:'上胸'},{name:'哑铃飞鸟',sets:'3x12',detail:'胸肌拉伸'},{name:'俯身夹胸',sets:'3x12',detail:'中缝'}],'背部':[{name:'单臂划船',sets:'4x10',detail:'每侧'},{name:'俯身飞鸟',sets:'4x12',detail:'后束+背部'},{name:'哑铃硬拉',sets:'3x12',detail:'下背+臀'}],'腿部':[{name:'哑铃深蹲',sets:'4x12',detail:'手持哑铃'},{name:'哑铃箭步蹲',sets:'3x10',detail:'每侧'},{name:'哑铃臀桥',sets:'4x15',detail:'负重'}],'肩部':[{name:'坐姿推举',sets:'4x10',detail:'肩前束'},{name:'侧平举',sets:'3x12',detail:'中束'},{name:'前平举',sets:'3x12',detail:'前束'},{name:'俯身飞鸟',sets:'3x12',detail:'后束'}],'手臂':[{name:'哑铃弯举',sets:'4x12',detail:'二头'},{name:'锤式弯举',sets:'3x12',detail:'肱肌'},{name:'颈后臂屈伸',sets:'3x12',detail:'三头'}],'核心':[{name:'负重卷腹',sets:'4x15',detail:'手持哑铃片'},{name:'俄罗斯转体',sets:'3x20',detail:'持哑铃'}],'全身':[{name:'哑铃高翻',sets:'3x8',detail:'爆发力'},{name:'农夫行走',sets:'3x30s',detail:'握力+核心'}]},
+    '健身房':{'胸肌':[{name:'杠铃卧推',sets:'4x8',detail:'自由重量'},{name:'上斜杠铃卧推',sets:'3x8',detail:'上胸'},{name:'龙门架夹胸',sets:'3x12',detail:'绳索'},{name:'史密斯机上斜',sets:'3x10'}],'背部':[{name:'引体向上',sets:'4x8',detail:'正手宽握'},{name:'杠铃划船',sets:'4x10',detail:'俯身'},{name:'高位下拉',sets:'3x12',detail:'宽握'},{name:'坐姿划船',sets:'3x12'}],'腿部':[{name:'杠铃深蹲',sets:'4x8',detail:'全蹲'},{name:'腿举机',sets:'4x12',detail:'超大重量'},{name:'腿弯举',sets:'3x15',detail:'股二头'},{name:'小腿提踵',sets:'4x15'}],'肩部':[{name:'杠铃推举',sets:'4x8',detail:'站姿'},{name:'哑铃侧平举',sets:'3x15',detail:'递减组'},{name:'面拉',sets:'3x15',detail:'绳索'},{name:'阿诺德推举',sets:'3x10'}],'手臂':[{name:'杠铃弯举',sets:'4x10',detail:'二头'},{name:'窄距卧推',sets:'3x10',detail:'三头'},{name:'绳索下压',sets:'3x12',detail:'三头'}],'核心':[{name:'器械卷腹',sets:'4x15'},{name:'悬挂举腿',sets:'3x12'},{name:'腹肌轮',sets:'3x10'}],'全身':[{name:'硬拉',sets:'4x6',detail:'传统硬拉'},{name:'高翻',sets:'3x5',detail:'爆发力训练'}]}
+  },
+  '减脂':{'徒手':{'胸肌':[{name:'快速俯卧撑',sets:'4x20'},{name:'宽距俯卧撑',sets:'3x15'}],'腿部':[{name:'深蹲跳',sets:'4x15'},{name:'箭步蹲跳',sets:'3x12'}],'核心':[{name:'平板支撑',sets:'4x45s'},{name:'自行车卷腹',sets:'3x20'}],'全身':[{name:'波比跳',sets:'5x12'},{name:'登山者',sets:'4x30s'},{name:'开合跳',sets:'3x40'},{name:'高抬腿',sets:'4x30s'}]},
+    '哑铃':{'胸肌':[{name:'哑铃卧推',sets:'4x12'},{name:'哑铃飞鸟',sets:'3x15'}],'腿部':[{name:'哑铃深蹲跳',sets:'4x12'},{name:'哑铃箭步蹲',sets:'3x10'}],'手臂':[{name:'哑铃弯举',sets:'3x15'},{name:'锤式弯举',sets:'3x15'}],'全身':[{name:'哑铃波比',sets:'4x10'},{name:'哑铃高抓',sets:'3x10'},{name:'壶铃摇摆',sets:'4x20'}]},
+    '健身房':{'胸肌':[{name:'杠铃卧推',sets:'4x10'},{name:'龙门架夹胸',sets:'3x15'}],'腿部':[{name:'杠铃深蹲',sets:'4x10'},{name:'腿举',sets:'4x15'},{name:'保加利亚蹲',sets:'3x10'}],'背部':[{name:'高位下拉',sets:'4x12'},{name:'坐姿划船',sets:'3x15'}],'全身':[{name:'硬拉',sets:'4x8'},{name:'高翻',sets:'3x6'},{name:'战绳',sets:'4x30s'}]}
+  },
+  '塑形':{'徒手':{'臀腿':[{name:'深蹲',sets:'4x15'},{name:'臀桥',sets:'4x20'},{name:'侧抬腿',sets:'3x15'},{name:'跪姿后踢',sets:'3x15'}],'核心':[{name:'平板支撑',sets:'4x45s'},{name:'卷腹',sets:'3x20'},{name:'俄罗斯转体',sets:'3x15'}],'上半身':[{name:'窄距俯卧撑',sets:'3x10'},{name:'超人式',sets:'3x12'},{name:'爬行',sets:'3x10'}],'有氧':[{name:'跳绳',sets:'5x1min'},{name:'开合跳',sets:'3x30'}]},
+    '哑铃':{'臀腿':[{name:'哑铃深蹲',sets:'4x15'},{name:'哑铃臀桥',sets:'4x15'},{name:'哑铃箭步蹲',sets:'3x10'}],'背部':[{name:'哑铃划船',sets:'3x12'},{name:'俯身飞鸟',sets:'3x12'}],'肩胸':[{name:'哑铃卧推',sets:'3x12'},{name:'侧平举',sets:'3x15'},{name:'推举',sets:'3x12'}],'核心':[{name:'俄罗斯转体',sets:'3x20'},{name:'平板提膝',sets:'3x12'}]},
+    '健身房':{'臀腿':[{name:'杠铃深蹲',sets:'4x12'},{name:'罗马尼亚硬拉',sets:'4x12'},{name:'臀推',sets:'4x15'},{name:'腿弯举',sets:'3x15'}],'背部':[{name:'高位下拉',sets:'4x12'},{name:'坐姿划船',sets:'3x15'}],'肩胸':[{name:'哑铃卧推',sets:'3x12'},{name:'器械夹胸',sets:'3x15'},{name:'侧平举',sets:'3x15'}],'核心':[{name:'悬垂举腿',sets:'3x12'},{name:'平板支撑',sets:'4x45s'}]}
+  },
+  '新手入门':{'徒手':{'全身':[{name:'靠墙深蹲',sets:'3x12',detail:'掌握正确姿势'},{name:'跪姿俯卧撑',sets:'3x8',detail:'女生版'},{name:'平板支撑',sets:'3x20s'},{name:'臀桥',sets:'3x12'},{name:'鸟狗式',sets:'3x10',detail:'核心稳定'},{name:'站姿提踵',sets:'3x15'}],'有氧':[{name:'原地踏步',sets:'3x1min'},{name:'开合跳',sets:'3x20'}]},
+    '哑铃':{'全身':[{name:'哑铃深蹲',sets:'3x10',detail:'轻重量'},{name:'地板卧推',sets:'3x10'},{name:'哑铃划船',sets:'3x10'},{name:'站姿推举',sets:'3x8'},{name:'哑铃弯举',sets:'3x10'},{name:'哑铃硬拉',sets:'3x10'}]},
+    '健身房':{'全身':[{name:'史密斯深蹲',sets:'3x10'},{name:'器械推胸',sets:'3x10'},{name:'坐姿划船',sets:'3x10'},{name:'高位下拉',sets:'3x10'},{name:'器械肩推',sets:'3x10'},{name:'腿举机',sets:'3x12'}]}
+  }
+};
+function generatePlan(){if(window.unlockAPI&&!unlockAPI.isUnlocked()){document.getElementById('planResult').innerHTML='<div class="card" style="text-align:center;padding:40px"><p style="font-size:40px;margin-bottom:12px">🔒</p><h3 style="margin-bottom:8px">训练计划已锁定</h3><p style="color:rgba(255,255,255,0.4);font-size:13px;margin-bottom:16px">解锁后可查看完整训练计划详情</p><button class="btn btn-primary" onclick="unlockAPI.showModal()">0.5元解锁全站</button></div>';return}
+  const goal=document.getElementById('planGoal').value,days=parseInt(document.getElementById('planDays').value),equip=document.getElementById('planEquipment').value;
+  const pd=EXERCISE_DB[goal]&&EXERCISE_DB[goal][equip];
+  if(!pd){document.getElementById('planResult').innerHTML='<div class="card"><p style="color:var(--text-tertiary)">暂无匹配计划，请调整选择条件</p></div>';return}
+  const groups=Object.keys(pd),rotations=[];
+  for(let w=0;w<4;w++)for(let d=0;d<days;d++){const dg=[];const used=new Set();const tc=groups.length<=2?groups.length:Math.min(3,groups.length);let a=0;while(dg.length<tc&&a<50){const g=groups[Math.floor(Math.random()*groups.length)];if(!used.has(g)){dg.push(g);used.add(g)}a++}if(dg.length===0)dg.push(groups[0]);rotations.push(dg)}
+  let html='<h2 class="section-header" style="margin-top:0;">4周训练计划 · '+goal+' · '+equip+' · 每周'+days+'天</h2>';
+  for(let w=1;w<=4;w++){html+='<h3 style="margin:20px 0 12px;color:var(--accent);">第'+w+'周</h3>';for(let d=0;d<days;d++){const gs=rotations[(w-1)*days+d];html+='<div class="plan-day"><div class="plan-day-header collapsed" onclick="this.classList.toggle(\'collapsed\');this.nextElementSibling.classList.toggle(\'collapsed\')"><span>第'+w+'周 · 第'+(d+1)+'练</span><span class="arrow">&#9660;</span></div><div class="plan-day-body collapsed"><p style="color:var(--text-tertiary);font-size:13px;margin-bottom:8px;">'+gs.join(' · ')+'</p>';for(const g of gs){(pd[g]||[]).forEach(function(ex){html+='<div class="plan-exercise" onclick="showExDetail(\''+ex.name+'\',\''+ex.sets+'\',\''+(ex.detail||'感受目标肌群发力')+'\')"><div class="name">'+ex.name+'</div><div class="detail"><span>'+ex.sets+'</span>'+(ex.detail?'<span style="color:var(--text-tertiary)">'+ex.detail+'</span>':'')+'</div></div>'})}html+='</div></div>'}}
+  html+='<div class="card" style="margin-top:16px;text-align:center;"><p style="color:var(--text-tertiary);font-size:13px;">点击每个动作查看详细训练指导</p></div>';
+  document.getElementById('planResult').innerHTML=html
+}
+function showExDetail(name,sets,detail){
+  const o=document.createElement('div');o.className='modal-overlay active exercise-detail-modal';
+  o.innerHTML='<div class="modal"><button class="modal-close" onclick="this.closest(\'.modal-overlay\').remove()">&times;</button><h3>'+name+'</h3><div class="detail-section"><h4>推荐组数</h4><p>'+sets+'</p></div><div class="detail-section"><h4>动作要点</h4><p>'+detail+'</p></div><button class="btn btn-primary btn-block" onclick="this.closest(\'.modal-overlay\').remove()" style="margin-top:12px;">知道了</button></div>';
+  document.body.appendChild(o);o.addEventListener('click',function(e){if(e.target===this)this.remove()})
+}
+generatePlan();
+</script>
+</body>
+</html>

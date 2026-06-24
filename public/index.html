@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>铁馆 - 你的智能健身伙伴</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<nav class="nav">
+<div class="nav-inner">
+<a href="index.html" class="nav-logo">铁馆</a>
+<ul class="nav-links">
+<li><a href="index.html">首页</a></li>
+<li><a href="muscles.html">肌肉图</a></li>
+<li><a href="exercises.html">动作库</a></li>
+<li><a href="plans.html">训练计划</a></li>
+<li><a href="calculator.html">热量计算</a></li>
+<li><a href="knowledge.html">知识库</a></li>
+<li><a href="calendar.html">进度日历</a></li>
+<li><a href="tools.html">工具</a></li>
+</ul>
+</div>
+</nav>
+<script>
+(function(){var p=location.pathname.split("/").pop()||"index.html";document.querySelectorAll(".nav-links a").forEach(function(a){if(a.getAttribute("href")===p)a.classList.add("active")})})();
+ src="js/particles.js"></script>
+<div class="container content-enter">
+  <div class="hero content-enter">
+    <h1>铁馆</h1>
+    <p>你的智能健身伙伴 · 科学训练 · 精准饮食 · 持续进步</p>
+    <div class="unlock-banner content-enter content-enter-delay-1" onclick="unlockAPI.showModal()">
+      <span>🔥 0.5元解锁全站</span>
+      <span class="sub">200+动作库 · 完整训练计划 · 增肌减脂食谱</span>
+      <span class="arrow">→</span>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num" id="statCheckins">0</div><div class="label">累计打卡</div></div>
+      <div class="hero-stat"><div class="num" id="statStreak">0</div><div class="label">连续天数</div></div>
+      <div class="hero-stat"><div class="num" id="statCalories">0</div><div class="label">今日热量</div></div>
+      <div class="hero-stat"><div class="num" id="statBadges">0</div><div class="label">成就徽章</div></div>
+    </div>
+  </div>
+
+  <div class="feature-grid content-enter content-enter-delay-1">
+    <a href="plans.html" class="feature-item"><svg viewBox="0 0 40 40" fill="none"><rect x="6" y="6" width="28" height="28" rx="4" stroke="#64b5f6" stroke-width="2"/><path d="M12 20h16M20 12v16" stroke="#64b5f6" stroke-width="2"/></svg><h3>训练计划</h3><p>个性化周期训练</p></a>
+    <a href="calculator.html" class="feature-item"><svg viewBox="0 0 40 40" fill="none"><rect x="8" y="6" width="24" height="28" rx="3" stroke="#64b5f6" stroke-width="2"/><text x="20" y="26" text-anchor="middle" fill="#64b5f6" font-size="14" font-weight="bold">kcal</text></svg><h3>热量计算</h3><p>科学饮食管理</p></a>
+    <a href="knowledge.html" class="feature-item"><svg viewBox="0 0 40 40" fill="none"><path d="M20 8C20 8 12 12 8 12v20c4-2 12 2 12 2s8-4 12-2V12c-4-2-12 2-12 2" stroke="#64b5f6" stroke-width="2" fill="none"/></svg><h3>知识库</h3><p>健身知识大全</p></a>
+    <a href="calendar.html" class="feature-item"><svg viewBox="0 0 40 40" fill="none"><rect x="6" y="8" width="28" height="26" rx="3" stroke="#64b5f6" stroke-width="2"/><path d="M6 16h28M14 8v4M26 8v4" stroke="#64b5f6" stroke-width="2"/><circle cx="20" cy="24" r="3" fill="#64b5f6"/></svg><h3>进度日历</h3><p>打卡跟踪系统</p></a>
+    <a href="tools.html" class="feature-item"><svg viewBox="0 0 40 40" fill="none"><path d="M28 12l4-4M32 8l-2-2" stroke="#64b5f6" stroke-width="2" stroke-linecap="round"/><circle cx="18" cy="22" r="8" stroke="#64b5f6" stroke-width="2"/></svg><h3>健身工具</h3><p>1RM/体脂计算</p></a>
+    <a href="profile.html" class="feature-item"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="14" r="6" stroke="#64b5f6" stroke-width="2"/><path d="M8 34c0-6 5.4-10 12-10s12 4 12 10" stroke="#64b5f6" stroke-width="2"/></svg><h3>个人资料</h3><p>身体数据管理</p></a>
+    <a href="profile.html#export" class="feature-item"><svg viewBox="0 0 40 40" fill="none"><path d="M20 6v16M14 16l6 6 6-6" stroke="#64b5f6" stroke-width="2" stroke-linecap="round"/><path d="M8 28v2a4 4 0 004 4h16a4 4 0 004-4v-2" stroke="#64b5f6" stroke-width="2"/></svg><h3>数据导出</h3><p>备份你的健身数据</p></a>
+    </div>
+
+  <h2 class="section-header content-enter content-enter-delay-2">最近动态</h2>
+  <div class="card content-enter content-enter-delay-3">
+    <div id="recentActivity" style="min-height:60px;color:var(--text-secondary);font-size:14px;">加载中...</div>
+  </div>
+</div>
+<script src="js/unlock.js"></script>
+<script src="js/nav.js"></script><script src="js/ui.js"></script><script src="js/api.js"></script>
+<script>
+async function loadHome() {
+  try {
+    const user = await api.get('/user');
+    const today = new Date().toISOString().slice(0,10);
+    const month = today.slice(0,7);
+    const checkins = await api.get('/checkins?month=' + month);
+    const meals = await api.get('/meals?date=' + today);
+    const badges = await api.get('/streaks');
+
+    const totalCheckins = checkins.filter(c => c.training_done || c.diet_done).length;
+    let streak = 0;
+    const doneDates = checkins.filter(c => c.training_done).map(c => c.date).sort().reverse();
+    for (let i = 0; i < doneDates.length; i++) {
+      const d = new Date(doneDates[i]);
+      const prev = i > 0 ? new Date(doneDates[i-1]) : null;
+      if (i === 0) { streak = 1; continue; }
+      const diff = Math.round((prev - d) / 86400000);
+      if (diff <= 1) streak++; else break;
+    }
+    const totalCal = meals.reduce((s, m) => s + m.total_calories, 0);
+
+    document.getElementById('statCheckins').textContent = totalCheckins;
+    document.getElementById('statStreak').textContent = streak;
+    document.getElementById('statCalories').textContent = Math.round(totalCal);
+    document.getElementById('statBadges').textContent = badges.length;
+
+    let activityHTML = '';
+    if (checkins.length > 0) {
+      const recent = checkins.slice(-5).reverse();
+      activityHTML = recent.map(c => {
+        const status = [];
+        if (c.training_done) status.push('🏋️训练');
+        if (c.diet_done) status.push('🍽️饮食');
+        if (c.water_ml > 0) status.push('💧' + c.water_ml + 'ml');
+        return '<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:13px;">' +
+          '<span style="color:var(--text-tertiary)">' + c.date + '</span> ' +
+          status.join(' ') +
+          (c.notes ? ' — ' + c.notes : '') + '</div>';
+      }).join('');
+    } else {
+      activityHTML = '<div class="empty-state"><p>还没有打卡记录，去 <a href="calendar.html">进度日历</a> 开始吧！</p></div>';
+    }
+    document.getElementById('recentActivity').innerHTML = activityHTML;
+  } catch(e) {
+    document.getElementById('recentActivity').innerHTML = '<div style="color:var(--text-muted)">加载失败，请确保服务器已启动</div>';
+  }
+}
+loadHome();
+</script>
+</body>
+</html>

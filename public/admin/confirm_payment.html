@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>支付管理 - 铁馆</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a12;color:rgba(255,255,255,0.87);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center}
+.card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:32px;width:480px;max-width:90vw}
+h1{font-size:22px;margin-bottom:20px;text-align:center}
+.form-group{margin-bottom:16px}
+label{display:block;font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:6px}
+input{padding:12px 16px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:#fff;font-size:15px;outline:none;transition:all 0.25s;width:100%;box-sizing:border-box}
+input:focus{border-color:rgba(72,201,114,0.3);box-shadow:0 0 0 3px rgba(72,201,114,0.12)}
+.btn{width:100%;padding:12px;border-radius:10px;border:none;background:#48c972;color:#fff;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.25s;font-family:inherit}
+.btn:hover{background:#3ab862;transform:translateY(-2px)}
+.btn:disabled{opacity:0.5;cursor:wait}
+#result{margin-top:16px;padding:12px;border-radius:10px;display:none;font-size:14px;text-align:center}
+#result.success{display:block;background:rgba(72,201,114,0.1);color:#48c972;border:1px solid rgba(72,201,114,0.2)}
+#result.error{display:block;background:rgba(255,80,80,0.1);color:#ff5050;border:1px solid rgba(255,80,80,0.2)}
+.info{font-size:12px;color:rgba(255,255,255,0.3);margin-top:16px;text-align:center}
+.orders{margin-top:20px}
+.orders h3{font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:8px}
+.order-item{display:flex;justify-content:space-between;padding:8px 12px;border-radius:8px;background:rgba(255,255,255,0.02);margin-bottom:4px;font-size:12px}
+.order-item .pending{color:#ffaa32}
+.order-item .completed{color:#48c972}
+.order-item .expired{color:rgba(255,255,255,0.3)}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>🔐 铁馆支付管理</h1>
+<div class="form-group">
+<label>订单号</label>
+<input type="text" id="orderIdInput" placeholder="输入订单号" autocomplete="off">
+</div>
+<div class="form-group">
+<label>管理密钥</label>
+<input type="password" id="secretInput" placeholder="输入管理密钥" value="tieguan888" autocomplete="off">
+</div>
+<button class="btn" id="confirmBtn" onclick="confirmPayment()">确认收款</button>
+<div id="result"></div>
+
+<div class="orders">
+<h3>📋 所有订单</h3>
+<div id="orderList"><p style="font-size:13px;color:rgba(255,255,255,0.3);text-align:center">加载中...</p></div>
+</div>
+<div class="info">管理员页面 · 请勿外泄</div>
+</div>
+<script>
+async function confirmPayment() {
+    var oid = document.getElementById("orderIdInput").value.trim();
+    var sec = document.getElementById("secretInput").value.trim();
+    var btn = document.getElementById("confirmBtn");
+    var res = document.getElementById("result");
+
+    if (!oid) { showResult("请输入订单号", "error"); return; }
+    if (!sec) { showResult("请输入管理密钥", "error"); return; }
+
+    btn.disabled = true;
+    btn.textContent = "处理中...";
+    res.style.display = "none";
+
+    try {
+        var r = await fetch("../api/payment/confirm.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: "order_id=" + encodeURIComponent(oid) + "&secret=" + encodeURIComponent(sec)
+        });
+        var d = await r.json();
+        if (d.success) {
+            showResult("✅ " + d.message, "success");
+            document.getElementById("orderIdInput").value = "";
+            loadOrders();
+        } else {
+            showResult("❌ " + d.message, "error");
+        }
+    } catch(e) {
+        showResult("❌ 请求失败: " + e.message, "error");
+    }
+    btn.disabled = false;
+    btn.textContent = "确认收款";
+}
+
+function showResult(msg, type) {
+    var r = document.getElementById("result");
+    r.textContent = msg;
+    r.className = type;
+    r.style.display = "block";
+}
+
+async function loadOrders() {
+    try {
+        var r = await fetch("../api/payment/check.php?list_all=1&secret=" + encodeURIComponent(document.getElementById("secretInput").value.trim()));
+        var d = await r.json();
+        var list = document.getElementById("orderList");
+        if (!d.success || !d.orders || d.orders.length === 0) {
+            list.innerHTML = '<p style="font-size:13px;color:rgba(255,255,255,0.3);text-align:center">暂无订单</p>';
+            return;
+        }
+        list.innerHTML = d.orders.slice().reverse().map(function(o) {
+            return '<div class="order-item"><span>' + o.order_id + '</span><span class="' + o.status + '">' +
+                ({pending:"⏳ 待支付",completed:"✅ 已支付",expired:"⌛ 已过期"}[o.status] || o.status) + '</span></div>';
+        }).join("");
+    } catch(e) {
+        document.getElementById("orderList").innerHTML = '<p style="font-size:13px;color:rgba(255,255,255,0.3);text-align:center">加载失败</p>';
+    }
+}
+
+// Load orders on startup
+document.getElementById("secretInput").addEventListener("keydown", function(e) {
+    if (e.key === "Enter") document.getElementById("orderIdInput").focus();
+});
+document.getElementById("orderIdInput").addEventListener("keydown", function(e) {
+    if (e.key === "Enter") confirmPayment();
+});
+loadOrders();
+setInterval(loadOrders, 5000);
+</script>
+</body>
+</html>

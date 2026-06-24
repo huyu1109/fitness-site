@@ -1,0 +1,288 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>进度日历 - 铁馆</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.cal-nav{display:flex;align-items:center;justify-content:center;gap:24px;margin-bottom:16px}
+.cal-nav button{background:none;border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.87);padding:8px 20px;border-radius:8px;cursor:pointer;font-size:18px}
+.cal-nav button:hover{border-color:var(--accent)}
+.cal-nav span{font-size:18px;font-weight:700}
+.cal-grid{table-layout:fixed;width:100%;border-collapse:collapse}
+.cal-grid th{padding:8px;font-size:13px;color:rgba(255,255,255,0.5);font-weight:600}
+.cal-grid td{cursor:pointer;padding:8px;border-radius:8px;font-size:16px;font-weight:700;text-align:center;min-width:50px;min-height:50px;background:#1e1e2e;transition:all 0.15s;color:rgba(255,255,255,0.87)}
+.cal-grid td:hover{background:rgba(255,255,255,0.08);transform:scale(1.05)}
+.cal-grid td.today{background:#2a2a3e;border:2px solid #48c972;font-weight:700;color:#fff}
+.cal-grid td.checked{background:#1a3a2a;color:#48c972;font-weight:700}
+.cal-grid td.unchecked{background:#2a1a1a;color:rgba(255,255,255,0.5)}
+.cal-grid td.past{background:#2a1a1a;color:rgba(255,255,255,0.3);cursor:not-allowed;opacity:0.6}
+.cal-grid td.past:hover{background:#2a1a1a;transform:none}
+.cal-grid td.future{background:#1a1a2a;color:rgba(255,255,255,0.2);cursor:not-allowed}
+.cal-grid td.future:hover{background:#1a1a2a;transform:none}
+.stats{text-align:center;font-size:13px;color:rgba(255,255,255,0.4);margin:8px 0}
+.diet-card{background:#1e1e2e;border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:10px;flex:1;min-width:140px}
+.diet-card h4{font-size:12px;font-weight:600;margin:0 0 4px;color:rgba(255,255,255,0.6)}
+.diet-card input{width:100%;padding:4px 6px;margin:2px 0;border:1px solid rgba(255,255,255,0.08);border-radius:4px;background:rgba(255,255,255,0.04);color:#fff;font-size:11px;box-sizing:border-box}
+.diet-card .kcal{font-size:10px;color:rgba(255,255,255,0.3);text-align:right;margin-top:2px}
+.badge-bar{display:flex;align-items:center;gap:16px;margin-top:24px}
+.badge-mini{width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,0.06);display:inline-flex;align-items:center;justify-content:center;font-size:16px;background:rgba(255,255,255,0.02)}
+.badge-mini.unlocked{border-color:rgba(255,200,50,0.3);box-shadow:0 0 6px rgba(255,200,50,0.08)}
+.badge-mini.locked{opacity:0.25}
+.btn-badge{padding:6px 14px;border-radius:6px;border:1px solid rgba(255,255,255,0.08);background:#1e1e2e;color:rgba(255,255,255,0.5);font-size:11px;cursor:pointer}
+.btn-badge:hover{background:rgba(255,255,255,0.06);border-color:var(--accent);color:rgba(255,255,255,0.87)}
+#calTooltip{position:fixed;padding:10px 14px;background:rgba(30,30,46,0.95);border:1px solid rgba(255,255,255,0.08);border-radius:10px;font-size:12px;color:#fff;pointer-events:none;z-index:99999;display:none;backdrop-filter:blur(8px);line-height:1.5;min-width:180px;max-width:260px}
+.badge-modal{position:fixed;top:0;left:0;right:0;bottom:0;z-index:99999;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center}
+.badge-modal.open{display:flex}
+.badge-modal-box{background:rgba(30,30,50,0.95);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:24px;width:600px;max-width:90vw;max-height:80vh;overflow-y:auto;position:relative}
+.badge-modal-close{position:absolute;top:12px;right:16px;background:none;border:none;color:#fff;font-size:24px;cursor:pointer}
+.badge-modal-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:16px}
+.badge-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:12px 8px;text-align:center;min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.badge-card.unlocked{border-color:rgba(255,200,50,0.3)}
+.badge-card.locked{opacity:0.35}
+.badge-card .ic{font-size:24px}
+.badge-card .nm{font-size:11px;font-weight:600;color:rgba(255,255,255,0.87);margin:4px 0 2px}
+.badge-card .dc{font-size:9px;color:rgba(255,255,255,0.4)}
+.badge-card .dt{font-size:9px;color:rgba(255,200,50,0.6);margin-top:2px}
+.diet-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+#dietTotal{font-size:13px;font-weight:600;text-align:right;margin-top:8px;color:rgba(255,255,255,0.7)}
+</style></head>
+<body>
+<nav class="nav">
+<div class="nav-inner">
+<a href="index.html" class="nav-logo">铁馆</a>
+<ul class="nav-links">
+<li><a href="index.html">首页</a></li>
+<li><a href="muscles.html">肌肉图</a></li>
+<li><a href="exercises.html">动作库</a></li>
+<li><a href="plans.html">训练计划</a></li>
+<li><a href="calculator.html">热量计算</a></li>
+<li><a href="knowledge.html">知识库</a></li>
+<li><a href="calendar.html">进度日历</a></li>
+<li><a href="tools.html">工具</a></li>
+</ul>
+</div>
+</nav>
+<script>
+(function(){var p=location.pathname.split("/").pop()||"index.html";document.querySelectorAll(".nav-links a").forEach(function(a){if(a.getAttribute("href")===p)a.classList.add("active")})})();
+</script>
+<script src="js/particles.js"></script>
+<div class="container">
+<h1 class="page-title">进度日历</h1>
+<p class="page-subtitle" style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:16px">每日打卡 · 记录每一次进步</p>
+
+<div class="diet-row" style="margin-bottom:16px">
+<textarea id="dietInput" placeholder="输入今日所有食物，如：米饭200g、鸡胸肉150g、西兰花100g、鸡蛋2个" style="width:100%;min-height:80px;padding:10px;border:1px solid rgba(255,255,255,0.08);border-radius:8px;background:rgba(255,255,255,0.03);color:#fff;font-size:13px;font-family:inherit;resize:vertical;box-sizing:border-box"></textarea>
+<div style="display:flex;align-items:center;gap:12px;margin-top:8px">
+<button onclick="calcCal()" style="padding:8px 20px;border-radius:8px;border:none;background:#64b5f6;color:#fff;cursor:pointer;font-size:13px">计算热量</button>
+<div id="dietTotal" style="font-size:14px;font-weight:600;color:rgba(255,255,255,0.7)">今日总热量：-- 千卡</div>
+<button onclick="sd()" style="padding:6px 14px;border-radius:6px;border:1px solid rgba(255,255,255,0.08);background:transparent;color:rgba(255,255,255,0.5);cursor:pointer;font-size:11px">保存记录</button>
+</div></div>
+
+<h3 style="font-size:16px;margin:0 0 12px">打卡日历</h3>
+<div class="cal-nav"><button onclick="cm(-1)">&lsaquo;</button><span id="ml"></span><button onclick="cm(1)">&rsaquo;</button></div>
+<div class="cal-grid" id="cg"></div>
+<div class="stats" id="cs"></div>
+
+<div class="badge-bar">
+<div id="bg"></div>
+<button class="btn-badge" onclick="sab()">🏆 查看全部徽章</button>
+</div>
+</div>
+
+<div class="badge-modal" id="bm" onclick="if(event.target===this)cbm()"><div class="badge-modal-box">
+<button class="badge-modal-close" onclick="cbm()">&times;</button>
+<h3 style="font-size:18px;font-weight:600;margin:0">所有徽章</h3>
+<div class="badge-modal-grid" id="bmg"></div>
+</div></div>
+<div id="calTooltip"></div>
+
+<script src="js/unlock.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/ui.js"></script>
+<script>
+var cur=new Date(),ci={},bl=null;
+try{var s=localStorage.getItem("fit_checkins");if(s)ci=JSON.parse(s)}catch(e){}
+try{var b=localStorage.getItem("fit_badges");if(b)bl=JSON.parse(b)}catch(e){}
+
+var badges=[
+{id:"first",ic:"🔥",nm:"初露锋芒",dc:"完成第1次训练",ch:function(){return Object.keys(ci).length>=1}},
+{id:"week7",ic:"💪",nm:"七日坚持",dc:"连续打卡7天",ch:function(){var d=Object.keys(ci).sort();if(d.length<7)return false;for(var i=d.length-7;i>=0;i--){var ok=true;for(var j=0;j<7;j++){var dt=new Date();dt.setDate(dt.getDate()-j);if(!ci[dt.toISOString().slice(0,10)]){ok=false;break}}if(ok)return true}return false}},
+{id:"month",ic:"📅",nm:"月度全勤",dc:"月打卡满20天",ch:function(){var y=cur.getFullYear(),m=(cur.getMonth()+1).toString().padStart(2,"0");return Object.keys(ci).filter(function(k){return k.startsWith(y+"-"+m)}).length>=20}},
+{id:"100t",ic:"🏋️",nm:"百次训练",dc:"累计100次训练",ch:function(){return Object.keys(ci).length>=100}},
+{id:"diet3",ic:"🥗",nm:"饮食达标",dc:"连续3天不超标",ch:function(){return false}},
+{id:"protein",ic:"🍗",nm:"蛋白质王者",dc:"单日蛋白质>120g",ch:function(){return false}},
+{id:"water",ic:"💧",nm:"水润达人",dc:"单日饮水>2000ml",ch:function(){return false}},
+{id:"loss5",ic:"📉",nm:"减重5kg",dc:"体重下降5kg",ch:function(){return false}},
+{id:"gain3",ic:"📈",nm:"增重3kg",dc:"体重增加3kg",ch:function(){return false}},
+{id:"bdfat",ic:"🎽",nm:"体脂下降",dc:"体脂率下降3%",ch:function(){return false}},
+{id:"msure",ic:"📏",nm:"围度变化",dc:"记录围度>4周",ch:function(){return false}},
+{id:"perf",ic:"⭐",nm:"完美一周",dc:"训练+饮食+饮水全达标",ch:function(){return false}},
+{id:"beast",ic:"🦁",nm:"猛兽模式",dc:"连续3天训练超60分",ch:function(){return false}},
+{id:"rest",ic:"🧘",nm:"张弛有度",dc:"每周休2天连4周",ch:function(){return false}},
+{id:"photo",ic:"📷",nm:"变形记",dc:"上传4张对比照",ch:function(){return false}}
+];
+
+function cr(){
+  var y=cur.getFullYear(),m=cur.getMonth();
+  document.getElementById("ml").textContent=y+"年"+(m+1)+"月";
+  var f=new Date(y,m,1).getDay(),d2=new Date(y,m+1,0).getDate(),ts=new Date().toISOString().slice(0,10);
+  var h="<table class='cal-grid'><tr>";
+  ["日","一","二","三","四","五","六"].forEach(function(d){h+="<th>"+d+"</th>"});
+  h+="</tr><tr>";
+  for(var i=0;i<f;i++)h+="<td></td>";
+  for(var d=1;d<=d2;d++){
+    var ds=y+"-"+(m+1).toString().padStart(2,"0")+"-"+d.toString().padStart(2,"0");
+    var cl=(ds===ts?"today":"")+(ci[ds]?" checked":"")+(ds<ts&&!ci[ds]?" past":"")+(ds>ts?" future":"");
+    h+="<td class='"+cl+"' data-date='"+ds+"' onclick='td(\""+ds+"\")'>"+d+"</td>";
+    if((f+d)%7===0)h+="</tr><tr>"
+  }
+  h+="</tr></table>";
+  document.getElementById("cg").innerHTML=h;
+  var cnt=Object.keys(ci).filter(function(k){return k.startsWith(y+"-"+(m+1).toString().padStart(2,"0"))}).length;
+  document.getElementById("cs").textContent="本月打卡 "+cnt+" 天 &#x3000;累计 "+Object.keys(ci).length+" 天";
+  st()
+}
+
+function td(ds){
+  var ts=new Date().toISOString().slice(0,10);
+  if(ds<ts){alert("\u274C \u4e0d\u80fd\u4e3a\u8fc7\u53bb\u7684\u65e5\u671f\u6253\u5361");return}
+  if(ds>ts){alert("\u23F3 \u8fd8\u672a\u5230\u8fd9\u4e00\u5929");return}
+  ci[ds]?delete ci[ds]:(ci[ds]={t:true});
+  try{localStorage.setItem("fit_checkins",JSON.stringify(ci))}catch(e){}
+  cr()
+}
+
+function cm(d){cur.setMonth(cur.getMonth()+d);cr()}
+
+var ttm=null;
+function st(){
+  var tip=document.getElementById("calTooltip");
+  document.querySelectorAll("#cg td[data-date]").forEach(function(td){
+    td.addEventListener("mouseenter",function(){
+      var ds=this.getAttribute("data-date");if(!ds)return;
+      var d2=new Date(ds),dy=["日","一","二","三","四","五","六"];
+      var lb=(d2.getMonth()+1)+"月"+d2.getDate()+"日 "+dy[d2.getDay()];
+      var ts2=new Date().toISOString().slice(0,10);
+      var st2=(ds===ts2)?(ci[ds]?"\u2705 \u5df2\u5b8c\u6210":"\u274C \u672a\u5b8c\u6210"):(ds<ts2?"\uD83D\uDD12 \u4e0d\u53ef\u6253\u5361":"\u23F3 \u672a\u6765");
+      ttm=setTimeout(function(){
+        var h="<div style='font-weight:600;margin-bottom:6px;font-size:13px'>"+lb+" <span style='font-size:11px'>"+st2+"</span></div>";
+        h+="<div style='font-size:11px;font-weight:600;color:#48c972;margin-top:6px'>\uD83C\uDFCB \u4eca\u65e5\u8bad\u7ec3</div>";
+        try{
+          var pl=JSON.parse(localStorage.getItem("workout_plans")||"{}");
+          var dp=pl[ds];
+          if(dp&&dp.exercises&&dp.exercises.length>0){
+            dp.exercises.forEach(function(ex){h+="<div style='font-size:10px;padding:2px 0;color:rgba(255,255,255,0.8)'>\u2022 "+ex.name+" <span style='color:rgba(255,255,255,0.4)'>"+ex.sets+"\u7ec4\u00d7"+ex.reps+"\u6b21</span></div>"});
+            h+="<div style='font-size:9px;color:rgba(72,201,114,0.5);margin-top:2px'>\uD83D\uDCCB \u6765\u81ea\u808c\u8089\u56fe\u8ba1\u5212</div>"
+          }else{h+="<div style='font-size:10px;color:rgba(255,255,255,0.3)'>\u6682\u65e0\u8bad\u7ec3\u5b89\u6392</div>"}
+        }catch(e){h+="<div style='font-size:10px;color:rgba(255,255,255,0.3)'>\u6682\u65e0\u8bad\u7ec3\u5b89\u6392</div>"}
+        h+="<div style='font-size:11px;font-weight:600;color:#ffa726;margin-top:6px'>\uD83C\uDF7D \u4eca\u65e5\u996e\u98df</div><div style='font-size:10px;color:rgba(255,255,255,0.3)'>\u6682\u65e0\u996e\u98df\u8bb0\u5f55</div>";
+        h+="<div style='font-size:11px;font-weight:600;color:#64b5f6;margin-top:6px'>\uD83D\uDCA7 \u4eca\u65e5\u996e\u6c34</div><div style='font-size:10px;color:rgba(255,255,255,0.3)'>\u6682\u65e0\u996e\u6c34\u8bb0\u5f55</div>";
+        tip.innerHTML=h;tip.style.display="block"
+      },200)
+    });
+    td.addEventListener("mousemove",function(e){
+      var t2=document.getElementById("calTooltip");
+      t2.style.left=(e.clientX+12)+"px";t2.style.top=(e.clientY-12)+"px"
+    });
+    td.addEventListener("mouseleave",function(){clearTimeout(ttm);setTimeout(function(){document.getElementById("calTooltip").style.display="none"},100)})
+  })
+}
+
+function ck(){
+  if(!bl)bl={};
+  var nw=[];
+  badges.forEach(function(b){
+    var w=!!bl[b.id],n=b.ch();
+    if(n&&!w){bl[b.id]={date:new Date().toISOString().slice(0,10)};nw.push(b)}
+    if(!n&&w)delete bl[b.id]
+  });
+  try{localStorage.setItem("fit_badges",JSON.stringify(bl))}catch(e){}
+  var g=document.getElementById("bg");if(!g)return;
+  var h="";badges.slice(0,8).forEach(function(b){h+="<span class='badge-mini "+(bl[b.id]?"unlocked":"locked")+"'>"+(bl[b.id]?b.ic:"?")+"</span>"});
+  g.innerHTML=h;
+  var gm=document.getElementById("bmg");if(gm){
+    var mh="";badges.forEach(function(b){mh+="<div class='badge-card "+(bl[b.id]?"unlocked":"locked")+"'><div class='ic'>"+(bl[b.id]?b.ic:"\uD83D\uDD12")+"</div><div class='nm'>"+b.nm+"</div><div class='dc'>"+b.dc+"</div>"+(bl[b.id]?"<div class='dt'>"+bl[b.id].date+"</div>":"")+"</div>"});
+    gm.innerHTML=mh
+  }
+  if(nw.length>0){
+    var ov=document.createElement("div");
+    ov.style.cssText="position:fixed;top:0;left:0;right:0;bottom:0;z-index:999999;background:rgba(0,0,0,0.6);display:flex;flex-direction:column;align-items:center;justify-content:center";
+    var h2="<div style='text-align:center'><div style='font-size:48px;margin-bottom:8px'>\uD83C\uDF89</div><div style='font-size:22px;font-weight:700;color:#ffc832;margin-bottom:12px'>\u65b0\u5fbd\u7ae0\u89e3\u9501!</div>";
+    nw.forEach(function(b){h2+="<div style='margin:8px 0'><span style='font-size:32px'>"+b.ic+"</span><span style='font-size:16px;margin-left:8px'>"+b.nm+"</span></div>"});
+    h2+="<button onclick='this.parentNode.parentNode.remove()' style='margin-top:16px;padding:10px 24px;border-radius:8px;border:none;background:#48c972;color:#fff;font-size:14px;cursor:pointer'>\u786e\u5b9a</button></div>";
+    ov.innerHTML=h2;document.body.appendChild(ov)
+  }
+}
+
+function sab(){document.getElementById("bm").classList.add("open")}
+function cbm(){document.getElementById("bm").classList.remove("open")}
+
+// Diet
+
+function calcCal(){
+  var t=document.getElementById("dietInput").value;
+  var db={米饭:1.16,饭:1.16,面条:1.15,馒头:2.2,面包:2.5,燕麦:3.8,玉米:1.1,红薯:0.9,土豆:0.8,鸡胸肉:1.65,鸡肉:1.65,鸡腿:1.8,牛肉:1.25,猪肉:2.5,羊肉:2,鸭肉:1.5,鱼:1.2,虾:0.9,鸡蛋:1.5,豆腐:0.8,西兰花:0.35,菠菜:0.25,白菜:0.15,黄瓜:0.15,番茄:0.2,胡萝卜:0.4,芹菜:0.15,青椒:0.2,茄子:0.25,苹果:0.5,香蕉:0.9,橙子:0.4,葡萄:0.6,西瓜:0.3,草莓:0.3,牛奶:0.6,酸奶:0.7,黄豆:4.5,花生:5,坚果:6};
+  var total=0;
+  t.split(/[,，、\n]/).forEach(function(i){
+    i=i.trim();if(!i)return;
+    var m=i.match(/([\u4e00-\u9fa5a-zA-Z]+)\s*(\d+\.?\d*)\s*[gG克]?/);
+    if(m){var n=m[1];var g=parseFloat(m[2]);for(var k in db){if(n.indexOf(k)>=0||k.indexOf(n)>=0){total+=Math.round(db[k]*g);break}}}
+  });
+  var d=document.getElementById("dietTotal");
+  d.innerHTML="今日总热量："+total+" 千卡 "+(total<=2000?"✅ 达标":"⚠️ 超标");
+  d.style.color=total<=2000?"rgba(255,255,255,0.7)":"#ff5252"
+}
+function calcCal(){
+  var t=document.getElementById("dietInput").value;
+  var db={米饭:1.16,饭:1.16,面条:1.15,馒头:2.2,面包:2.5,燕麦:3.8,玉米:1.1,红薯:0.9,土豆:0.8,鸡胸肉:1.65,鸡肉:1.65,牛肉:1.25,猪肉:2.5,鸡蛋:1.5,豆腐:0.8,西兰花:0.35,菠菜:0.25,白菜:0.15,黄瓜:0.15,番茄:0.2,胡萝卜:0.4,苹果:0.5,香蕉:0.9,牛奶:0.6,酸奶:0.7};
+  var total=0;
+  t.split(/[,，、\n]/).forEach(function(i){
+    i=i.trim();if(!i)return;
+    var m=i.match(/[\u4e00-\u9fa5a-zA-Z]+\s*\d+\.?\d*/);
+    if(!m)return;
+    var txt=m[0];
+    var num=parseFloat(txt.match(/\d+\.?\d*/)[0]);
+    var name=txt.replace(/\d+\.?\d*/,"").trim();
+    for(var k in db){if(name.indexOf(k)>=0||k.indexOf(name)>=0){total+=Math.round(db[k]*num);break}}
+  });
+  var d=document.getElementById("dietTotal");
+  d.innerHTML="今日总热量："+total+"千卡 "+(total<=2000?"✅达标":"⚠️超标");
+  d.style.color=total<=2000?"rgba(255,255,255,0.7)":"#ff5252"
+}
+function sd(){
+  var t=document.getElementById("dietInput").value;
+  if(!t.trim()){alert("请先输入食物");return}
+  try{var a=JSON.parse(localStorage.getItem("fit_meals")||"{}");a[new Date().toISOString().slice(0,10)]={text:t};localStorage.setItem("fit_meals",JSON.stringify(a));alert("✅已保存")}catch(e){alert("保存失败")}
+}function sd(){
+  var t=document.getElementById("dietInput").value;
+  if(!t.trim()){alert("请先输入食物");return}
+  try{var a=JSON.parse(localStorage.getItem("fit_meals")||"{}");a[new Date().toISOString().slice(0,10)]={text:t};localStorage.setItem("fit_meals",JSON.stringify(a));alert("✅ 已保存")}catch(e){alert("保存失败")}
+}function ud(){
+  var total=0;
+  ;
+  var t2=document.getElementById("dietTotal");
+  var ok=total<=2000;
+  t2.innerHTML="\u4eca\u65e5\u603b\u70ed\u91cf\uff1a"+total+" / 2000 \u5343\u5361";
+  t2.style.color=ok?"rgba(255,255,255,0.7)":"#ff5252"
+}
+function sd(){
+  var d={};
+  document.querySelectorAll(".diet-card").forEach(function(card){
+    var meal=card.querySelector(".df").dataset.meal;
+    var food=card.querySelector(".df").value;
+    var cal=parseInt(card.querySelector(".dc2").value)||0;
+    d[meal]={food:food,cal:cal}
+  });
+  try{
+    var all=JSON.parse(localStorage.getItem("fit_meals")||"{}");
+    all[new Date().toISOString().slice(0,10)]=d;
+    localStorage.setItem("fit_meals",JSON.stringify(all));
+    alert("\u2705 \u5df2\u4fdd\u5b58")
+  }catch(e){alert("\u4fdd\u5b58\u5931\u8d25")}
+}
+
+cr();ck();
+</script>
+</body></html>

@@ -1,0 +1,15 @@
+﻿node_modules/
+截图/
+backup/
+deploy/
+备用_登录功能/
+body-muscles/
+*.db
+*.db-shm
+*.db-wal
+*.log
+*.zip
+.DS_Store
+Thumbs.db
+.env
+.env.local

@@ -1,0 +1,11 @@
+Error: no such table: exercises
+    at e.handleError (D:\健身网站\node_modules\sql.js\dist\sql-wasm.js:90:192)
+    at e.exec (D:\健身网站\node_modules\sql.js\dist\sql-wasm.js:87:461)
+    at dbAll (D:\健身网站\server.js:27:22)
+    at D:\健身网站\server.js:278:12
+    at Layer.handle [as handle_request] (D:\健身网站\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\健身网站\node_modules\express\lib\router\route.js:149:13)
+    at Route.dispatch (D:\健身网站\node_modules\express\lib\router\route.js:119:3)
+    at Layer.handle [as handle_request] (D:\健身网站\node_modules\express\lib\router\layer.js:95:5)
+    at D:\健身网站\node_modules\express\lib\router\index.js:284:15
+    at router.process_params (D:\健身网站\node_modules\express\lib\router\index.js:346:12)
