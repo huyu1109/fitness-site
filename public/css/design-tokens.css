@@ -1,12 +1,12 @@
-/* 铁馆 · 设计系统变量 */
+﻿/* 铁馆 · 设计系统变量 */
 /* 配色、字体、间距、圆角、阴影、动画 */
 :root {
   --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
     "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
   --font-mono: "SF Mono", "Menlo", "Monaco", "Consolas", monospace;
-  --text-primary: rgba(255,255,255,0.87);
-  --text-secondary: rgba(255,255,255,0.6);
-  --text-tertiary: rgba(255,255,255,0.38);
+  --text-primary: rgba(200,200,200,0.85);
+  --text-secondary: rgba(180,180,180,0.7);
+  --text-tertiary: rgba(150,150,150,0.5);
   --danger: #ef5350;
   --warning: #ffa726;
   --success: #66bb6a;
@@ -64,3 +64,4 @@
   --lh-tight: 1.2;
   --lh-base: 1.6;
 }
+
