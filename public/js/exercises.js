@@ -11,9 +11,59 @@ var curMuscle="all",curEquip="all",curDiff="all",curSearch="";
 
 function search(){
   curSearch=document.getElementById("searchInput").value.trim().toLowerCase();
-  render()
+  // Show skeleton on new search
+  var g = document.getElementById("grid");
+  if (g && curSearch.length > 0) {
+    g.innerHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px">' +
+      '<div class="card" style="height:120px"><div class="skeleton" style="width:70%;height:16px;margin-bottom:12px"></div><div class="skeleton" style="width:40%;height:12px"></div></div>' +
+      '<div class="card" style="height:120px"><div class="skeleton" style="width:70%;height:16px;margin-bottom:12px"></div><div class="skeleton" style="width:40%;height:12px"></div></div>' +
+      '<div class="card" style="height:120px"><div class="skeleton" style="width:70%;height:16px;margin-bottom:12px"></div><div class="skeleton" style="width:40%;height:12px"></div></div>' +
+      '</div>';
+  }
+  setTimeout(render, 200);
 }
 
+
+function scoreResult(ex, query) {
+  if (!query) return 0;
+  var q = query.toLowerCase();
+  var name = ex.name.toLowerCase();
+  var en = ex.en.toLowerCase();
+  var muscle = ex.muscle.toLowerCase();
+  var equip = ex.equip.toLowerCase();
+  // Exact match = highest score
+  if (name === q) return 100;
+  if (en === q) return 90;
+  // Name contains
+  if (name.indexOf(q) >= 0) return 80;
+  if (en.indexOf(q) >= 0) return 70;
+  // Pinyin match
+  if (toPy(ex.name).indexOf(q) >= 0) return 65;
+  // Keyword match
+  for (var i = 0; i < ex.keywords.length; i++) {
+    if (ex.keywords[i].toLowerCase().indexOf(q) >= 0) return 60;
+  }
+  // Muscle/equipment match
+  if (muscle.indexOf(q) >= 0) return 40;
+  if (equip.indexOf(q) >= 0) return 20;
+  return 0;
+}
+
+function highlightMatch(text, query) {
+  if (!query || !text) return text;
+  var q = query.toLowerCase();
+  var t = text.toLowerCase();
+  var idx = t.indexOf(q);
+  if (idx < 0) return text;
+  return text.slice(0, idx) + "<mark>" + text.slice(idx, idx + q.length) + "</mark>" + text.slice(idx + q.length);
+}
+
+function diffStars(diff) {
+  var n = {'入门': 1, '进阶': 2, '高阶': 3}[diff] || 1;
+  var s = "";
+  for (var i = 0; i < 3; i++) s += i < n ? "★" : "☆";
+  return s;
+}
 function filter(type,val){
   if(type==="m"){
     curMuscle=val;
@@ -46,10 +96,15 @@ function render(){
       var inEquip=ex.equip.toLowerCase().indexOf(kw)>=0;
       var inKw=false;
       for(var i=0;i<ex.keywords.length;i++){if(ex.keywords[i].toLowerCase().indexOf(kw)>=0){inKw=true;break}}
-      if(!inName&&!inEn&&!inMuscle&&!inEquip&&!inKw)return false;
+      var inPy=toPy(ex.name).indexOf(kw)>=0;
+      if(!inName&&!inEn&&!inMuscle&&!inEquip&&!inKw&&!inPy)return false;
     }
     return true
   });
+  // Sort by relevance when searching
+  if(curSearch){
+    allResults.sort(function(a,b){return scoreResult(b,curSearch)-scoreResult(a,curSearch)});
+  }
   if(!window.unlockAPI||!unlockAPI.isUnlocked()&&allResults.length>5){allResults=allResults.slice(0,5);limited=true}
   document.getElementById("resultCount").textContent="共 "+allResults.length+" 个动作"+(limited?" · ?? 解锁显示全部":"");
   var g=document.getElementById("grid");
@@ -58,14 +113,13 @@ function render(){
   allResults.forEach(function(ex){
     var hl=ex.name;
     if(curSearch&&ex.name.toLowerCase().indexOf(curSearch)>=0){
-      var idx=ex.name.toLowerCase().indexOf(curSearch);
-      hl=ex.name.slice(0,idx)+"<em>"+ex.name.slice(idx,idx+curSearch.length)+"</em>"+ex.name.slice(idx+curSearch.length)
+      hl=highlightMatch(ex.name,curSearch);
     }
     var lv="lv"+{入门:"1",进阶:"2",高阶:"3"}[ex.diff];
-    h+="<div class='card' data-id='+ex.id+' onclick='if(limited&&unlockAPI&&!unlockAPI.isUnlocked()){unlockAPI.showModal();return}showDetail("+ex.id+")'>";
-    h+="<div class='nm'>"+hl+"</div>";
-    h+="<div class='en'>"+ex.en+"</div>";
-    h+="<div class='meta'><span>"+ex.muscle+"</span><span>"+ex.equip+"</span><span class='"+lv+"'>"+ex.diff+"</span></div></div>"
+    h+="<div class='card' onclick='if(limited&&unlockAPI&&!unlockAPI.isUnlocked()){unlockAPI.showModal();return}showDetail("+ex.id+")'>";
+    h+="<div class='nm'>"+hl+'</div>';
+    h+='<div style="font-size:12px;color:var(--text-tertiary);margin-bottom:4px">'+diffStars(ex.diff)+'</div>';
+    h+="<div class='meta'><span>"+highlightMatch(ex.muscle,curSearch)+"</span><span>"+highlightMatch(ex.equip,curSearch)+"</span><span class='"+lv+"'>"+ex.diff+"</span></div></div>"
   });
   g.innerHTML=h
   if(limited&&unlockAPI&&!unlockAPI.isUnlocked()){
@@ -83,13 +137,13 @@ function showDetail(id){
   ex.errors.forEach(function(e){errHtml+="<li class='err'>?? "+e+"</li>"});
   var altHtml="";
   ex.alt.split("、").forEach(function(a){altHtml+="<li class='alt'>?? "+a+"</li>"});
-  document.getElementById("modalContent").innerHTML="<h2>"+ex.name+"</h2><div class='en2'>"+ex.en+"</div>"
+  document.getElementById("modalContent").innerHTML="<h2>"+ex.name+"</h2><div class='en2'>"+ex.en+'</div>'
     +"<div class='modal-tags'><span>"+ex.muscle+"</span><span>"+ex.equip+"</span><span class='lv"+lv+"' style='color:"+{1:"#48c972",2:"#ffaa32",3:"#ff5050"}[lv]+"'>"+ex.diff+"</span><span>"+ex.type+"</span></div>"
     +"<div class='modal-section'><h4>\uD83C\uDFCB 动作步骤</h4><ol>"+stepsHtml+"</ol></div>"
     +"<div class='modal-section'><h4>\uD83D\uDC2C 呼吸节奏</h4><p style='font-size:12px;color:rgba(255,255,255,0.65)'>"+ex.breath+"</p></div>"
     +"<div class='modal-section'><h4>\u26A0\uFE0F 常见错误</h4><ul>"+errHtml+"</ul></div>"
     +"<div class='modal-section'><h4>\uD83D\uDCA1 替代动作</h4><ul>"+altHtml+"</ul></div>"
-    +"<div style='font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:8px'>\uD83C\uDFCB 适合人群："+ex.suit+"</div>"
+    +"<div style='font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:8px'>\uD83C\uDFCB 适合人群："+ex.suit+'</div>'
     +"<button class='btn-add'>\u2795 加入我的计划</button>";
   document.getElementById("modal").classList.add("open")
 }

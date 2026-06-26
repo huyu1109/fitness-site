@@ -1,4 +1,6 @@
 
+mark{background:rgba(72,201,114,0.25);color:#48c972;padding:0 2px;border-radius:2px}
+
 .btn-ghost {
   background: transparent; color: var(--text-secondary);
   border: 1px solid transparent;
@@ -446,3 +448,5 @@ button:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.2)!im
 .pay-btn-main:hover{background:linear-gradient(135deg,#3ab862,#2da854);transform:translateY(-3px);box-shadow:0 10px 32px rgba(72,201,114,0.45)}
 .pay-btn-main:active{transform:translateY(-1px)}
 .pay-sub-main{font-size:13px;color:rgba(255,255,255,0.4);margin:10px 0 0}
+
+.search-sticky{position:sticky;top:var(--nav-height,65px);z-index:100;background:var(--bg-body);padding:12px 0;margin:-12px 0 0}
