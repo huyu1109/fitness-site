@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -87,7 +87,53 @@ function showAddFoodModal(){const o=document.createElement('div');o.className='m
 async function addCustomFood(){const d={name:document.getElementById('newFoodName').value,category:document.getElementById('newFoodCat').value,calories_per100g:parseFloat(document.getElementById('newFoodCal').value)||0,protein:parseFloat(document.getElementById('newFoodPro').value)||0,fat:parseFloat(document.getElementById('newFoodFat').value)||0,carbs:parseFloat(document.getElementById('newFoodCarb').value)||0};if(!d.name){showToast('请输入食物名','error');return}await api.post('/foods',d);document.querySelector('.modal-overlay.active').remove();showToast('食物已添加','success');loadFoods()}
 function showSaveMealModal(){if(currentPlate.length===0){showToast('餐盘为空','error');return}const o=document.createElement('div');o.className='modal-overlay active';o.innerHTML='<div class="modal"><button class="modal-close" onclick="this.closest(\'.modal-overlay\').remove()">&times;</button><h3>保存为常用搭配</h3><div class="form-group"><label>搭配名称</label><input class="form-control" id="savedMealName" placeholder="如：增肌早餐"></div><button class="btn btn-primary btn-block" onclick="saveSavedMeal()">保存</button></div>';document.body.appendChild(o)}
 async function saveSavedMeal(){const n=document.getElementById('savedMealName').value;if(!n){showToast('请输入名称','error');return}await api.post('/saved-meals',{name:n,foods_json:currentPlate.map(i=>({id:i.food.id,name:i.food.name,grams:i.grams})),total_calories:currentPlate.reduce((s,i)=>s+i.calories,0)});document.querySelector('.modal-overlay.active').remove();showToast('已保存常用搭配','success')}
-async function showSavedMeals(){try{const s=await api.get('/saved-meals');const o=document.createElement('div');o.className='modal-overlay active';o.innerHTML='<div class="modal"><button class="modal-close" onclick="this.closest(\'.modal-overlay\').remove()">&times;</button><h3>我的常用搭配</h3>'+(s.length===0?'<p style="color:var(--text-tertiary)">暂无保存的搭配</p>':s.map(x=>'<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06);"><span>'+x.name+' <span style="color:var(--text-tertiary);font-size:12px;">'+Math.round(x.total_calories)+'kcal</span></span><span><button class="btn btn-sm btn-primary" onclick="loadSavedMeal('+x.id+',\''+x.name+'\')">使用</button></span></div>').join(''))+'</div>';document.body.appendChild(o)}catch(e){}}
+async function showSavedMeals(){try{const s=await api.get('/saved-meals');const o=document.createElement('div');o.className='modal-overlay active';o.innerHTML='<div class="modal"><button class="modal-close" onclick="this.closest(\'.modal-overlay\').remove()">&times;</button><h3>我的常用搭配</h3>'+(s.length===0?'<p style="color:var(--text-tertiary)">暂无保存的搭配</p>':s.map(x=>'<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06);"><span>'+x.name+' <span style="color:var(--text-tertiary);font-size:12px;">'+Math.round(x.total_calories)+'kcal</span></span><span><button class="btn btn-sm btn-primary" onclick="loadSavedMeal('+x.id+',\''+x.name+'\')">使用</button></span></div>').join(''))+'</div>
+<div class="card" style="margin-top:32px">
+<h3>食物营养查询（271种食物）</h3>
+<p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">每100g含量 · 输入食物名称搜索</p>
+<input type="text" id="foodSearch" placeholder="输入食物名称，如"苹果"" oninput="searchFood()" style="border-radius:999px;padding:12px 20px;margin-bottom:16px;max-width:500px">
+<div id="foodResults" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px"></div>
+</div>
+
+<script>
+function searchFood() {
+  var q = document.getElementById("foodSearch").value.trim().toLowerCase();
+  var r = document.getElementById("foodResults");
+  if (!q) { r.innerHTML = "<div style=\\"text-align:center;padding:20px;color:var(--text-tertiary)\\">输入食物名称开始查询</div>"; return; }
+  
+  var all = [];
+  var cats = typeof foodData !== "undefined" ? foodData : {};
+  for (var c in cats) {
+    if (cats[c] && cats[c].forEach) {
+      cats[c].forEach(function(f) { all.push(f); });
+    }
+  }
+  
+  var hit = all.filter(function(f) {
+    return f.name && (f.name.toLowerCase().indexOf(q) >= 0);
+  });
+  
+  if (hit.length === 0) {
+    r.innerHTML = "<div style=\\"text-align:center;padding:20px;color:var(--text-tertiary)\\">未找到匹配食物，试试其他关键词</div>";
+    return;
+  }
+  
+  var h = "";
+  hit.slice(0, 24).forEach(function(f) {
+    h += "<div class=\\"card\\" style=\\"padding:14px\\">" +
+      "<div style=\\"font-weight:600;font-size:14px;margin-bottom:6px\\">" + f.name + "</div>" +
+      "<div style=\\"display:flex;flex-wrap:wrap;gap:12px;font-size:12px\\">" +
+      "<span>\\ud83d\\udd25 " + f.cal + " kcal</span>" +
+      "<span style=\\"color:#ef5350\\">\\ud83d\\udcaa " + f.protein + "g</span>" +
+      "<span style=\\"color:#ffa726\\">\\ud83e\\uddc8 " + f.fat + "g</span>" +
+      "<span style=\\"color:#64b5f6\\">\\ud83c\\udf3e " + f.carbs + "g</span>" +
+      "</div></div>";
+  });
+  if (hit.length > 24) h += "<div style=\\"text-align:center;padding:12px;color:var(--text-tertiary);font-size:13px\\">..." + (hit.length - 24) + " 个更多结果</div>";
+  r.innerHTML = h;
+}
+</script>
+';document.body.appendChild(o)}catch(e){}}
 async function loadSavedMeal(id){const s=await api.get('/saved-meals');const m=s.find(x=>x.id===id);if(!m)return;const f=typeof m.foods_json==='string'?JSON.parse(m.foods_json):(m.foods_json||[]);currentPlate=[];for(const x of f){const food=allFoods.find(f2=>f2.id===x.id||f2.name===x.name);if(food){const g=x.grams||100;currentPlate.push({food,grams:g,calories:Math.round(food.calories_per100g*g/100),protein:Math.round(food.protein*g/100*10)/10,fat:Math.round(food.fat*g/100*10)/10,carbs:Math.round(food.carbs*g/100*10)/10})}}document.querySelector('.modal-overlay.active').remove();renderPlate();showToast('已加载','success')}
 function showToast(msg,t){const e=document.createElement('div');e.className='toast '+t;e.textContent=msg;document.body.appendChild(e);setTimeout(()=>e.remove(),2500)}
 loadFoods();loadTodayMeals();
@@ -95,5 +141,7 @@ loadFoods();loadTodayMeals();
 
     <script src="js/utils.js"></script>
     <script src="js/toast.js"></script>
+<script src="js/food-data.js"></script>
 </body>
 </html>
+
