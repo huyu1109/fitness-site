@@ -24,13 +24,13 @@
       links += "<li><a href=\"" + item.href + "\" class=\"" + active.trim() + "\">" + item.label + "</a></li>";
     }
 
-    var unlockLink = "<li><a href=\"javascript:void(0)\" onclick=\"unlockAPI.showModal()\" style=\"color:#48c972;font-weight:600\" id=\"navUnlockBtn\">\uD83D\uDD13 \u89e3\u9501</a></li>";
+    // var unlockLink = "<li><a href=\"javascript:void(0)\" onclick=\"unlockAPI.showModal()\" style=\"color:#48c972;font-weight:600\" id=\"navUnlockBtn\">\uD83D\uDD13 \u89e3\u9501</a></li>";
 
     var nav = document.createElement("nav");
     nav.className = "nav";
     nav.innerHTML = "<div class=\"nav-inner\">" +
       "<a href=\"index.html\" class=\"nav-logo\">\u94c1\u9986</a>" +
-      "<ul class=\"nav-links\">" + links + unlockLink + "</ul></div>";
+      "<ul class=\"nav-links\">" + links + "</ul></div>";
 
     if (document.body) {
       document.body.insertBefore(nav, document.body.firstChild);
@@ -56,4 +56,5 @@
     initNav();
   }
 })();
+
 
