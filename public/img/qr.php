@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 header("Content-Type: image/jpeg");
 header("Cache-Control: public, max-age=86400");
 $file = __DIR__ . "/wechat_qr.jpg";

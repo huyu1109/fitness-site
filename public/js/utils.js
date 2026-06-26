@@ -1,4 +1,4 @@
-﻿// 铁馆工具函数库 (Utilities)
+// 铁馆工具函数库 (Utilities)
 (function() {
   'use strict';
 

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>设计系统 · 铁馆</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+body{padding-top:80px;background:#09090b;color:rgba(255,255,255,0.87);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
+.container{max-width:1200px;margin:0 auto;padding:0 24px 80px}
+h1{text-align:center;margin-bottom:8px}
+.lead{text-align:center;color:rgba(255,255,255,0.6);margin-bottom:48px}
+.cat{margin:64px 0;border-top:1px solid rgba(255,255,255,0.06);padding-top:48px}
+.cat:first-of-type{border:none;margin-top:0;padding-top:0}
+.cat h2{margin-bottom:4px}
+.subhead{font-size:13px;color:rgba(255,255,255,0.38);margin-bottom:24px}
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px}
+.swatch-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:12px;text-align:center}
+.swatch-bar{height:48px;border-radius:8px;margin-bottom:8px}
+.swatch-lbl{font-size:12px;font-weight:600}
+.swatch-val{font-size:11px;color:rgba(255,255,255,0.38)}
+.typo{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:20px}
+.typo-row{display:flex;align-items:baseline;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);gap:24px}
+.typo-lbl{width:60px;font-size:11px;color:rgba(255,255,255,0.38);flex-shrink:0}
+.comp-section{margin:32px 0}
+.comp-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:12px 0}
+.cards-row{display:flex;gap:16px;flex-wrap:wrap}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.skels{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+</style>
+</head>
+<body>
+<span id="nav-placeholder"></span>
+<script>fetch('nav.html').then(r=>r.text()).then(h=>document.getElementById('nav-placeholder').outerHTML=h)</script>
+
+<div class="container">
+<h1 style="font-size:clamp(28px,5vw,48px);font-weight:700">铁馆设计系统</h1>
+<p class="lead" style="font-size:16px">Design System v2.0 - 基于 react-bits / agency-agents 设计模式</p>
+
+<div class="cat">
+<h2 style="font-size:clamp(22px,3.5vw,32px);font-weight:600">色彩系统</h2>
+<p class="subhead">基础层 / 内容层 / 强调层 / 装饰层</p>
+<div class="swatches">
+<div class="swatch-card"><div class="swatch-bar" style="background:#09090b"></div><div class="swatch-lbl">Body背景</div><div class="swatch-val">--bg-body</div></div><div class="swatch-card"><div class="swatch-bar" style="background:#141418"></div><div class="swatch-lbl">卡片背景</div><div class="swatch-val">--bg-card</div></div><div class="swatch-card"><div class="swatch-bar" style="background:#1c1c24"></div><div class="swatch-lbl">悬浮背景</div><div class="swatch-val">--bg-card-hover</div></div><div class="swatch-card"><div class="swatch-bar" style="background:rgba(255,255,255,0.04)"></div><div class="swatch-lbl">毛玻璃</div><div class="swatch-val">--bg-glass</div></div><div class="swatch-card"><div class="swatch-bar" style="background:#48c972"></div><div class="swatch-lbl">品牌色</div><div class="swatch-val">--accent</div></div><div class="swatch-card"><div class="swatch-bar" style="background:#3db864"></div><div class="swatch-lbl">品牌悬浮</div><div class="swatch-val">--accent-hover</div></div><div class="swatch-card"><div class="swatch-bar" style="background:#64b5f6"></div><div class="swatch-lbl">信息色</div><div class="swatch-val">--blue</div></div><div class="swatch-card"><div class="swatch-bar" style="background:#ef5350"></div><div class="swatch-lbl">危险色</div><div class="swatch-val">--danger</div></div><div class="swatch-card"><div class="swatch-bar" style="background:#ffa726"></div><div class="swatch-lbl">警告色</div><div class="swatch-val">--warning</div></div><div class="swatch-card"><div class="swatch-bar" style="background:#66bb6a"></div><div class="swatch-lbl">成功色</div><div class="swatch-val">--success</div></div></div></div>
+
+<div class="cat">
+<h2>字体系统</h2>
+<p class="subhead">clamp() 响应式字号 / 系统字体栈</p>
+<div class="typo">
+<div class="typo-row"><span class="typo-lbl">H1</span><span style="font-size:clamp(28px,5vw,48px);font-weight:700">铁馆健身</span></div>
+<div class="typo-row"><span class="typo-lbl">H2</span><span style="font-size:clamp(22px,3.5vw,32px);font-weight:600">肌肉图选择器</span></div>
+<div class="typo-row"><span class="typo-lbl">H3</span><span style="font-size:clamp(18px,2.5vw,24px);font-weight:600">训练计划详情</span></div>
+<div class="typo-row"><span class="typo-lbl">H4</span><span style="font-size:clamp(15px,1.8vw,18px);font-weight:600">热量计算结果</span></div>
+<div class="typo-row"><span class="typo-lbl">正文</span><span style="font-size:14px">系统字体栈 / 苹方 / 微软雅黑 / SF Pro</span></div>
+<div class="typo-row"><span class="typo-lbl">辅助</span><span style="font-size:13px;color:rgba(255,255,255,0.6)">标签说明文字</span></div>
+<div class="typo-row"><span class="typo-lbl">小字</span><span style="font-size:11px;color:rgba(255,255,255,0.38)">版权信息 11px</span></div>
+</div></div>
+
+<div class="cat">
+<h2>间距 / 圆角 / 阴影</h2>
+<p class="subhead">8px 基准网格 - 6/8/12/16/24px 圆角 - 3 层阴影</p>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px">
+<div style="background:rgba(72,201,114,0.12);color:#48c972;padding:4px;border-radius:8px;font-size:13px">4px</div><div style="background:rgba(72,201,114,0.12);color:#48c972;padding:8px;border-radius:8px;font-size:13px">8px</div><div style="background:rgba(72,201,114,0.12);color:#48c972;padding:12px;border-radius:8px;font-size:13px">12px</div><div style="background:rgba(72,201,114,0.12);color:#48c972;padding:16px;border-radius:8px;font-size:13px">16px</div><div style="background:rgba(72,201,114,0.12);color:#48c972;padding:24px;border-radius:8px;font-size:13px">24px</div><div style="background:rgba(72,201,114,0.12);color:#48c972;padding:32px;border-radius:8px;font-size:13px">32px</div><div style="background:rgba(72,201,114,0.12);color:#48c972;padding:48px;border-radius:8px;font-size:13px">48px</div></div>
+<div style="display:flex;gap:20px;flex-wrap:wrap;margin-bottom:24px"><div style="width:80px;height:80px;background:rgba(72,201,114,0.12);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#48c972">6px</div><div style="width:80px;height:80px;background:rgba(72,201,114,0.12);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#48c972">8px</div><div style="width:80px;height:80px;background:rgba(72,201,114,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#48c972">12px</div><div style="width:80px;height:80px;background:rgba(72,201,114,0.12);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#48c972">16px</div><div style="width:80px;height:80px;background:rgba(72,201,114,0.12);border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#48c972">24px</div></div>
+<div style="display:flex;gap:20px;flex-wrap:wrap">
+<div style="width:160px;height:60px;background:#141418;border:1px solid rgba(255,255,255,0.06);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:12px;color:rgba(255,255,255,0.6);box-shadow:0 8px 32px rgba(0,0,0,0.24)">卡片阴影</div>
+<div style="width:160px;height:60px;background:#141418;border:1px solid rgba(255,255,255,0.06);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:12px;color:rgba(255,255,255,0.6);box-shadow:0 16px 48px rgba(0,0,0,0.32)">弹窗阴影</div>
+<div style="width:160px;height:60px;background:#141418;border:1px solid rgba(255,255,255,0.06);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:12px;color:rgba(255,255,255,0.6);box-shadow:0 4px 20px rgba(72,201,114,0.25)">强调阴影</div>
+</div></div>
+
+<div class="cat">
+<h2>组件规范</h2>
+
+<div class="comp-section"><h3>按钮 Button</h3>
+<div class="comp-row">
+<button class="btn btn-primary" style="font-size:14px;padding:10px 24px;border:none;border-radius:8px;cursor:pointer;font-weight:600;background:#48c972;color:#fff;transition:all 0.15s">主按钮</button>
+<button class="btn btn-secondary" style="font-size:14px;padding:10px 24px;border:none;border-radius:8px;cursor:pointer;font-weight:600;background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.87);border:1px solid rgba(255,255,255,0.08);transition:all 0.15s">次按钮</button>
+<button class="btn btn-ghost" style="font-size:14px;padding:10px 24px;border:none;border-radius:8px;cursor:pointer;font-weight:600;background:transparent;color:rgba(255,255,255,0.6);transition:all 0.15s">幽灵按钮</button>
+<button class="btn btn-danger" style="font-size:14px;padding:10px 24px;border:none;border-radius:8px;cursor:pointer;font-weight:600;background:#ef5350;color:#fff;transition:all 0.15s">危险按钮</button>
+</div></div>
+
+<div class="comp-section"><h3>卡片 Card</h3>
+<div class="cards-row">
+<div class="card" style="background:rgba(255,255,255,0.04);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:20px;width:200px;position:relative;overflow:hidden">
+<div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent)"></div>
+<h4 style="margin:0 0 8px;font-size:var(--fs-h4,16px)">标准卡片</h4>
+<p style="margin:0;font-size:13px;color:rgba(255,255,255,0.6)">悬浮抬升 + 顶部高光线</p></div>
+<div class="card" style="background:rgba(255,255,255,0.04);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:20px;width:200px;position:relative"><h4 style="margin:0 0 8px">毛玻璃卡片</h4><p style="margin:0;font-size:13px;color:rgba(255,255,255,0.6)">blur 模糊效果</p></div>
+</div></div>
+
+<div class="comp-section"><h3>标签 / Tab / 输入框</h3>
+<div class="filters">
+<span style="padding:6px 16px;border-radius:999px;font-size:13px;font-weight:500;cursor:pointer;background:rgba(72,201,114,0.12);color:#48c972;border:1px solid rgba(72,201,114,0.3)">胸部</span>
+<span style="padding:6px 16px;border-radius:999px;font-size:13px;font-weight:500;cursor:pointer;background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.06)">背部</span>
+<span style="padding:6px 16px;border-radius:999px;font-size:13px;font-weight:500;cursor:pointer;background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.06)">腿部</span>
+</div>
+<div style="display:flex;gap:0;background:rgba(255,255,255,0.04);border-radius:8px;padding:4px;max-width:280px;margin-bottom:16px">
+<div style="flex:1;padding:8px 16px;text-align:center;border-radius:6px;cursor:pointer;font-size:14px;font-weight:500;background:#141418;color:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.2)">扫码支付</div>
+<div style="flex:1;padding:8px 16px;text-align:center;border-radius:6px;cursor:pointer;font-size:14px;font-weight:500;color:rgba(255,255,255,0.6)">解锁码</div>
+</div>
+<input type="text" placeholder="搜索动作名称..." style="max-width:400px;width:100%;padding:12px 20px;border-radius:999px;border:1px solid rgba(255,255,255,0.08);background:#141418;color:rgba(255,255,255,0.87);font-size:15px;outline:none;box-sizing:border-box;margin-bottom:12px">
+</div>
+
+<div class="comp-section"><h3>空状态 / 徽章 / 进度</h3>
+<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;max-width:400px;margin-bottom:16px">
+<div style="font-size:40px;margin-bottom:12px;opacity:0.3">-</div>
+<div style="font-size:16px;font-weight:600;margin-bottom:8px">暂无数据</div>
+<div style="font-size:13px;color:rgba(255,255,255,0.38);max-width:300px">还没有打卡记录</div>
+</div>
+<div class="comp-row">
+<span style="display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;border-radius:999px;font-size:11px;font-weight:700;background:#48c972;color:#fff">3</span>
+<span style="display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;border-radius:999px;font-size:11px;font-weight:700;background:#48c972;color:#fff">新</span>
+</div>
+<div style="width:100%;height:6px;background:rgba(255,255,255,0.06);border-radius:999px;overflow:hidden;max-width:400px">
+<div style="height:100%;background:#48c972;border-radius:999px;width:60%;transition:width 0.35s"></div>
+</div>
+</div>
+
+<div class="comp-section"><h3>骨架屏 / 加载</h3>
+<div class="skels">
+<div style="background:linear-gradient(90deg,#141418 25%,rgba(255,255,255,0.06) 50%,#141418 75%);background-size:200% 100%;animation:shimmer 1.5s ease-in-out infinite;border-radius:8px;width:180px;height:20px"></div>
+<div style="background:linear-gradient(90deg,#141418 25%,rgba(255,255,255,0.06) 50%,#141418 75%);background-size:200% 100%;animation:shimmer 1.5s ease-in-out infinite;border-radius:8px;width:120px;height:20px"></div>
+<div style="width:20px;height:20px;border:2px solid rgba(255,255,255,0.1);border-top-color:#48c972;border-radius:50%;animation:spin 0.6s linear infinite"></div>
+</div></div>
+
+</div></div>
+<style>
+@keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</body>
+</html>

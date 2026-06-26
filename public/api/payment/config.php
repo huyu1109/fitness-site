@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $paymentsFile = __DIR__ . "/payments.json";
 
 function loadPayments() {

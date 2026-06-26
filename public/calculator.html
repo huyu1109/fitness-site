@@ -3,23 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ÈÈÁ¿¼ÆËãÆ÷ - Ìú¹İ</title>
-<meta name="description" content="Ìú¹İÈÈÁ¿¼ÆËãÆ÷ - 90ÖÖ³£¼ûÊ³ÎïÈÈÁ¿²éÑ¯£¬¿ÆÑ§¹ÜÀíÃ¿ÈÕÒûÊ³ÉãÈë¡£">
+<title>çƒ­é‡è®¡ç®—å™¨ - é“é¦†</title>
+<meta name="description" content="é“é¦†çƒ­é‡è®¡ç®—å™¨ - 90ç§å¸¸è§é£Ÿç‰©çƒ­é‡æŸ¥è¯¢ï¼Œç§‘å­¦ç®¡ç†æ¯æ—¥é¥®é£Ÿæ‘„å…¥ã€‚">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <nav class="nav">
 <div class="nav-inner">
-<a href="index.html" class="nav-logo">Ìú¹İ</a>
+<a href="index.html" class="nav-logo">é“é¦†</a>
 <ul class="nav-links">
-<li><a href="index.html">Ê×Ò³</a></li>
-<li><a href="muscles.html">¼¡ÈâÍ¼</a></li>
-<li><a href="exercises.html">¶¯×÷¿â</a></li>
-<li><a href="plans.html">ÑµÁ·¼Æ»®</a></li>
-<li><a href="calculator.html">ÈÈÁ¿¼ÆËã</a></li>
-<li><a href="knowledge.html">ÖªÊ¶¿â</a></li>
-<li><a href="calendar.html">½ø¶ÈÈÕÀú</a></li>
-<li><a href="tools.html">¹¤¾ß</a></li>
+<li><a href="index.html">é¦–é¡µ</a></li>
+<li><a href="muscles.html">è‚Œè‚‰å›¾</a></li>
+<li><a href="exercises.html">åŠ¨ä½œåº“</a></li>
+<li><a href="plans.html">è®­ç»ƒè®¡åˆ’</a></li>
+<li><a href="calculator.html">çƒ­é‡è®¡ç®—</a></li>
+<li><a href="knowledge.html">çŸ¥è¯†åº“</a></li>
+<li><a href="calendar.html">è¿›åº¦æ—¥å†</a></li>
+<li><a href="tools.html">å·¥å…·</a></li>
 </ul>
 </div>
 </nav>
@@ -28,42 +28,42 @@
 </script>
 <script src="js/particles.js""></script>
 <div class="container content-enter">
-  <h1 class="page-title content-enter">ÈÈÁ¿¼ÆËãÆ÷</h1>
-  <p class="page-subtitle content-enter content-enter-delay-1">ËÑË÷Ê³Îï£¬¼ÇÂ¼ÒûÊ³£¬¿ÆÑ§¹ÜÀíÃ¿ÈÕÈÈÁ¿</p>
+  <h1 class="page-title content-enter">çƒ­é‡è®¡ç®—å™¨</h1>
+  <p class="page-subtitle content-enter content-enter-delay-1">æœç´¢é£Ÿç‰©ï¼Œè®°å½•é¥®é£Ÿï¼Œç§‘å­¦ç®¡ç†æ¯æ—¥çƒ­é‡</p>
   <div class="calc-layout content-enter content-enter-delay-2">
-    <div class="card"><div class="card-header">ËÑË÷Ê³Îï</div>
-      <input class="food-search" id="foodSearch" placeholder="ËÑË÷Ê³Îï..." oninput="filterFoods()">
+    <div class="card"><div class="card-header">æœç´¢é£Ÿç‰©</div>
+      <input class="food-search" id="foodSearch" placeholder="æœç´¢é£Ÿç‰©..." oninput="filterFoods()">
       <div class="food-categories" id="foodCats">
-        <button class="food-cat active" data-cat="all">È«²¿</button>
-        <button class="food-cat" data-cat="Ö÷Ê³">Ö÷Ê³</button>
-        <button class="food-cat" data-cat="ÈâÀà">ÈâÀà</button>
-        <button class="food-cat" data-cat="Êß²Ë">Êß²Ë</button>
-        <button class="food-cat" data-cat="Ë®¹û">Ë®¹û</button>
-        <button class="food-cat" data-cat="ÈéÖÆÆ·">ÈéÖÆÆ·</button>
-        <button class="food-cat" data-cat="¼á¹û">¼á¹ûÁãÊ³</button>
+        <button class="food-cat active" data-cat="all">å…¨éƒ¨</button>
+        <button class="food-cat" data-cat="ä¸»é£Ÿ">ä¸»é£Ÿ</button>
+        <button class="food-cat" data-cat="è‚‰ç±»">è‚‰ç±»</button>
+        <button class="food-cat" data-cat="è”¬èœ">è”¬èœ</button>
+        <button class="food-cat" data-cat="æ°´æœ">æ°´æœ</button>
+        <button class="food-cat" data-cat="ä¹³åˆ¶å“">ä¹³åˆ¶å“</button>
+        <button class="food-cat" data-cat="åšæœ">åšæœé›¶é£Ÿ</button>
       </div>
       <div class="food-list" id="foodList"></div>
-      <button class="btn btn-secondary btn-sm" onclick="showAddFoodModal()" style="margin-top:12px;">+ Ìí¼Ó×Ô¶¨ÒåÊ³Îï</button>
+      <button class="btn btn-secondary btn-sm" onclick="showAddFoodModal()" style="margin-top:12px;">+ æ·»åŠ è‡ªå®šä¹‰é£Ÿç‰©</button>
     </div>
-    <div class="card"><div class="card-header">µ±Ç°²ÍÅÌ</div>
-      <div class="form-group"><label>²Í´Î</label><select class="form-control" id="mealType"><option>Ôç²Í</option><option>Îç²Í</option><option>Íí²Í</option><option>¼Ó²Í</option></select></div>
-      <div id="currentPlate"><div class="empty-state"><p>µã»÷×ó²àÊ³ÎïÌí¼Óµ½²ÍÅÌ</p></div></div>
+    <div class="card"><div class="card-header">å½“å‰é¤ç›˜</div>
+      <div class="form-group"><label>é¤æ¬¡</label><select class="form-control" id="mealType"><option>æ—©é¤</option><option>åˆé¤</option><option>æ™šé¤</option><option>åŠ é¤</option></select></div>
+      <div id="currentPlate"><div class="empty-state"><p>ç‚¹å‡»å·¦ä¾§é£Ÿç‰©æ·»åŠ åˆ°é¤ç›˜</p></div></div>
       <div class="plate-summary" id="plateSummary">
-        <div class="plate-stat"><div class="val" id="sumCal">0</div><div class="lbl">ÈÈÁ¿</div></div>
-        <div class="plate-stat"><div class="val" id="sumProtein">0</div><div class="lbl">µ°°×ÖÊ</div></div>
-        <div class="plate-stat"><div class="val" id="sumFat">0</div><div class="lbl">Ö¬·¾</div></div>
-        <div class="plate-stat"><div class="val" id="sumCarbs">0</div><div class="lbl">Ì¼Ë®</div></div>
+        <div class="plate-stat"><div class="val" id="sumCal">0</div><div class="lbl">çƒ­é‡</div></div>
+        <div class="plate-stat"><div class="val" id="sumProtein">0</div><div class="lbl">è›‹ç™½è´¨</div></div>
+        <div class="plate-stat"><div class="val" id="sumFat">0</div><div class="lbl">è„‚è‚ª</div></div>
+        <div class="plate-stat"><div class="val" id="sumCarbs">0</div><div class="lbl">ç¢³æ°´</div></div>
       </div>
-      <div class="input-group" style="margin-bottom:10px;"><label>·İÁ¿(g):</label><input type="number" id="portionGrams" value="100" min="10" max="1000" step="10"></div>
-      <button class="btn btn-primary btn-block" onclick="saveMeal()">±£´æÕâ²Í</button>
-      <button class="btn btn-secondary btn-block" onclick="clearPlate()">Çå¿Õ²ÍÅÌ</button>
+      <div class="input-group" style="margin-bottom:10px;"><label>ä»½é‡(g):</label><input type="number" id="portionGrams" value="100" min="10" max="1000" step="10"></div>
+      <button class="btn btn-primary btn-block" onclick="saveMeal()">ä¿å­˜è¿™é¤</button>
+      <button class="btn btn-secondary btn-block" onclick="clearPlate()">æ¸…ç©ºé¤ç›˜</button>
       <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
-        <button class="btn btn-secondary btn-sm" onclick="showSaveMealModal()">±£´æÎª³£ÓÃ´îÅä</button>
-        <button class="btn btn-secondary btn-sm" onclick="showSavedMeals()">ÎÒµÄ³£ÓÃ´îÅä</button>
+        <button class="btn btn-secondary btn-sm" onclick="showSaveMealModal()">ä¿å­˜ä¸ºå¸¸ç”¨æ­é…</button>
+        <button class="btn btn-secondary btn-sm" onclick="showSavedMeals()">æˆ‘çš„å¸¸ç”¨æ­é…</button>
       </div>
     </div>
   </div>
-  <h3 class="section-header content-enter content-enter-delay-3">½ñÈÕÒûÊ³¼ÇÂ¼</h3>
+  <h3 class="section-header content-enter content-enter-delay-3">ä»Šæ—¥é¥®é£Ÿè®°å½•</h3>
   <div class="card content-enter content-enter-delay-3" id="todayMeals"></div>
 </div>
 <script src="js/effects.js""></script>
@@ -77,32 +77,32 @@ async function loadFoods(){try{allFoods=await api.get('/foods');renderFoods()}ca
 function renderFoods(){const s=(document.getElementById('foodSearch').value||'').trim().toLowerCase();let f=allFoods;if(currentCat!=='all')f=f.filter(x=>x.category===currentCat);if(s)f=f.filter(x=>x.name.includes(s));
   const g=parseInt(document.getElementById('portionGrams').value)||100;
   document.getElementById('foodList').innerHTML=f.map(x=>'<div class="food-item" onclick="addToPlate('+x.id+','+g+')"><span>'+x.name+'</span><span class="cal">'+x.calories_per100g+' kcal/100g</span></div>').join('');
-  if(f.length===0)document.getElementById('foodList').innerHTML='<div class="empty-state"><p>Ã»ÓĞÕÒµ½Æ¥ÅäÊ³Îï</p></div>'}
+  if(f.length===0)document.getElementById('foodList').innerHTML='<div class="empty-state"><p>æ²¡æœ‰æ‰¾åˆ°åŒ¹é…é£Ÿç‰©</p></div>'}
 function filterFoods(){renderFoods()}
 document.getElementById('foodCats').addEventListener('click',function(e){if(e.target.classList.contains('food-cat')){this.querySelectorAll('.food-cat').forEach(t=>t.classList.remove('active'));e.target.classList.add('active');currentCat=e.target.dataset.cat;renderFoods()}});
 function addToPlate(fid,g){const f=allFoods.find(x=>x.id===fid);if(!f)return;const r=g/100;currentPlate.push({food:f,grams:g,calories:Math.round(f.calories_per100g*r),protein:Math.round(f.protein*r*10)/10,fat:Math.round(f.fat*r*10)/10,carbs:Math.round(f.carbs*r*10)/10});renderPlate()}
-function renderPlate(){const c=document.getElementById('currentPlate');c.innerHTML=currentPlate.length===0?'<div class="empty-state"><p>µã»÷×ó²àÊ³ÎïÌí¼Óµ½²ÍÅÌ</p></div>':currentPlate.map((i,idx)=>'<div class="plate-dish" style="display:flex;justify-content:space-between;align-items:center;"><span>'+i.food.name+' <span style="color:var(--text-tertiary)">'+i.grams+'g</span></span><span><span style="color:var(--accent);font-weight:600;">'+i.calories+'</span> kcal <span style="cursor:pointer;color:var(--text-tertiary);margin-left:8px;" onclick="removeFromPlate('+idx+')">&#10005;</span></span></div>').join('');
+function renderPlate(){const c=document.getElementById('currentPlate');c.innerHTML=currentPlate.length===0?'<div class="empty-state"><p>ç‚¹å‡»å·¦ä¾§é£Ÿç‰©æ·»åŠ åˆ°é¤ç›˜</p></div>':currentPlate.map((i,idx)=>'<div class="plate-dish" style="display:flex;justify-content:space-between;align-items:center;"><span>'+i.food.name+' <span style="color:var(--text-tertiary)">'+i.grams+'g</span></span><span><span style="color:var(--accent);font-weight:600;">'+i.calories+'</span> kcal <span style="cursor:pointer;color:var(--text-tertiary);margin-left:8px;" onclick="removeFromPlate('+idx+')">&#10005;</span></span></div>').join('');
   const sc=currentPlate.reduce((s,i)=>s+i.calories,0),sp=currentPlate.reduce((s,i)=>s+i.protein,0),sf=currentPlate.reduce((s,i)=>s+i.fat,0),scb=currentPlate.reduce((s,i)=>s+i.carbs,0);
   document.getElementById('sumCal').textContent=sc;document.getElementById('sumProtein').textContent=sp.toFixed(1);document.getElementById('sumFat').textContent=sf.toFixed(1);document.getElementById('sumCarbs').textContent=scb.toFixed(1)}
 function removeFromPlate(i){currentPlate.splice(i,1);renderPlate()}
 function clearPlate(){currentPlate=[];renderPlate()}
-async function saveMeal(){if(currentPlate.length===0){showToast('²ÍÅÌÎª¿Õ','error');return}
+async function saveMeal(){if(currentPlate.length===0){showToast('é¤ç›˜ä¸ºç©º','error');return}
   const mt=document.getElementById('mealType').value,td=new Date().toISOString().slice(0,10);
   const sc=currentPlate.reduce((s,i)=>s+i.calories,0),sp=currentPlate.reduce((s,i)=>s+i.protein,0),sf=currentPlate.reduce((s,i)=>s+i.fat,0),scb=currentPlate.reduce((s,i)=>s+i.carbs,0);
   await api.post('/meal',{date:td,meal_type:mt, foods_json:currentPlate.map(i=>({id:i.food.id,name:i.food.name,grams:i.grams,cal:i.calories})),total_calories:sc,total_protein:sp,total_fat:sf,total_carbs:scb});
-  showToast(mt+'ÒÑ±£´æ','success');clearPlate();loadTodayMeals()}
-async function loadTodayMeals(){const td=new Date().toISOString().slice(0,10);try{const ms=await api.get('/meals?date='+td);const c=document.getElementById('todayMeals');if(ms.length===0){c.innerHTML='<div class="empty-state"><p>½ñÌì»¹Ã»ÓĞÒûÊ³¼ÇÂ¼</p></div>';return}
-  let html='';for(const mt of['Ôç²Í','Îç²Í','Íí²Í','¼Ó²Í']){const m=ms.filter(x=>x.meal_type===mt);if(m.length===0)continue;html+='<div class="meal-item"><div><strong>'+mt+'</strong>';for(const meal of m){const f=typeof meal.foods_json==='string'?JSON.parse(meal.foods_json):(meal.foods_json||[]);const n=f.map(x=>x.name+(x.grams?'('+x.grams+'g)':'')).join('¡¢');html+='<div style="font-size:12px;color:var(--text-tertiary);">'+n+'</div></div><div><span class="meal-cal">'+Math.round(meal.total_calories)+'</span> kcal <span class="meal-del" onclick="deleteMeal('+meal.id+')">&#10005;</span></div>'}html+='</div>'}
+  showToast(mt+'å·²ä¿å­˜','success');clearPlate();loadTodayMeals()}
+async function loadTodayMeals(){const td=new Date().toISOString().slice(0,10);try{const ms=await api.get('/meals?date='+td);const c=document.getElementById('todayMeals');if(ms.length===0){c.innerHTML='<div class="empty-state"><p>ä»Šå¤©è¿˜æ²¡æœ‰é¥®é£Ÿè®°å½•</p></div>';return}
+  let html='';for(const mt of['æ—©é¤','åˆé¤','æ™šé¤','åŠ é¤']){const m=ms.filter(x=>x.meal_type===mt);if(m.length===0)continue;html+='<div class="meal-item"><div><strong>'+mt+'</strong>';for(const meal of m){const f=typeof meal.foods_json==='string'?JSON.parse(meal.foods_json):(meal.foods_json||[]);const n=f.map(x=>x.name+(x.grams?'('+x.grams+'g)':'')).join('ã€');html+='<div style="font-size:12px;color:var(--text-tertiary);">'+n+'</div></div><div><span class="meal-cal">'+Math.round(meal.total_calories)+'</span> kcal <span class="meal-del" onclick="deleteMeal('+meal.id+')">&#10005;</span></div>'}html+='</div>'}
   const tc=ms.reduce((s,m)=>s+m.total_calories,0),tp=ms.reduce((s,m)=>s+(m.total_protein||0),0),tf=ms.reduce((s,m)=>s+(m.total_fat||0),0),tcb=ms.reduce((s,m)=>s+(m.total_carbs||0),0);
-  html+='<div class="daily-summary"><div class="row"><span class="lbl">½ñÈÕ×Ü¼Æ</span><span class="val">'+Math.round(tc)+' kcal</span></div><div class="row"><span class="lbl">µ°°×ÖÊ</span><span class="val">'+tp.toFixed(1)+'g</span></div><div class="row"><span class="lbl">Ö¬·¾</span><span class="val">'+tf.toFixed(1)+'g</span></div><div class="row"><span class="lbl">Ì¼Ë®</span><span class="val">'+tcb.toFixed(1)+'g</span></div></div>';
+  html+='<div class="daily-summary"><div class="row"><span class="lbl">ä»Šæ—¥æ€»è®¡</span><span class="val">'+Math.round(tc)+' kcal</span></div><div class="row"><span class="lbl">è›‹ç™½è´¨</span><span class="val">'+tp.toFixed(1)+'g</span></div><div class="row"><span class="lbl">è„‚è‚ª</span><span class="val">'+tf.toFixed(1)+'g</span></div><div class="row"><span class="lbl">ç¢³æ°´</span><span class="val">'+tcb.toFixed(1)+'g</span></div></div>';
   c.innerHTML=html}catch(e){}}
-async function deleteMeal(id){await api.del('/meal/'+id);showToast('ÒÑÉ¾³ı','success');loadTodayMeals()}
-function showAddFoodModal(){const o=document.createElement('div');o.className='modal-overlay active';o.innerHTML='<div class="modal"><button class="modal-close" onclick="this.closest(\'.modal-overlay\').remove()">&times;</button><h3>Ìí¼Ó×Ô¶¨ÒåÊ³Îï</h3><div class="form-group"><label>Ê³ÎïÃû</label><input class="form-control" id="newFoodName" placeholder="Èç£º×ÔÖÆ¼¦ĞØÈâ"></div><div class="form-group"><label>·ÖÀà</label><select class="form-control" id="newFoodCat"><option>Ö÷Ê³</option><option>ÈâÀà</option><option>Êß²Ë</option><option>Ë®¹û</option><option>ÈéÖÆÆ·</option><option>¼á¹û</option></select></div><div class="grid-2"><div class="form-group"><label>ÈÈÁ¿ (kcal/100g)</label><input class="form-control" id="newFoodCal" type="number" step="0.1"></div><div class="form-group"><label>µ°°×ÖÊ (g/100g)</label><input class="form-control" id="newFoodPro" type="number" step="0.1"></div></div><div class="grid-2"><div class="form-group"><label>Ö¬·¾ (g/100g)</label><input class="form-control" id="newFoodFat" type="number" step="0.1"></div><div class="form-group"><label>Ì¼Ë® (g/100g)</label><input class="form-control" id="newFoodCarb" type="number" step="0.1"></div></div><button class="btn btn-primary btn-block" onclick="addCustomFood()">Ìí¼Ó</button></div>';document.body.appendChild(o)}
-async function addCustomFood(){const d={name:document.getElementById('newFoodName').value,category:document.getElementById('newFoodCat').value,calories_per100g:parseFloat(document.getElementById('newFoodCal').value)||0,protein:parseFloat(document.getElementById('newFoodPro').value)||0,fat:parseFloat(document.getElementById('newFoodFat').value)||0,carbs:parseFloat(document.getElementById('newFoodCarb').value)||0};if(!d.name){showToast('ÇëÊäÈëÊ³ÎïÃû','error');return}await api.post('/foods',d);document.querySelector('.modal-overlay.active').remove();showToast('Ê³ÎïÒÑÌí¼Ó','success');loadFoods()}
-function showSaveMealModal(){if(currentPlate.length===0){showToast('²ÍÅÌÎª¿Õ','error');return}const o=document.createElement('div');o.className='modal-overlay active';o.innerHTML='<div class="modal"><button class="modal-close" onclick="this.closest(\'.modal-overlay\').remove()">&times;</button><h3>±£´æÎª³£ÓÃ´îÅä</h3><div class="form-group"><label>´îÅäÃû³Æ</label><input class="form-control" id="savedMealName" placeholder="Èç£ºÔö¼¡Ôç²Í"></div><button class="btn btn-primary btn-block" onclick="saveSavedMeal()">±£´æ</button></div>';document.body.appendChild(o)}
-async function saveSavedMeal(){const n=document.getElementById('savedMealName').value;if(!n){showToast('ÇëÊäÈëÃû³Æ','error');return}await api.post('/saved-meals',{name:n,foods_json:currentPlate.map(i=>({id:i.food.id,name:i.food.name,grams:i.grams})),total_calories:currentPlate.reduce((s,i)=>s+i.calories,0)});document.querySelector('.modal-overlay.active').remove();showToast('ÒÑ±£´æ³£ÓÃ´îÅä','success')}
-async function showSavedMeals(){try{const s=await api.get('/saved-meals');const o=document.createElement('div');o.className='modal-overlay active';o.innerHTML='<div class="modal"><button class="modal-close" onclick="this.closest(\'.modal-overlay\').remove()">&times;</button><h3>ÎÒµÄ³£ÓÃ´îÅä</h3>'+(s.length===0?'<p style="color:var(--text-tertiary)">ÔİÎŞ±£´æµÄ´îÅä</p>':s.map(x=>'<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06);"><span>'+x.name+' <span style="color:var(--text-tertiary);font-size:12px;">'+Math.round(x.total_calories)+'kcal</span></span><span><button class="btn btn-sm btn-primary" onclick="loadSavedMeal('+x.id+',\''+x.name+'\')">Ê¹ÓÃ</button></span></div>').join(''))+'</div>';document.body.appendChild(o)}catch(e){}}
-async function loadSavedMeal(id){const s=await api.get('/saved-meals');const m=s.find(x=>x.id===id);if(!m)return;const f=typeof m.foods_json==='string'?JSON.parse(m.foods_json):(m.foods_json||[]);currentPlate=[];for(const x of f){const food=allFoods.find(f2=>f2.id===x.id||f2.name===x.name);if(food){const g=x.grams||100;currentPlate.push({food,grams:g,calories:Math.round(food.calories_per100g*g/100),protein:Math.round(food.protein*g/100*10)/10,fat:Math.round(food.fat*g/100*10)/10,carbs:Math.round(food.carbs*g/100*10)/10})}}document.querySelector('.modal-overlay.active').remove();renderPlate();showToast('ÒÑ¼ÓÔØ','success')}
+async function deleteMeal(id){await api.del('/meal/'+id);showToast('å·²åˆ é™¤','success');loadTodayMeals()}
+function showAddFoodModal(){const o=document.createElement('div');o.className='modal-overlay active';o.innerHTML='<div class="modal"><button class="modal-close" onclick="this.closest(\'.modal-overlay\').remove()">&times;</button><h3>æ·»åŠ è‡ªå®šä¹‰é£Ÿç‰©</h3><div class="form-group"><label>é£Ÿç‰©å</label><input class="form-control" id="newFoodName" placeholder="å¦‚ï¼šè‡ªåˆ¶é¸¡èƒ¸è‚‰"></div><div class="form-group"><label>åˆ†ç±»</label><select class="form-control" id="newFoodCat"><option>ä¸»é£Ÿ</option><option>è‚‰ç±»</option><option>è”¬èœ</option><option>æ°´æœ</option><option>ä¹³åˆ¶å“</option><option>åšæœ</option></select></div><div class="grid-2"><div class="form-group"><label>çƒ­é‡ (kcal/100g)</label><input class="form-control" id="newFoodCal" type="number" step="0.1"></div><div class="form-group"><label>è›‹ç™½è´¨ (g/100g)</label><input class="form-control" id="newFoodPro" type="number" step="0.1"></div></div><div class="grid-2"><div class="form-group"><label>è„‚è‚ª (g/100g)</label><input class="form-control" id="newFoodFat" type="number" step="0.1"></div><div class="form-group"><label>ç¢³æ°´ (g/100g)</label><input class="form-control" id="newFoodCarb" type="number" step="0.1"></div></div><button class="btn btn-primary btn-block" onclick="addCustomFood()">æ·»åŠ </button></div>';document.body.appendChild(o)}
+async function addCustomFood(){const d={name:document.getElementById('newFoodName').value,category:document.getElementById('newFoodCat').value,calories_per100g:parseFloat(document.getElementById('newFoodCal').value)||0,protein:parseFloat(document.getElementById('newFoodPro').value)||0,fat:parseFloat(document.getElementById('newFoodFat').value)||0,carbs:parseFloat(document.getElementById('newFoodCarb').value)||0};if(!d.name){showToast('è¯·è¾“å…¥é£Ÿç‰©å','error');return}await api.post('/foods',d);document.querySelector('.modal-overlay.active').remove();showToast('é£Ÿç‰©å·²æ·»åŠ ','success');loadFoods()}
+function showSaveMealModal(){if(currentPlate.length===0){showToast('é¤ç›˜ä¸ºç©º','error');return}const o=document.createElement('div');o.className='modal-overlay active';o.innerHTML='<div class="modal"><button class="modal-close" onclick="this.closest(\'.modal-overlay\').remove()">&times;</button><h3>ä¿å­˜ä¸ºå¸¸ç”¨æ­é…</h3><div class="form-group"><label>æ­é…åç§°</label><input class="form-control" id="savedMealName" placeholder="å¦‚ï¼šå¢è‚Œæ—©é¤"></div><button class="btn btn-primary btn-block" onclick="saveSavedMeal()">ä¿å­˜</button></div>';document.body.appendChild(o)}
+async function saveSavedMeal(){const n=document.getElementById('savedMealName').value;if(!n){showToast('è¯·è¾“å…¥åç§°','error');return}await api.post('/saved-meals',{name:n,foods_json:currentPlate.map(i=>({id:i.food.id,name:i.food.name,grams:i.grams})),total_calories:currentPlate.reduce((s,i)=>s+i.calories,0)});document.querySelector('.modal-overlay.active').remove();showToast('å·²ä¿å­˜å¸¸ç”¨æ­é…','success')}
+async function showSavedMeals(){try{const s=await api.get('/saved-meals');const o=document.createElement('div');o.className='modal-overlay active';o.innerHTML='<div class="modal"><button class="modal-close" onclick="this.closest(\'.modal-overlay\').remove()">&times;</button><h3>æˆ‘çš„å¸¸ç”¨æ­é…</h3>'+(s.length===0?'<p style="color:var(--text-tertiary)">æš‚æ— ä¿å­˜çš„æ­é…</p>':s.map(x=>'<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06);"><span>'+x.name+' <span style="color:var(--text-tertiary);font-size:12px;">'+Math.round(x.total_calories)+'kcal</span></span><span><button class="btn btn-sm btn-primary" onclick="loadSavedMeal('+x.id+',\''+x.name+'\')">ä½¿ç”¨</button></span></div>').join(''))+'</div>';document.body.appendChild(o)}catch(e){}}
+async function loadSavedMeal(id){const s=await api.get('/saved-meals');const m=s.find(x=>x.id===id);if(!m)return;const f=typeof m.foods_json==='string'?JSON.parse(m.foods_json):(m.foods_json||[]);currentPlate=[];for(const x of f){const food=allFoods.find(f2=>f2.id===x.id||f2.name===x.name);if(food){const g=x.grams||100;currentPlate.push({food,grams:g,calories:Math.round(food.calories_per100g*g/100),protein:Math.round(food.protein*g/100*10)/10,fat:Math.round(food.fat*g/100*10)/10,carbs:Math.round(food.carbs*g/100*10)/10})}}document.querySelector('.modal-overlay.active').remove();renderPlate();showToast('å·²åŠ è½½','success')}
 function showToast(msg,t){const e=document.createElement('div');e.className='toast '+t;e.textContent=msg;document.body.appendChild(e);setTimeout(()=>e.remove(),2500)}
 loadFoods();loadTodayMeals();
 </script>

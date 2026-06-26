@@ -1,3 +1,16 @@
+
+.btn-ghost {
+  background: transparent; color: var(--text-secondary);
+  border: 1px solid transparent;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 24px; border-radius: var(--radius-sm);
+  font-size: 14px; font-weight: 600; cursor: pointer;
+  font-family: var(--font); white-space: nowrap;
+  transition: all 0.15s ease;
+}
+.btn-ghost:hover { background: rgba(255,255,255,0.06); color: #fff; }
+.btn-ghost:active { transform: scale(0.97); }
+
 /* 铁馆 · UI 组件 */
 
 

@@ -1,4 +1,4 @@
-﻿// 铁馆 Toast 通知系统
+// 铁馆 Toast 通知系统
 (function() {
   'use strict';
 
