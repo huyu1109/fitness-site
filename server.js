@@ -405,7 +405,7 @@ app.post('/api/payment/confirm', (req, res) => {
 });
 // ====== Feishu OAuth Login ======
 const FEISHU_OAUTH_ID = 'cli_aab0fa927024dcc7';
-const FEISHU_OAUTH_SECRET = 'CLF2yKfotInw01Sn2LLgdexNNNjPSWtY';
+const FEISHU_OAUTH_SECRET = 'your_feishu_secret_here';
 const OAUTH_REDIRECT = 'http://localhost:3000/api/auth/feishu/callback';
 
 app.get('/api/auth/feishu/login', function(req, res) {
