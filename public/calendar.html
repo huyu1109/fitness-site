@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -74,7 +74,7 @@
 
 <div class="badge-bar">
 <div id="bg"></div>
-<button class="btn-badge" onclick="sab()">?? 查看全部徽章</button>
+<button class="btn-badge" onclick="sab()">查看全部徽章</button>
 </div>
 </div>
 
@@ -219,7 +219,7 @@ function calcCal(){
     if(m){var n=m[1];var g=parseFloat(m[2]);for(var k in db){if(n.indexOf(k)>=0||k.indexOf(n)>=0){total+=Math.round(db[k]*g);break}}}
   });
   var d=document.getElementById("dietTotal");
-  d.innerHTML="今日总热量："+total+" 千卡 "+(total<=2000?"? 达标":"超标");
+  d.innerHTML="今日总热量："+total+" 千卡 "+(total<=2000?"✅ 达标":"超标");
   d.style.color=total<=2000?"rgba(255,255,255,0.7)":"#ff5252"
 }
 function calcCal(){
@@ -236,7 +236,7 @@ function calcCal(){
     for(var k in db){if(name.indexOf(k)>=0||k.indexOf(name)>=0){total+=Math.round(db[k]*num);break}}
   });
   var d=document.getElementById("dietTotal");
-  d.innerHTML="今日总热量："+total+"千卡 "+(total<=2000?"?达标":"??超标");
+  d.innerHTML="今日总热量："+total+"千卡 "+(total<=2000?"✅达标":"超标");
   d.style.color=total<=2000?"rgba(255,255,255,0.7)":"#ff5252"
 }
 function sd(){

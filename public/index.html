@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -82,7 +82,7 @@ async function loadHome() {
         const status = [];
         if (c.training_done) status.push('训练');
         if (c.diet_done) status.push('饮食');
-        if (c.water_ml > 0) status.push('??' + c.water_ml + 'ml');
+        if (c.water_ml > 0) status.push('💧' + c.water_ml + 'ml');
         return '<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:13px;">' +
           '<span style="color:var(--text-tertiary)">' + c.date + '</span> ' +
           status.join(' ') +
@@ -103,3 +103,4 @@ loadHome();
     <script src="js/toast.js"></script>
 </body>
 </html>
+
