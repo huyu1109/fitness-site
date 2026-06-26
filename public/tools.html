@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -6,6 +6,32 @@
 <title>健身工具 - 铁馆</title>
 <meta name="description" content="铁馆健身工具 - 1RM最大重量计算器、体脂率估算工具，辅助科学训练。">
 <link rel="stylesheet" href="css/style.css">
+<style>
+.tool-card input, .tool-card select {
+  background: var(--bg-card);
+  border: var(--border-glass);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  color: var(--text-primary);
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+  margin-bottom: 10px;
+}
+.tool-card input:focus, .tool-card select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+  outline: none;
+}
+.tool-card label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+</style>
 </head>
 <body>
 
@@ -19,7 +45,7 @@
 
   <div class="tools-layout content-enter content-enter-delay-2">
     <div class="tool-card">
-      <h3>??? 1RM 计算器</h3>
+      <h3>1RM 计算器</h3>
       <p style="font-size:13px;color:var(--text-tertiary);margin-bottom:12px;">输入你能做的最大重量和次数，估算你的1RM（一次最大重量）</p>
       <div class="rm-input-group">
         <div class="form-group" style="flex:1;min-width:100px;"><label>重量 (kg)</label><input class="form-control" id="rmWeight" type="number" step="2.5" value="60"></div>
@@ -31,7 +57,7 @@
     </div>
 
     <div class="tool-card">
-      <h3>?? 体脂率估算</h3>
+      <h3>体脂率估算</h3>
       <p style="font-size:13px;color:var(--text-tertiary);margin-bottom:12px;">基于腰围和身高的简易估算公式</p>
       <div class="rm-input-group">
         <div class="form-group" style="flex:1;"><label>性别</label><select class="form-control" id="bfGender"><option value="男">男</option><option value="女">女</option></select></div>
@@ -96,3 +122,5 @@ calcRM();
     <script src="js/toast.js"></script>
 </body>
 </html>
+
+
