@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>动作�?- 铁馆</title>
-<meta name="description" content="铁馆动作�?- 60+标准健身动作，支持中文搜索、肌群筛选、器械筛选、难度分级�?>
+<title>动作库 - 铁馆</title>
+<meta name="description" content="铁馆动作库 - 60+标准健身动作，支持中文搜索、肌群筛选、器械筛选、难度分级。">
 <link rel="stylesheet" href="css/style.css">
 <style>
 body{background:#0a0a12;color:rgba(255,255,255,0.87);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;margin:0}
@@ -68,11 +68,11 @@ body{background:#0a0a12;color:rgba(255,255,255,0.87);font-family:-apple-system,B
 </script>
 <script src="js/particles.js""></script>
 <div class="container">
-<h1 class="page-title" style="margin-bottom:4px">动作�?/h1>
-<p style="text-align:center;font-size:13px;color:rgba(255,255,255,0.35);margin:0 0 20px">收录 60+ 健身动作，支持中文搜索和筛�?/p>
+<h1 class="page-title" style="margin-bottom:4px">动作库</h1>
+<p style="text-align:center;font-size:13px;color:rgba(255,255,255,0.35);margin:0 0 20px">收录 60+ 健身动作，支持中文搜索和筛选</p>
 <div class="search-wrap">
 <div class="icon"></div>
-<input id="searchInput" placeholder="搜索动作名称、肌群、器�?.." oninput="search()">
+<input id="searchInput" placeholder="搜索动作名称、肌群、器械..." oninput="search()">
 </div>
 <div class="tags" id="muscleTags">
 <span class="tag active" data-muscle="all">全部</span>
@@ -85,7 +85,7 @@ body{background:#0a0a12;color:rgba(255,255,255,0.87);font-family:-apple-system,B
 <span class="tag active" data-equip="all">全部器械</span>
 <span class="tag" data-equip="杠铃">杠铃</span><span class="tag" data-equip="哑铃">哑铃</span>
 <span class="tag" data-equip="绳索">绳索</span><span class="tag" data-equip="固定器械">固定器械</span>
-<span class="tag" data-equip="徒手">徒手</span><span class="tag" data-equip="弹力�?>弹力�?/span>
+<span class="tag" data-equip="徒手">徒手</span><span class="tag" data-equip="弹力带">弹力带</span>
 </div>
 <div class="tags" id="diffTags">
 <span class="tag active" data-diff="all">全部难度</span>
@@ -93,7 +93,7 @@ body{background:#0a0a12;color:rgba(255,255,255,0.87);font-family:-apple-system,B
 <span class="tag" data-diff="进阶">进阶</span>
 <span class="tag" data-diff="高阶">高阶</span>
 </div>
-<div class="srcount" id="resultCount">�?0 个动�?/div>
+<div class="srcount" id="resultCount">共 0 个动作</div>
 <div class="grid" id="grid"></div>
 </div>
 <div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
@@ -111,5 +111,3 @@ body{background:#0a0a12;color:rgba(255,255,255,0.87);font-family:-apple-system,B
     <script src="js/toast.js"></script>
 <script src="js/exercises.js"></script>
 </body></html>
-
-
