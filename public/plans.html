@@ -48,7 +48,7 @@ const EXERCISE_DB = {
     '健身房':{'全身':[{name:'史密斯深蹲',sets:'3x10'},{name:'器械推胸',sets:'3x10'},{name:'坐姿划船',sets:'3x10'},{name:'高位下拉',sets:'3x10'},{name:'器械肩推',sets:'3x10'},{name:'腿举机',sets:'3x12'}]}
   }
 };
-function generatePlan(){if(window.unlockAPI&&!unlockAPI.isUnlocked()){document.getElementById('planResult').innerHTML='<div class="card" style="text-align:center;padding:40px"><p style="font-size:40px;margin-bottom:12px">??</p><h3 style="margin-bottom:8px">训练计划已锁定</h3><p style="color:rgba(255,255,255,0.4);font-size:13px;margin-bottom:16px">解锁后可查看完整训练计划详情</p><button class="btn btn-primary" onclick="unlockAPI.showModal()">0.5元解锁全站</button></div>';return}
+function generatePlan(){if(window.unlockAPI&&!unlockAPI.isUnlocked()){document.getElementById('planResult').innerHTML='<div class="card" style="text-align:center;padding:40px"><p style="font-size:40px;margin-bottom:12px"></p><h3 style="margin-bottom:8px">训练计划已锁定</h3><p style="color:rgba(255,255,255,0.4);font-size:13px;margin-bottom:16px">解锁后可查看完整训练计划详情</p><button class="btn btn-primary" onclick="unlockAPI.showModal()">0.5元解锁全站</button></div>';return}
   const goal=document.getElementById('planGoal').value,days=parseInt(document.getElementById('planDays').value),equip=document.getElementById('planEquipment').value;
   const pd=EXERCISE_DB[goal]&&EXERCISE_DB[goal][equip];
   if(!pd){document.getElementById('planResult').innerHTML='<div class="card"><p style="color:var(--text-tertiary)">暂无匹配计划，请调整选择条件</p></div>';return}

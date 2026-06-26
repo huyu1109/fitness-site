@@ -33,7 +33,26 @@ h2{font-size:22px;margin-bottom:4px}
 
 <script>
 (function(){var p=location.pathname.split("/").pop()||"index.html";document.querySelectorAll(".nav-links a").forEach(function(a){if(a.getAttribute("href")===p)a.classList.add("active")})})();
-</script>
+
+function selectQuick(cat) {
+  var map = {
+    push: ['胸肌上部','胸肌下部','三角肌前束','三角肌中束','肱三头肌'],
+    pull: ['背阔肌','斜方肌','三角肌后束','肱二头肌'],
+    legs: ['股四头肌','腘绳肌','臀大肌','臀中肌','内收肌','腓肠肌','比目鱼肌'],
+    core: ['腹直肌上部','腹直肌下部','腹外斜肌'],
+    full: ['胸肌上部','胸肌下部','三角肌前束','三角肌中束','三角肌后束','肱二头肌','肱三头肌','背阔肌','斜方肌','腹直肌上部','腹直肌下部','腹外斜肌','股四头肌','腘绳肌','臀大肌','臀中肌','内收肌','腓肠肌','比目鱼肌','竖脊肌','腰方肌','胫骨前肌','髋屈肌'],
+  };
+  var targets = map[cat] || [];
+  if (cat === 'clear') { selected = {}; updateSel(); return; }
+  // Select matching muscles
+  selected = {};
+  targets.forEach(function(t) {
+    for (var k in mus) {
+      if (mus[k].indexOf(t) >= 0) selected[k] = true;
+    }
+  });
+  updateSel();
+}</script>
 <script src="js/particles.js">
 // 生成训练计划
 var exDB={chest:["杠铃卧推","哑铃飞鸟","上斜卧推","绳索夹胸"],back:["引体向上","杠铃划船","高位下拉","坐姿划船"],shoulder:["哑铃推举","侧平举","前平举","面拉"],biceps:["杠铃弯举","哑铃弯举","锤式弯举"],triceps:["绳索下压","仰卧臂屈伸","窄距卧推"],abs:["卷腹","平板支撑","仰卧举腿","俄罗斯转体"],glute:["深蹲","箭步蹲","臀推","腿举"],calf:["站姿提踵","坐姿提踵"]};
@@ -86,6 +105,25 @@ function syncToCalendar(){
     localStorage.setItem("workout_plans",JSON.stringify(all));
     alert("\u2705 \u5df2\u540c\u6b65\u5230\u6253\u5361\u8868")
   }catch(e){alert("\u4fdd\u5b58\u5931\u8d25: "+e.message)}
+}
+function selectQuick(cat) {
+  var map = {
+    push: ['胸肌上部','胸肌下部','三角肌前束','三角肌中束','肱三头肌'],
+    pull: ['背阔肌','斜方肌','三角肌后束','肱二头肌'],
+    legs: ['股四头肌','腘绳肌','臀大肌','臀中肌','内收肌','腓肠肌','比目鱼肌'],
+    core: ['腹直肌上部','腹直肌下部','腹外斜肌'],
+    full: ['胸肌上部','胸肌下部','三角肌前束','三角肌中束','三角肌后束','肱二头肌','肱三头肌','背阔肌','斜方肌','腹直肌上部','腹直肌下部','腹外斜肌','股四头肌','腘绳肌','臀大肌','臀中肌','内收肌','腓肠肌','比目鱼肌','竖脊肌','腰方肌','胫骨前肌','髋屈肌'],
+  };
+  var targets = map[cat] || [];
+  if (cat === 'clear') { selected = {}; updateSel(); return; }
+  // Select matching muscles
+  selected = {};
+  targets.forEach(function(t) {
+    for (var k in mus) {
+      if (mus[k].indexOf(t) >= 0) selected[k] = true;
+    }
+  });
+  updateSel();
 }</script>
 <script src="https://unpkg.com/body-muscles/dist/umd/body-muscles.umd.min.js">
 // 生成训练计划
@@ -139,9 +177,66 @@ function syncToCalendar(){
     localStorage.setItem("workout_plans",JSON.stringify(all));
     alert("\u2705 \u5df2\u540c\u6b65\u5230\u6253\u5361\u8868")
   }catch(e){alert("\u4fdd\u5b58\u5931\u8d25: "+e.message)}
+}
+function selectQuick(cat) {
+  var map = {
+    push: ['胸肌上部','胸肌下部','三角肌前束','三角肌中束','肱三头肌'],
+    pull: ['背阔肌','斜方肌','三角肌后束','肱二头肌'],
+    legs: ['股四头肌','腘绳肌','臀大肌','臀中肌','内收肌','腓肠肌','比目鱼肌'],
+    core: ['腹直肌上部','腹直肌下部','腹外斜肌'],
+    full: ['胸肌上部','胸肌下部','三角肌前束','三角肌中束','三角肌后束','肱二头肌','肱三头肌','背阔肌','斜方肌','腹直肌上部','腹直肌下部','腹外斜肌','股四头肌','腘绳肌','臀大肌','臀中肌','内收肌','腓肠肌','比目鱼肌','竖脊肌','腰方肌','胫骨前肌','髋屈肌'],
+  };
+  var targets = map[cat] || [];
+  if (cat === 'clear') { selected = {}; updateSel(); return; }
+  // Select matching muscles
+  selected = {};
+  targets.forEach(function(t) {
+    for (var k in mus) {
+      if (mus[k].indexOf(t) >= 0) selected[k] = true;
+    }
+  });
+  updateSel();
 }</script>
-<script src="js/effects.js""></script>
-<script src="js/unlock.js""></script>
+<script src="js/effects.js"">
+function selectQuick(cat) {
+  var map = {
+    push: ['胸肌上部','胸肌下部','三角肌前束','三角肌中束','肱三头肌'],
+    pull: ['背阔肌','斜方肌','三角肌后束','肱二头肌'],
+    legs: ['股四头肌','腘绳肌','臀大肌','臀中肌','内收肌','腓肠肌','比目鱼肌'],
+    core: ['腹直肌上部','腹直肌下部','腹外斜肌'],
+    full: ['胸肌上部','胸肌下部','三角肌前束','三角肌中束','三角肌后束','肱二头肌','肱三头肌','背阔肌','斜方肌','腹直肌上部','腹直肌下部','腹外斜肌','股四头肌','腘绳肌','臀大肌','臀中肌','内收肌','腓肠肌','比目鱼肌','竖脊肌','腰方肌','胫骨前肌','髋屈肌'],
+  };
+  var targets = map[cat] || [];
+  if (cat === 'clear') { selected = {}; updateSel(); return; }
+  // Select matching muscles
+  selected = {};
+  targets.forEach(function(t) {
+    for (var k in mus) {
+      if (mus[k].indexOf(t) >= 0) selected[k] = true;
+    }
+  });
+  updateSel();
+}</script>
+<script src="js/unlock.js"">
+function selectQuick(cat) {
+  var map = {
+    push: ['胸肌上部','胸肌下部','三角肌前束','三角肌中束','肱三头肌'],
+    pull: ['背阔肌','斜方肌','三角肌后束','肱二头肌'],
+    legs: ['股四头肌','腘绳肌','臀大肌','臀中肌','内收肌','腓肠肌','比目鱼肌'],
+    core: ['腹直肌上部','腹直肌下部','腹外斜肌'],
+    full: ['胸肌上部','胸肌下部','三角肌前束','三角肌中束','三角肌后束','肱二头肌','肱三头肌','背阔肌','斜方肌','腹直肌上部','腹直肌下部','腹外斜肌','股四头肌','腘绳肌','臀大肌','臀中肌','内收肌','腓肠肌','比目鱼肌','竖脊肌','腰方肌','胫骨前肌','髋屈肌'],
+  };
+  var targets = map[cat] || [];
+  if (cat === 'clear') { selected = {}; updateSel(); return; }
+  // Select matching muscles
+  selected = {};
+  targets.forEach(function(t) {
+    for (var k in mus) {
+      if (mus[k].indexOf(t) >= 0) selected[k] = true;
+    }
+  });
+  updateSel();
+}</script>
 <script src="js/nav.js">
 // 生成训练计划
 var exDB={chest:["杠铃卧推","哑铃飞鸟","上斜卧推","绳索夹胸"],back:["引体向上","杠铃划船","高位下拉","坐姿划船"],shoulder:["哑铃推举","侧平举","前平举","面拉"],biceps:["杠铃弯举","哑铃弯举","锤式弯举"],triceps:["绳索下压","仰卧臂屈伸","窄距卧推"],abs:["卷腹","平板支撑","仰卧举腿","俄罗斯转体"],glute:["深蹲","箭步蹲","臀推","腿举"],calf:["站姿提踵","坐姿提踵"]};
@@ -194,6 +289,25 @@ function syncToCalendar(){
     localStorage.setItem("workout_plans",JSON.stringify(all));
     alert("\u2705 \u5df2\u540c\u6b65\u5230\u6253\u5361\u8868")
   }catch(e){alert("\u4fdd\u5b58\u5931\u8d25: "+e.message)}
+}
+function selectQuick(cat) {
+  var map = {
+    push: ['胸肌上部','胸肌下部','三角肌前束','三角肌中束','肱三头肌'],
+    pull: ['背阔肌','斜方肌','三角肌后束','肱二头肌'],
+    legs: ['股四头肌','腘绳肌','臀大肌','臀中肌','内收肌','腓肠肌','比目鱼肌'],
+    core: ['腹直肌上部','腹直肌下部','腹外斜肌'],
+    full: ['胸肌上部','胸肌下部','三角肌前束','三角肌中束','三角肌后束','肱二头肌','肱三头肌','背阔肌','斜方肌','腹直肌上部','腹直肌下部','腹外斜肌','股四头肌','腘绳肌','臀大肌','臀中肌','内收肌','腓肠肌','比目鱼肌','竖脊肌','腰方肌','胫骨前肌','髋屈肌'],
+  };
+  var targets = map[cat] || [];
+  if (cat === 'clear') { selected = {}; updateSel(); return; }
+  // Select matching muscles
+  selected = {};
+  targets.forEach(function(t) {
+    for (var k in mus) {
+      if (mus[k].indexOf(t) >= 0) selected[k] = true;
+    }
+  });
+  updateSel();
 }</script>
 <div class="container">
 <h2> 肌肉训练选择器</h2>
@@ -271,6 +385,25 @@ function syncToCalendar(){
     localStorage.setItem("workout_plans",JSON.stringify(all));
     alert("\u2705 \u5df2\u540c\u6b65\u5230\u6253\u5361\u8868")
   }catch(e){alert("\u4fdd\u5b58\u5931\u8d25: "+e.message)}
+}
+function selectQuick(cat) {
+  var map = {
+    push: ['胸肌上部','胸肌下部','三角肌前束','三角肌中束','肱三头肌'],
+    pull: ['背阔肌','斜方肌','三角肌后束','肱二头肌'],
+    legs: ['股四头肌','腘绳肌','臀大肌','臀中肌','内收肌','腓肠肌','比目鱼肌'],
+    core: ['腹直肌上部','腹直肌下部','腹外斜肌'],
+    full: ['胸肌上部','胸肌下部','三角肌前束','三角肌中束','三角肌后束','肱二头肌','肱三头肌','背阔肌','斜方肌','腹直肌上部','腹直肌下部','腹外斜肌','股四头肌','腘绳肌','臀大肌','臀中肌','内收肌','腓肠肌','比目鱼肌','竖脊肌','腰方肌','胫骨前肌','髋屈肌'],
+  };
+  var targets = map[cat] || [];
+  if (cat === 'clear') { selected = {}; updateSel(); return; }
+  // Select matching muscles
+  selected = {};
+  targets.forEach(function(t) {
+    for (var k in mus) {
+      if (mus[k].indexOf(t) >= 0) selected[k] = true;
+    }
+  });
+  updateSel();
 }</script>
 <script>
 var sel=new Set();
@@ -458,8 +591,66 @@ function syncToCalendar(){
     localStorage.setItem("workout_plans",JSON.stringify(all));
     alert("\u2705 \u5df2\u540c\u6b65\u5230\u6253\u5361\u8868")
   }catch(e){alert("保存失败: "+e.message)}
+}
+function selectQuick(cat) {
+  var map = {
+    push: ['胸肌上部','胸肌下部','三角肌前束','三角肌中束','肱三头肌'],
+    pull: ['背阔肌','斜方肌','三角肌后束','肱二头肌'],
+    legs: ['股四头肌','腘绳肌','臀大肌','臀中肌','内收肌','腓肠肌','比目鱼肌'],
+    core: ['腹直肌上部','腹直肌下部','腹外斜肌'],
+    full: ['胸肌上部','胸肌下部','三角肌前束','三角肌中束','三角肌后束','肱二头肌','肱三头肌','背阔肌','斜方肌','腹直肌上部','腹直肌下部','腹外斜肌','股四头肌','腘绳肌','臀大肌','臀中肌','内收肌','腓肠肌','比目鱼肌','竖脊肌','腰方肌','胫骨前肌','髋屈肌'],
+  };
+  var targets = map[cat] || [];
+  if (cat === 'clear') { selected = {}; updateSel(); return; }
+  // Select matching muscles
+  selected = {};
+  targets.forEach(function(t) {
+    for (var k in mus) {
+      if (mus[k].indexOf(t) >= 0) selected[k] = true;
+    }
+  });
+  updateSel();
 }</script>
-    <script src="js/utils.js"></script>
-    <script src="js/toast.js"></script>
+    <script src="js/utils.js">
+function selectQuick(cat) {
+  var map = {
+    push: ['胸肌上部','胸肌下部','三角肌前束','三角肌中束','肱三头肌'],
+    pull: ['背阔肌','斜方肌','三角肌后束','肱二头肌'],
+    legs: ['股四头肌','腘绳肌','臀大肌','臀中肌','内收肌','腓肠肌','比目鱼肌'],
+    core: ['腹直肌上部','腹直肌下部','腹外斜肌'],
+    full: ['胸肌上部','胸肌下部','三角肌前束','三角肌中束','三角肌后束','肱二头肌','肱三头肌','背阔肌','斜方肌','腹直肌上部','腹直肌下部','腹外斜肌','股四头肌','腘绳肌','臀大肌','臀中肌','内收肌','腓肠肌','比目鱼肌','竖脊肌','腰方肌','胫骨前肌','髋屈肌'],
+  };
+  var targets = map[cat] || [];
+  if (cat === 'clear') { selected = {}; updateSel(); return; }
+  // Select matching muscles
+  selected = {};
+  targets.forEach(function(t) {
+    for (var k in mus) {
+      if (mus[k].indexOf(t) >= 0) selected[k] = true;
+    }
+  });
+  updateSel();
+}</script>
+    <script src="js/toast.js">
+function selectQuick(cat) {
+  var map = {
+    push: ['胸肌上部','胸肌下部','三角肌前束','三角肌中束','肱三头肌'],
+    pull: ['背阔肌','斜方肌','三角肌后束','肱二头肌'],
+    legs: ['股四头肌','腘绳肌','臀大肌','臀中肌','内收肌','腓肠肌','比目鱼肌'],
+    core: ['腹直肌上部','腹直肌下部','腹外斜肌'],
+    full: ['胸肌上部','胸肌下部','三角肌前束','三角肌中束','三角肌后束','肱二头肌','肱三头肌','背阔肌','斜方肌','腹直肌上部','腹直肌下部','腹外斜肌','股四头肌','腘绳肌','臀大肌','臀中肌','内收肌','腓肠肌','比目鱼肌','竖脊肌','腰方肌','胫骨前肌','髋屈肌'],
+  };
+  var targets = map[cat] || [];
+  if (cat === 'clear') { selected = {}; updateSel(); return; }
+  // Select matching muscles
+  selected = {};
+  targets.forEach(function(t) {
+    for (var k in mus) {
+      if (mus[k].indexOf(t) >= 0) selected[k] = true;
+    }
+  });
+  updateSel();
+}</script>
 </body></html>
+
 

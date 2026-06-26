@@ -467,3 +467,18 @@ button:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.2)!im
 .cal-future { opacity: 0.3; pointer-events: none; }
 .cal-day { transition: all 0.2s ease; cursor: pointer; }
 .cal-day:hover { transform: scale(1.05); }
+/* Global select styling */
+select {
+  padding: 8px 12px; border-radius: var(--radius-sm);
+  background: var(--bg-card); color: var(--text-primary);
+  border: var(--border-glass); font-size: 14px;
+  cursor: pointer; outline: none;
+  font-family: var(--font);
+  transition: all 0.15s ease;
+  -webkit-appearance: none; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='rgba(255,255,255,0.5)' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center;
+  padding-right: 32px;
+}
+select:hover { border-color: rgba(255,255,255,0.14); }
+select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }

@@ -95,21 +95,21 @@ try{var s=localStorage.getItem("fit_checkins");if(s)ci=JSON.parse(s)}catch(e){}
 try{var b=localStorage.getItem("fit_badges");if(b)bl=JSON.parse(b)}catch(e){}
 
 var badges=[
-{id:"first",ic:"??",nm:"初露锋芒",dc:"完成第1次训练",ch:function(){return Object.keys(ci).length>=1}},
-{id:"week7",ic:"??",nm:"七日坚持",dc:"连续打卡7天",ch:function(){var d=Object.keys(ci).sort();if(d.length<7)return false;for(var i=d.length-7;i>=0;i--){var ok=true;for(var j=0;j<7;j++){var dt=new Date();dt.setDate(dt.getDate()-j);if(!ci[dt.toISOString().slice(0,10)]){ok=false;break}}if(ok)return true}return false}},
-{id:"month",ic:"??",nm:"月度全勤",dc:"月打卡满20天",ch:function(){var y=cur.getFullYear(),m=(cur.getMonth()+1).toString().padStart(2,"0");return Object.keys(ci).filter(function(k){return k.startsWith(y+"-"+m)}).length>=20}},
-{id:"100t",ic:"???",nm:"百次训练",dc:"累计100次训练",ch:function(){return Object.keys(ci).length>=100}},
-{id:"diet3",ic:"??",nm:"饮食达标",dc:"连续3天不超标",ch:function(){return false}},
-{id:"protein",ic:"??",nm:"蛋白质王者",dc:"单日蛋白质>120g",ch:function(){return false}},
-{id:"water",ic:"??",nm:"水润达人",dc:"单日饮水>2000ml",ch:function(){return false}},
-{id:"loss5",ic:"??",nm:"减重5kg",dc:"体重下降5kg",ch:function(){return false}},
-{id:"gain3",ic:"??",nm:"增重3kg",dc:"体重增加3kg",ch:function(){return false}},
-{id:"bdfat",ic:"??",nm:"体脂下降",dc:"体脂率下降3%",ch:function(){return false}},
-{id:"msure",ic:"??",nm:"围度变化",dc:"记录围度>4周",ch:function(){return false}},
+{id:"first",ic:"",nm:"初露锋芒",dc:"完成第1次训练",ch:function(){return Object.keys(ci).length>=1}},
+{id:"week7",ic:"",nm:"七日坚持",dc:"连续打卡7天",ch:function(){var d=Object.keys(ci).sort();if(d.length<7)return false;for(var i=d.length-7;i>=0;i--){var ok=true;for(var j=0;j<7;j++){var dt=new Date();dt.setDate(dt.getDate()-j);if(!ci[dt.toISOString().slice(0,10)]){ok=false;break}}if(ok)return true}return false}},
+{id:"month",ic:"",nm:"月度全勤",dc:"月打卡满20天",ch:function(){var y=cur.getFullYear(),m=(cur.getMonth()+1).toString().padStart(2,"0");return Object.keys(ci).filter(function(k){return k.startsWith(y+"-"+m)}).length>=20}},
+{id:"100t",ic:"⭐",nm:"百次训练",dc:"累计100次训练",ch:function(){return Object.keys(ci).length>=100}},
+{id:"diet3",ic:"",nm:"饮食达标",dc:"连续3天不超标",ch:function(){return false}},
+{id:"protein",ic:"",nm:"蛋白质王者",dc:"单日蛋白质>120g",ch:function(){return false}},
+{id:"water",ic:"",nm:"水润达人",dc:"单日饮水>2000ml",ch:function(){return false}},
+{id:"loss5",ic:"",nm:"减重5kg",dc:"体重下降5kg",ch:function(){return false}},
+{id:"gain3",ic:"",nm:"增重3kg",dc:"体重增加3kg",ch:function(){return false}},
+{id:"bdfat",ic:"",nm:"体脂下降",dc:"体脂率下降3%",ch:function(){return false}},
+{id:"msure",ic:"",nm:"围度变化",dc:"记录围度>4周",ch:function(){return false}},
 {id:"perf",ic:"?",nm:"完美一周",dc:"训练+饮食+饮水全达标",ch:function(){return false}},
-{id:"beast",ic:"??",nm:"猛兽模式",dc:"连续3天训练超60分",ch:function(){return false}},
-{id:"rest",ic:"??",nm:"张弛有度",dc:"每周休2天连4周",ch:function(){return false}},
-{id:"photo",ic:"??",nm:"变形记",dc:"上传4张对比照",ch:function(){return false}}
+{id:"beast",ic:"",nm:"猛兽模式",dc:"连续3天训练超60分",ch:function(){return false}},
+{id:"rest",ic:"",nm:"张弛有度",dc:"每周休2天连4周",ch:function(){return false}},
+{id:"photo",ic:"",nm:"变形记",dc:"上传4张对比照",ch:function(){return false}}
 ];
 
 function cr(){
@@ -219,7 +219,7 @@ function calcCal(){
     if(m){var n=m[1];var g=parseFloat(m[2]);for(var k in db){if(n.indexOf(k)>=0||k.indexOf(n)>=0){total+=Math.round(db[k]*g);break}}}
   });
   var d=document.getElementById("dietTotal");
-  d.innerHTML="今日总热量："+total+" 千卡 "+(total<=2000?"? 达标":"?? 超标");
+  d.innerHTML="今日总热量："+total+" 千卡 "+(total<=2000?"? 达标":"超标");
   d.style.color=total<=2000?"rgba(255,255,255,0.7)":"#ff5252"
 }
 function calcCal(){

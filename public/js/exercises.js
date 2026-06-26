@@ -106,7 +106,7 @@ function render(){
     allResults.sort(function(a,b){return scoreResult(b,curSearch)-scoreResult(a,curSearch)});
   }
   if(!window.unlockAPI||!unlockAPI.isUnlocked()&&allResults.length>5){allResults=allResults.slice(0,5);limited=true}
-  document.getElementById("resultCount").textContent="共 "+allResults.length+" 个动作"+(limited?" · ?? 解锁显示全部":"");
+  document.getElementById("resultCount").textContent="共 "+allResults.length+" 个动作"+(limited?" · 解锁显示全部":"");
   var g=document.getElementById("grid");
   if(allResults.length===0){g.innerHTML="<div class='none'>未找到匹配的动作，试试其他关键词</div>";return}
   var h="";
@@ -123,7 +123,7 @@ function render(){
   });
   g.innerHTML=h
   if(limited&&unlockAPI&&!unlockAPI.isUnlocked()){
-    g.innerHTML+='<div style="text-align:center;padding:24px;border-top:1px solid rgba(255,255,255,0.06);margin-top:16px"><p style="color:rgba(255,255,255,0.3);font-size:13px;margin-bottom:8px;">?? 已显示前5个动作</p><button class="btn btn-primary" onclick="unlockAPI.showModal()">0.5元解锁全部'+exercises.length+'个动作</button></div>';
+    g.innerHTML+='<div style="text-align:center;padding:24px;border-top:1px solid rgba(255,255,255,0.06);margin-top:16px"><p style="color:rgba(255,255,255,0.3);font-size:13px;margin-bottom:8px;">已显示前5个动作</p><button class="btn btn-primary" onclick="unlockAPI.showModal()">0.5元解锁全部'+exercises.length+'个动作</button></div>';
   }
 }
 
@@ -134,9 +134,9 @@ function showDetail(id){
   var stepsHtml="";
   ex.steps.forEach(function(s,i){stepsHtml+="<li>"+s+"</li>"});
   var errHtml="";
-  ex.errors.forEach(function(e){errHtml+="<li class='err'>?? "+e+"</li>"});
+  ex.errors.forEach(function(e){errHtml+="<li class="err">"+e+"</li>"});
   var altHtml="";
-  ex.alt.split("、").forEach(function(a){altHtml+="<li class='alt'>?? "+a+"</li>"});
+  ex.alt.split("、").forEach(function(a){altHtml+="<li class="alt">"+a+"</li>"});
   document.getElementById("modalContent").innerHTML="<h2>"+ex.name+"</h2><div class='en2'>"+ex.en+'</div>'
     +"<div class='modal-tags'><span>"+ex.muscle+"</span><span>"+ex.equip+"</span><span class='lv"+lv+"' style='color:"+{1:"#48c972",2:"#ffaa32",3:"#ff5050"}[lv]+"'>"+ex.diff+"</span><span>"+ex.type+"</span></div>"
     +"<div class='modal-section'><h4>\uD83C\uDFCB 动作步骤</h4><ol>"+stepsHtml+"</ol></div>"
