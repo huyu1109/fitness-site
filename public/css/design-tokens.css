@@ -1,41 +1,58 @@
 ﻿/* 铁馆 · 设计系统变量 */
 /* 配色、字体、间距、圆角、阴影、动画 */
 :root {
+  /* Catppuccin Mocha — 深色主题配色 */
+  --bg-body: #1e1e2e;
+  --bg-card: #181825;
+  --bg-card-hover: #313244;
+  --bg-elevated: #313244;
+  --bg-glass: rgba(49, 50, 68, 0.4);
+  --bg-glass-hover: rgba(49, 50, 68, 0.6);
+  --bg-glass-strong: rgba(24, 24, 37, 0.85);
+  --bg-nav: rgba(30, 30, 46, 0.85);
+  --bg-primary: #1e1e2e;
+
+  --border-glass: 1px solid rgba(69, 71, 90, 0.4);
+  --border-glass-hover: 1px solid rgba(69, 71, 90, 0.7);
+  --border-subtle: 1px solid rgba(69, 71, 90, 0.2);
+  --border-primary: #45475a;
+
+  --accent: #a6e3a1;
+  --accent-hover: #94e2d5;
+  --accent-rgb: 166, 227, 161;
+  --accent-glow: rgba(166, 227, 161, 0.2);
+  --accent-soft: rgba(166, 227, 161, 0.1);
+  --blue: #89b4fa;
+  --blue-glow: rgba(137, 180, 250, 0.2);
+  --teal: #94e2d5;
+  --mauve: #cba6f7;
+  --peach: #fab387;
+  --danger: #f38ba8;
+  --warning: #fab387;
+  --success: #a6e3a1;
+  --info: #89b4fa;
+
+  --text-primary: #cdd6f4;
+  --text-secondary: #a6adc8;
+  --text-tertiary: #6c7086;
+  --text-link: #a6e3a1;
+  --text-inverse: #1e1e2e;
+
   --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
     "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
   --font-mono: "SF Mono", "Menlo", "Monaco", "Consolas", monospace;
-  --text-primary: rgba(255,255,255,0.92);
-  --text-secondary: rgba(255,255,255,0.75);
-  --text-tertiary: rgba(255,255,255,0.55);
-  --danger: #ef5350;
-  --warning: #ffa726;
-  --success: #66bb6a;
-  --shadow-glass: 0 8px 32px rgba(0,0,0,0.24);
-  --shadow-glass-lg: 0 16px 48px rgba(0,0,0,0.32);
-  --ease-out: cubic-bezier(0.25, 0.1, 0.25, 1);
-  --ease-in-out: cubic-bezier(0.42, 0, 0.58, 1);
-  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  --bg-body: #09090b;
-  --bg-card: #141418;
-  --bg-card-hover: #1c1c24;
-  --bg-glass: rgba(255,255,255,0.04);
-  --bg-glass-hover: rgba(255,255,255,0.08);
-  --border-glass-hover: 1px solid rgba(255,255,255,0.14);
-  --accent-rgb: 72, 201, 114;
-  --accent-hover: #3db864;
-  --accent-glow: rgba(72,201,114,0.25);
-  --accent-soft: rgba(72,201,114,0.12);
-  --blue: #64b5f6;
-  --shadow-accent: 0 4px 20px rgba(72,201,114,0.25);
-  --shadow-dropdown: 0 8px 32px rgba(0,0,0,0.4);
-  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-bounce: cubic-bezier(0.68, -0.55, 0.27, 1.55);
-  --transition-fast: 0.15s ease;
-  --transition-base: 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
-  --transition-slow: 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
-  --transition-spring: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-  --nav-height: 65px;
+  --fs-h1: clamp(28px, 5vw, 48px);
+  --fs-h2: clamp(22px, 3.5vw, 32px);
+  --fs-h3: clamp(18px, 2.5vw, 24px);
+  --fs-h4: clamp(15px, 1.8vw, 18px);
+  --fs-body: 14px;
+  --fs-small: 13px;
+  --fs-tiny: 11px;
+
+  --lh-tight: 1.2;
+  --lh-base: 1.6;
+
   --space-4: 4px;
   --space-8: 8px;
   --space-12: 12px;
@@ -48,22 +65,29 @@
   --space-80: 80px;
   --space-card: var(--space-24);
   --space-section: var(--space-80);
+
   --radius-tiny: 6px;
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-xl: 24px;
   --radius-full: 9999px;
-  --fs-h1: clamp(28px, 5vw, 48px);
-  --fs-h2: clamp(22px, 3.5vw, 32px);
-  --fs-h3: clamp(18px, 2.5vw, 24px);
-  --fs-h4: clamp(15px, 1.8vw, 18px);
-  --fs-body: 14px;
-  --fs-small: 13px;
-  --fs-tiny: 11px;
-  --lh-tight: 1.2;
-  --lh-base: 1.6;
+
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --shadow-glass-lg: 0 16px 48px rgba(0, 0, 0, 0.4);
+  --shadow-accent: 0 4px 20px rgba(166, 227, 161, 0.2);
+  --shadow-dropdown: 0 8px 32px rgba(0, 0, 0, 0.4);
+
+  --ease-out: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-in-out: cubic-bezier(0.42, 0, 0.58, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.27, 1.55);
+
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
+  --transition-slow: 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+  --transition-spring: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --nav-height: 65px;
 }
-
-
-
