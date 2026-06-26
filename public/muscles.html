@@ -1,32 +1,32 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>肌肉图选择器 - 铁馆</title>
+﻿<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>肌肉图选择器 - 铁馆</title>
 <meta name="description" content="铁馆肌肉图选择器 - 交互式人体肌肉图解，点击选部位，左右联动，支持快捷选择模式。">
 <style>
 body{margin:0;background:#0a0a12;color:#fff;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
 .container{max-width:1200px;margin:0 auto;padding:20px 24px}
 h2{font-size:22px;margin-bottom:4px}
-.sub{font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:20px}
+.sub{font-size:13px;color:rgba(200,200,200,0.65);margin-bottom:20px}
 .layout{display:flex;gap:40px;align-items:flex-start}
 .diagrams{display:flex;gap:60px;flex:1;justify-content:center}
 .wrap{text-align:center;position:relative}
 .wrap svg{width:370px;height:auto}
-.wrap-label{font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:6px;letter-spacing:1px}
+.wrap-label{font-size:13px;color:rgba(200,200,200,0.75);margin-bottom:6px;letter-spacing:1px}
 .panel{width:280px;flex-shrink:0}
 .panel-title{font-size:16px;font-weight:600;margin-bottom:12px}
 #selList{min-height:40px}
-.empty-state{padding:24px 0;text-align:center;color:rgba(255,255,255,0.3);font-size:13px}
+.empty-state{padding:24px 0;text-align:center;color:rgba(200,200,200,0.55);font-size:13px}
 .sel-item{display:flex;justify-content:space-between;padding:6px 10px;margin-bottom:4px;background:rgba(72,201,114,0.08);border:1px solid rgba(72,201,114,0.12);border-radius:6px;font-size:12px}
-.sel-item .del{cursor:pointer;color:rgba(255,255,255,0.3);font-size:14px;padding:0 4px}
+.sel-item .del{cursor:pointer;color:rgba(200,200,200,0.55);font-size:14px;padding:0 4px}
 .sel-item .del:hover{color:#ff5252}
-.count-text{font-size:12px;color:rgba(255,255,255,0.4);text-align:center;margin:8px 0 12px}
+.count-text{font-size:12px;color:rgba(200,200,200,0.65);text-align:center;margin:8px 0 12px}
 .qb{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px}
-.qb button{flex:1;min-width:70px;padding:7px 0;border-radius:14px;border:1px solid rgba(255,255,255,0.12);background:transparent;color:rgba(255,255,255,0.6);font-size:11px;cursor:pointer;font-family:inherit}
+.qb button{flex:1;min-width:70px;padding:7px 0;border-radius:14px;border:1px solid rgba(255,255,255,0.12);background:transparent;color:rgba(200,200,200,0.85);font-size:11px;cursor:pointer;font-family:inherit}
 .qb button:hover{border-color:#48c972;color:#48c972}
 .ab{display:flex;flex-direction:column;gap:8px}
 .ab button{width:100%;border-radius:10px;font-family:inherit;cursor:pointer}
 .btn-p{height:42px;border:none;background:#48c972;color:#fff;font-size:14px;font-weight:600;transition:all 0.15s}
 .btn-p:hover{background:#3ab862}
-.btn-s{height:38px;border:1px solid rgba(255,255,255,0.12);background:transparent;color:rgba(255,255,255,0.5);font-size:12px;transition:all 0.15s}
-.btn-s:hover{border-color:rgba(255,255,255,0.25);color:rgba(255,255,255,0.8)}
+.btn-s{height:38px;border:1px solid rgba(255,255,255,0.12);background:transparent;color:rgba(200,200,200,0.75);font-size:12px;transition:all 0.15s}
+.btn-s:hover{border-color:rgba(200,200,200,0.5);color:rgba(255,255,255,0.8)}
 </style>
 <link rel="stylesheet" href="css/style.css"></head>
 <body>
@@ -58,7 +58,7 @@ function generatePlan(){
       total++;
       h+="<div style='padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:12px'>";
       h+="<span style='font-weight:500'>"+ex+"</span>";
-      h+=" <span style='color:rgba(255,255,255,0.4)'>4\u7ec4\u00d710\u6b21 \u4f11\u606f60s</span></div>"
+      h+=" <span style='color:rgba(200,200,200,0.65)'>4\u7ec4\u00d710\u6b21 \u4f11\u606f60s</span></div>"
     })
   }
   h+="<div style='text-align:center;padding:8px 0;font-size:12px;color:rgba(72,201,114,0.8)'>\u5171 "+total+" \u4e2a\u52a8\u4f5c</div></div>";
@@ -111,7 +111,7 @@ function generatePlan(){
       total++;
       h+="<div style='padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:12px'>";
       h+="<span style='font-weight:500'>"+ex+"</span>";
-      h+=" <span style='color:rgba(255,255,255,0.4)'>4\u7ec4\u00d710\u6b21 \u4f11\u606f60s</span></div>"
+      h+=" <span style='color:rgba(200,200,200,0.65)'>4\u7ec4\u00d710\u6b21 \u4f11\u606f60s</span></div>"
     })
   }
   h+="<div style='text-align:center;padding:8px 0;font-size:12px;color:rgba(72,201,114,0.8)'>\u5171 "+total+" \u4e2a\u52a8\u4f5c</div></div>";
@@ -166,7 +166,7 @@ function generatePlan(){
       total++;
       h+="<div style='padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:12px'>";
       h+="<span style='font-weight:500'>"+ex+"</span>";
-      h+=" <span style='color:rgba(255,255,255,0.4)'>4\u7ec4\u00d710\u6b21 \u4f11\u606f60s</span></div>"
+      h+=" <span style='color:rgba(200,200,200,0.65)'>4\u7ec4\u00d710\u6b21 \u4f11\u606f60s</span></div>"
     })
   }
   h+="<div style='text-align:center;padding:8px 0;font-size:12px;color:rgba(72,201,114,0.8)'>\u5171 "+total+" \u4e2a\u52a8\u4f5c</div></div>";
@@ -243,7 +243,7 @@ function generatePlan(){
       total++;
       h+="<div style='padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:12px'>";
       h+="<span style='font-weight:500'>"+ex+"</span>";
-      h+=" <span style='color:rgba(255,255,255,0.4)'>4\u7ec4\u00d710\u6b21 \u4f11\u606f60s</span></div>"
+      h+=" <span style='color:rgba(200,200,200,0.65)'>4\u7ec4\u00d710\u6b21 \u4f11\u606f60s</span></div>"
     })
   }
   h+="<div style='text-align:center;padding:8px 0;font-size:12px;color:rgba(72,201,114,0.8)'>\u5171 "+total+" \u4e2a\u52a8\u4f5c</div></div>";
@@ -430,9 +430,9 @@ function generatePlan(){
       var ex=exArr[i];total++;
       h+="<div style='padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:11px'>";
       h+="<span style='font-weight:500'>"+ex.n+"</span> ";
-      h+="<span style='color:rgba(255,255,255,0.3);font-size:10px'>["+ex.e+"]</span> ";
-      h+="<span style='color:rgba(255,255,255,0.4)'>"+ex.s+"</span> ";
-      h+="<span style='color:rgba(255,255,255,0.3)'>\u4f11\u606f"+ex.r+"</span></div>"
+      h+="<span style='color:rgba(200,200,200,0.55);font-size:10px'>["+ex.e+"]</span> ";
+      h+="<span style='color:rgba(200,200,200,0.65)'>"+ex.s+"</span> ";
+      h+="<span style='color:rgba(200,200,200,0.55)'>\u4f11\u606f"+ex.r+"</span></div>"
     }
   }
   h+="<div style='text-align:center;padding:8px 0;font-size:12px;color:rgba(72,201,114,0.8)'>\u5171 "+total+" \u4e2a\u52a8\u4f5c</div></div>";
