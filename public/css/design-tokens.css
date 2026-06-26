@@ -1,0 +1,51 @@
+/* 铁馆 · 设计系统变量 */
+/* 配色、字体、间距、圆角、阴影、动画 */
+:root {
+  --bg-body: #09090b;
+  --bg-card: #141418;
+  --bg-card-hover: #1c1c24;
+  --bg-glass: rgba(255,255,255,0.04);
+  --bg-glass-hover: rgba(255,255,255,0.08);
+  --border-glass-hover: 1px solid rgba(255,255,255,0.14);
+  --accent-rgb: 72, 201, 114;
+  --accent-hover: #3db864;
+  --accent-glow: rgba(72,201,114,0.25);
+  --accent-soft: rgba(72,201,114,0.12);
+  --blue: #64b5f6;
+  --shadow-accent: 0 4px 20px rgba(72,201,114,0.25);
+  --shadow-dropdown: 0 8px 32px rgba(0,0,0,0.4);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
+  --transition-slow: 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+  --transition-spring: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --nav-height: 65px;
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-48: 48px;
+  --space-64: 64px;
+  --space-80: 80px;
+  --space-card: var(--space-24);
+  --space-section: var(--space-80);
+  --radius-tiny: 6px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+  --fs-h1: clamp(28px, 5vw, 48px);
+  --fs-h2: clamp(22px, 3.5vw, 32px);
+  --fs-h3: clamp(18px, 2.5vw, 24px);
+  --fs-h4: clamp(15px, 1.8vw, 18px);
+  --fs-body: 14px;
+  --fs-small: 13px;
+  --fs-tiny: 11px;
+  --lh-tight: 1.2;
+  --lh-base: 1.6;
+}

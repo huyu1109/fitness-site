@@ -21,3 +21,5 @@ out.txt
 server_*.txt
 srv_*.txt
 动作库数据*.json
+.vercel
+.env*
