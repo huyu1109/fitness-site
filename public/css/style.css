@@ -1061,3 +1061,9 @@ button:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.2)!im
 .pay-status{text-align:center;font-size:13px;color:#ffaa32;margin:8px 0;padding:8px;border-radius:8px;background:rgba(255,170,50,0.05)}
 .pay-hint{font-size:11px;color:rgba(255,255,255,0.2);text-align:center;margin-top:6px}
 .pay-timer{text-align:center;font-size:12px;color:rgba(255,255,255,0.3);margin-top:8px;font-family:monospace}
+
+/* ====== 主页付款按钮 ====== */
+.pay-btn-main{display:inline-block;padding:16px 48px;border:none;border-radius:50px;background:linear-gradient(135deg,#48c972,#3ab862);color:#fff;font-size:18px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 6px 24px rgba(72,201,114,0.35);transition:all 0.3s}
+.pay-btn-main:hover{background:linear-gradient(135deg,#3ab862,#2da854);transform:translateY(-3px);box-shadow:0 10px 32px rgba(72,201,114,0.45)}
+.pay-btn-main:active{transform:translateY(-1px)}
+.pay-sub-main{font-size:13px;color:rgba(255,255,255,0.4);margin:10px 0 0}

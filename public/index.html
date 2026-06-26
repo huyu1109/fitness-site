@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>铁馆 - 你的智能健身伙伴</title>
+<meta name="description" content="铁馆健身 - 0.5元解锁全站，200+动作库、训练计划、热量计算、进度追踪一站式健身工具平台。">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -19,6 +20,7 @@
 <li><a href="knowledge.html">知识库</a></li>
 <li><a href="calendar.html">进度日历</a></li>
 <li><a href="tools.html">工具</a></li>
+<li><a href="javascript:void(0)" onclick="unlockAPI.showModal()" style="color:#48c972;font-weight:600" id="navUnlockBtn">🔓 解锁</a></li>
 </ul>
 </div>
 </nav>
@@ -29,11 +31,8 @@
   <div class="hero content-enter">
     <h1>铁馆</h1>
     <p>你的智能健身伙伴 · 科学训练 · 精准饮食 · 持续进步</p>
-    <div class="unlock-banner content-enter content-enter-delay-1" onclick="unlockAPI.showModal()">
-      <span>🔥 0.5元解锁全站</span>
-      <span class="sub">200+动作库 · 完整训练计划 · 增肌减脂食谱</span>
-      <span class="arrow">→</span>
-    </div>
+    <button class="pay-btn-main" onclick="unlockAPI.showModal()">🔥 0.5元解锁全站</button>
+    <p class="pay-sub-main">200+动作库 · 完整训练计划 · 增肌减脂食谱</p>
     <div class="hero-stats">
       <div class="hero-stat"><div class="num" id="statCheckins">0</div><div class="label">累计打卡</div></div>
       <div class="hero-stat"><div class="num" id="statStreak">0</div><div class="label">连续天数</div></div>

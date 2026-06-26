@@ -97,7 +97,7 @@
     var orderId = orderData ? orderData.order_id : ("OFFLINE" + Date.now().toString(36).toUpperCase());
     var qrWechat = orderData ? (orderData.qrcode ? orderData.qrcode.wechat : "/img/wechat_qr.jpg") : "/img/wechat_qr.jpg";
     var qrAlipay = orderData ? (orderData.qrcode ? orderData.qrcode.alipay : "/img/alipay_qr.jpg") : "/img/alipay_qr.jpg";
-    var usePayment = PAYMENT_ACTIVE && orderData && orderData.success;
+    var usePayment = true;
 
     status.textContent = usePayment ? "请扫码支付 0.50 元" : "请输入解锁码";
 
