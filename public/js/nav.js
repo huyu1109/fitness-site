@@ -24,7 +24,7 @@
       links += "<li><a href=\"" + item.href + "\" class=\"" + active.trim() + "\">" + item.label + "</a></li>";
     }
 
-    // var unlockLink = "<li><a href=\"javascript:void(0)\" onclick=\"unlockAPI.showModal()\" style=\"color:#48c972;font-weight:600\" id=\"navUnlockBtn\">\uD83D\uDD13 \u89e3\u9501</a></li>";
+    // // var unlockLink = "<li><a href=\"javascript:void(0)\" onclick=\"unlockAPI.showModal()\" style=\"color:#48c972;font-weight:600\" id=\"navUnlockBtn\">\uD83D\uDD13 \u89e3\u9501</a></li>";  [removed]
 
     var nav = document.createElement("nav");
     nav.className = "nav";
